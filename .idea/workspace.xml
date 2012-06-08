@@ -7,19 +7,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5b66e2b3-7be7-4bc0-a251-88913f2613ce" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Album.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Artist.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItem.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Playlist.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Song.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Video.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Settings.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/pms.db" afterPath="$PROJECT_DIR$/res/pms.db" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/Main.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/Main.java" />
     </list>
     <ignored path="iSub Server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -77,37 +72,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ErrorApiHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/ErrorApiHandler.java">
+      <file leaf-file-name="Album.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Album.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="28" selection-start="124" selection-end="124" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="87" column="5" selection-start="263" selection-end="1688" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;class#Album#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MediaItem.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItem.java">
+      <file leaf-file-name="MediaItemType.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="6" selection-start="2872" selection-end="2872" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Video.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Video.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="228" selection-end="228" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Song.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Song.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="85" column="37" selection-start="1781" selection-end="1781" vertical-scroll-proportion="0.0">
+            <state line="13" column="25" selection-start="295" selection-end="295" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -116,10 +96,8 @@
       <file leaf-file-name="Artist.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Artist.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="20" selection-start="1309" selection-end="1309" vertical-scroll-proportion="-7.072727">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="74" column="20" selection-start="1309" selection-end="1309" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,20 +105,10 @@
       <file leaf-file-name="Folder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="22" selection-start="1474" selection-end="1474" vertical-scroll-proportion="-7.072727">
+            <state line="65" column="7" selection-start="1371" selection-end="1371" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Album.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Album.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="0" selection-start="1554" selection-end="1554" vertical-scroll-proportion="0.51086956">
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="docComment;field#_parentFolder#0;class#Folder#0" expanded="true" />
+                <element signature="docComment;field#_folderPath#0;class#Folder#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -149,25 +117,67 @@
       <file leaf-file-name="Playlist.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Playlist.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="27" selection-start="1788" selection-end="1788" vertical-scroll-proportion="-25.09091">
+            <state line="92" column="27" selection-start="1788" selection-end="1788" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileType.java">
+      <file leaf-file-name="FileManager.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="40" selection-start="252" selection-end="252" vertical-scroll-proportion="0.0">
+            <state line="239" column="9" selection-start="7014" selection-end="7014" vertical-scroll-proportion="0.3018617">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;class#FileManager#0" expanded="true" />
+                <element signature="docComment;field#_currentScanningFolder#0;class#FileManager#0" expanded="true" />
+                <element signature="docComment;field#_currentScanningFile#0;class#FileManager#0" expanded="true" />
+                <element signature="e#1865#1882#0" expanded="true" />
+                <element signature="docComment;method#scanFolder#0;class#FileManager#0" expanded="true" />
+                <element signature="docComment;method#addFolderWatch#0;class#FileManager#0" expanded="true" />
+                <element signature="docComment;method#removeFolderWatch#0;class#FileManager#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tag.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/lib/jaudiotagger-2.0.4-20111207.115108-15.jar!/org/jaudiotagger/tag/Tag.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="17" selection-start="162" selection-end="162" vertical-scroll-proportion="-2.4">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MediaItemType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java">
+      <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="4" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0">
+            <state line="60" column="24" selection-start="2145" selection-end="2145" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="docComment;field#databaseSetup#0;class#Main#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Settings.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Settings.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="67" column="23" selection-start="1638" selection-end="1638" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;class#Settings#0" expanded="true" />
+                <element signature="e#1545#1553#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JNotify.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/lib/jnotify-0.94.jar!/net/contentobjects/jnotify/JNotify.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="36" selection-start="388" selection-end="396" vertical-scroll-proportion="-5.4">
               <folding />
             </state>
           </provider>
@@ -186,30 +196,28 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/TestApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpsServerTrustManagerFactory.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpsServerSslContextFactory.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpsServerKeyStore.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpServerPipelineFactory.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpServerHandler.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/FolderHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileType.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Video.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItem.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Song.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Artist.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Album.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Playlist.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/Main.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Settings.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileManager.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
-    <option name="y" value="25" />
-    <option name="width" value="1436" />
-    <option name="height" value="836" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -310,20 +318,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="iSub Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Personal Media Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -392,28 +386,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Netty" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="iSub Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pms" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pms" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="DataModel" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -428,21 +400,103 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="iSub Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="pms" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ApiHandler" />
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sqlite-jdbc-3.7.2.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="iSub Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sqlite-jdbc-3.7.2.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="native" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="iSub Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sqlite-jdbc-3.7.2.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="iSub Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="iSub Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Personal Media Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -453,11 +507,11 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.Java" />
+    <property name="options.lastSelected" value="fileTemplates" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="FullScreen" value="false" />
+    <property name="FullScreen" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.searchVisible" value="true" />
@@ -602,22 +656,22 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="25" width="1436" height="836" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.399361" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23473541" sideWeight="0.50247115" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.50247115" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2110951" sideWeight="0.7652646" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21048851" sideWeight="0.951049" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26486486" sideWeight="0.4936848" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -686,75 +740,20 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpServerPipelineFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="5" selection-start="1275" selection-end="1275" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/Netty/HttpsServerKeyStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="1" selection-start="709" selection-end="709" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/HelperObjects/UriWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="5" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/TestApiHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="24" selection-start="363" selection-end="363" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/StreamApiHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="45" selection-end="45" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/FolderHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="418" selection-end="418" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/ErrorApiHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="28" selection-start="124" selection-end="124" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Video.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="228" selection-end="228" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="11" column="0" selection-start="228" selection-end="228" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Song.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="37" selection-start="1781" selection-end="1781" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Artist.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="20" selection-start="1309" selection-end="1309" vertical-scroll-proportion="-7.072727">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="85" column="37" selection-start="1781" selection-end="1781" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="40" selection-start="252" selection-end="252" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="22" selection-start="1474" selection-end="1474" vertical-scroll-proportion="-7.072727">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="11" column="40" selection-start="252" selection-end="252" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -767,21 +766,105 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/MediaItemType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="4" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0" />
+        <state line="13" column="25" selection-start="295" selection-end="295" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Playlist.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="27" selection-start="1788" selection-end="1788" vertical-scroll-proportion="-25.09091">
+        <state line="92" column="27" selection-start="1788" selection-end="1788" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Album.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="0" selection-start="1554" selection-end="1554" vertical-scroll-proportion="0.51086956">
+        <state line="87" column="5" selection-start="263" selection-end="1688" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="docComment;class#Album#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jnotify-0.94.jar!/net/contentobjects/jnotify/JNotify.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="36" selection-start="388" selection-end="396" vertical-scroll-proportion="-5.4">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="24" selection-start="2145" selection-end="2145" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="docComment;field#databaseSetup#0;class#Main#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Settings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="23" selection-start="1638" selection-end="1638" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;class#Settings#0" expanded="true" />
+            <element signature="e#1545#1553#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Artist.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="20" selection-start="1309" selection-end="1309" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Folder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="7" selection-start="1371" selection-end="1371" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="docComment;field#_parentFolder#0;class#Folder#0" expanded="true" />
+            <element signature="docComment;field#_folderPath#0;class#Folder#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jaudiotagger-2.0.4-20111207.115108-15.jar!/org/jaudiotagger/audio/AudioFileIO.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="19" selection-start="2357" selection-end="2357" vertical-scroll-proportion="0.6512605">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jaudiotagger-2.0.4-20111207.115108-15.jar!/org/jaudiotagger/audio/AudioFile.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="160" selection-end="160" vertical-scroll-proportion="0.012605042">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jaudiotagger-2.0.4-20111207.115108-15.jar!/org/jaudiotagger/tag/Tag.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="162" selection-end="162" vertical-scroll-proportion="-2.4">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FileManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="239" column="9" selection-start="7014" selection-end="7014" vertical-scroll-proportion="0.3018617">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;class#FileManager#0" expanded="true" />
+            <element signature="docComment;field#_currentScanningFolder#0;class#FileManager#0" expanded="true" />
+            <element signature="docComment;field#_currentScanningFile#0;class#FileManager#0" expanded="true" />
+            <element signature="e#1865#1882#0" expanded="true" />
+            <element signature="docComment;method#scanFolder#0;class#FileManager#0" expanded="true" />
+            <element signature="docComment;method#addFolderWatch#0;class#FileManager#0" expanded="true" />
+            <element signature="docComment;method#removeFolderWatch#0;class#FileManager#0" expanded="true" />
           </folding>
         </state>
       </provider>

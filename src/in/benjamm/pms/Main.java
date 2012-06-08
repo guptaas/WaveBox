@@ -15,11 +15,14 @@ package in.benjamm.pms;
  * under the License.
  */
 
+import in.benjamm.pms.DataModel.Settings;
 import in.benjamm.pms.Netty.HttpServerPipelineFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.concurrent.Executors;
 
 /**
@@ -38,5 +41,40 @@ public class Main
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(8080));
+    }
+
+    /**
+     * Copy the database from the jar if necessary
+     */
+    private static void databaseSetup
+    {
+        File dbFile = new File(Settings.databasePath);
+        if (!dbFile.exists())
+        {
+            try
+            {
+                InputStream inStream = getClass().getResourceAsStream("/res/pms.db");
+                File outFile = new File(Settings.databasePath);
+                OutputStream outStream = new FileOutputStream(outFile);
+
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = inStream.read(buf)) > 0)
+                {
+                    outStream.write(buf, 0, len);
+                }
+                inStream.close();
+                outStream.close();
+            }
+            catch(FileNotFoundException ex)
+            {
+                System.out.println(ex.getMessage() + " in the specified directory.");
+                System.exit(0);
+            }
+            catch(IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

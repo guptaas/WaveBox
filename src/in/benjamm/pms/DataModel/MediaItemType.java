@@ -10,5 +10,6 @@ package in.benjamm.pms.DataModel;
 public enum MediaItemType
 {
     MEDIA_ITEM_TYPE_SONG,
-    MEDIA_ITEM_TYPE_VIDEO
+    MEDIA_ITEM_TYPE_VIDEO,
+    MEDIA_ITEM_TYPE_IMAGE
 }

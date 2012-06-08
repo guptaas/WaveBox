@@ -1,5 +1,6 @@
 package in.benjamm.pms.DataModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,12 @@ public class Folder
     public Folder getParentFolder() { return _parentFolder; }
     public void setParentFolder(Folder parentFolder) { _parentFolder = parentFolder; }
 
-
+    /**
+     * The absolute path of the folder
+     */
+    private String _folderPath;
+    public String getFolderPath() { return _folderPath; }
+    public void setFolderPath(Folder folderPath) { _folderPath = folderPath; }
 
     /*
      * Constructor(s)
@@ -79,5 +85,14 @@ public class Folder
     public List<Folder> listOfSubFolders()
     {
         return null;
+    }
+
+    public String mediaFolder()
+    {
+        for (String mediaFolder : Settings.mediaFolders())
+        {
+            if (getFolderPath().startsWith(mediaFolder))
+                return mediaFolder;
+        }
     }
 }
