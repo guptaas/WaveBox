@@ -1,5 +1,13 @@
 package in.benjamm.pms.DataModel;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+
+import java.io.File;
+import java.sql.SQLException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -50,11 +58,34 @@ public class Song extends MediaItem
 
 
 
+
     /*
      * Constructor(s)
      */
 
     // Constuctors here
+
+	Song (AudioFile audioFile, int folderId)
+	{
+		// Create header and tag objects
+		AudioHeader header = audioFile.getAudioHeader();
+		Tag tag = audioFile.getTag();
+
+		// Get the attributes
+		_folderId = folderId;
+		_artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
+		_album = Album.albumForName(tag.getFirst(FieldKey.ALBUM));
+		_fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
+		_songName = tag.getFirst(FieldKey.TITLE);
+		_trackNumber = Integer.valueOf(tag.getFirst(FieldKey.TRACK));
+		_discNumber = Integer.valueOf(tag.getFirst(FieldKey.DISC_NO));
+		_duration = header.getTrackLength();
+		_bitrate = header.getBitRateAsNumber();
+		File file = audioFile.getFile();
+		_fileSize = file.length();
+		_lastModified = file.lastModified();
+		_fileName = file.getName();
+	}
 
 
 
@@ -87,4 +118,28 @@ public class Song extends MediaItem
      */
     public void rescan()
     {}
+
+	public void updateDatabase()
+	{
+		// Prepare the query
+		String query = "INSERT INTO song";
+		query += "folder_id = " + getFolderId();
+		query += "artist_id = " + getArtist().getArtistId();
+		query += "album_id = " + getAlbum().getAlbumId();
+		query += "file_type_id = " + getFileType().fileTypeId();
+		query += "song_name = " + getSongName();
+		query += "track_num = " + getTrackNumber();
+		query += "disc_num = " + getDiscNumber();
+		query += "duration = " + getDuration();
+		query += "bitrate = " + getBitrate();
+		query += "file_size = " + getFileSize();
+		query += "last_modified = " + getLastModified();
+		query += "file_name = " + getFileName();
+
+		try {
+			Settings.getDbStatement().executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

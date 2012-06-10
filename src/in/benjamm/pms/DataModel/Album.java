@@ -1,6 +1,5 @@
 package in.benjamm.pms.DataModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -86,4 +85,14 @@ public class Album
     {
         return null;
     }
+
+	static public int albumIdForName(String albumName)
+	{
+		return 0;
+	}
+
+	static public Album albumForName(String albumName)
+	{
+		return new Album();
+	}
 }

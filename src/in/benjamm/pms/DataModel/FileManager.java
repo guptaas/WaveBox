@@ -10,17 +10,14 @@ import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -70,12 +67,9 @@ public class FileManager implements JNotifyListener
         String overrideClass = System.getProperty("jnotify.impl.override");
         if (overrideClass != null)
         {
-            try
-            {
+            try {
                 _jnotifyInstance = (IJNotify) Class.forName(overrideClass).newInstance();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -84,36 +78,25 @@ public class FileManager implements JNotifyListener
             String osName = System.getProperty("os.name").toLowerCase();
             if (osName.equals("linux"))
             {
-                try
-                {
+                try {
                     _jnotifyInstance = (IJNotify) Class.forName("net.contentobjects.jnotify.linux.JNotifyAdapterLinux").newInstance();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
-            else
-            if (osName.startsWith("windows"))
+            else if (osName.startsWith("windows"))
             {
-                try
-                {
+                try {
                     _jnotifyInstance = (IJNotify) Class.forName("net.contentobjects.jnotify.win32.JNotifyAdapterWin32").newInstance();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
-            else
-            if (osName.startsWith("mac os x"))
+            else if (osName.startsWith("mac os x"))
             {
-                try
-                {
+                try {
                     _jnotifyInstance = (IJNotify) Class.forName("net.contentobjects.jnotify.macosx.JNotifyAdapterMacOSX").newInstance();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -202,52 +185,32 @@ public class FileManager implements JNotifyListener
         Settings.getDbStatement().executeUpdate(query);
     }
 
-    public void processFile(File file, int folderId) throws SQLException
+    public void processFile(File file, int folderId)
     {
-        /*
-        song_id INTEGER PRIMARY KEY ASC AUTOINCREMENT,
-        folder_id INTEGER,
-        artist_id INTEGER,
+		if (MediaItem.fileNeedsUpdating(file))
+		{
+			AudioFile f = null;
+			try {
+				f = AudioFileIO.read(file);
+			} catch (CannotReadException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (TagException e) {
+				e.printStackTrace();
+			} catch (ReadOnlyFileException e) {
+				e.printStackTrace();
+			} catch (InvalidAudioFrameException e) {
+				e.printStackTrace();
+			}
 
-        album_id INTEGER,
-        file_type_id INTEGER,
-        song_name TEXT,
-        track_num INTEGER,
-        disc_num INTEGER,
-        duration INTEGER,
-        bitrate INTEGER,
-        file_size INTEGER,
-        last_modified INTEGER,
-        file_name TEXT
-         */
-
-        AudioFile f = null;
-        try {
-            f = AudioFileIO.read(file);
-        } catch (CannotReadException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TagException e) {
-            e.printStackTrace();
-        } catch (ReadOnlyFileException e) {
-            e.printStackTrace();
-        } catch (InvalidAudioFrameException e) {
-            e.printStackTrace();
-        }
-
-        if (f != null)
-        {
-            // This is an audio file
-            AudioHeader header = f.getAudioHeader();
-            Tag tag = f.getTag();
-
-            String query = "INSERT INTO song";
-            query += "folder_id = " + folderId;
-            query += "artist_id = "; // +
-            query += "album_id = "; // +
-            query += ""
-        }
+			if (f != null)
+			{
+				// This is a song, process it
+				Song song = new Song(f, folderId);
+				song.updateDatabase();
+			}
+		}
     }
 
     /**

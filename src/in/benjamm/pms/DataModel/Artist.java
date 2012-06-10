@@ -1,6 +1,5 @@
 package in.benjamm.pms.DataModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,4 +73,14 @@ public class Artist
     {
         return null;
     }
+
+	public static int artistIdForName(String artistName)
+	{
+		return 0;
+	}
+
+	public static Artist artistForName(String artistName)
+	{
+		return new Artist();
+	}
 }

@@ -49,6 +49,10 @@ public class Folder
      * Constructor(s)
      */
 
+	Folder(String path)
+	{
+
+	}
     // Constuctors here
 
 

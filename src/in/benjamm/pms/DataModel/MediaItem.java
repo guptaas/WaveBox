@@ -1,5 +1,9 @@
 package in.benjamm.pms.DataModel;
 
+import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -16,70 +20,70 @@ public class MediaItem
     /**
      * Type of media (song, video, etc)
      */
-    private MediaItemType _mediaItemType;
+    protected MediaItemType _mediaItemType;
     public MediaItemType getMediaItemType() { return _mediaItemType; }
     public void setMediaItemType(MediaItemType type) { _mediaItemType = type; }
 
     /**
      * Unique identifier
      */
-    private int _itemId;
+	protected int _itemId;
     public int getItemId() { return _itemId; }
     public void setItemId(int itemId) { _itemId = itemId; }
 
     /**
      * Associated cover art
      */
-    private int _artId;
+	protected int _artId;
     public int getArtId()  { return _artId; }
     public void setArtId(int artId) { _artId = artId; }
 
     /**
      * Folder containing this media
      */
-    private int _folderId;
+	protected int _folderId;
     public int getFolderId() { return _folderId; }
     public void setFolderId(int folderId) { _folderId = folderId; }
 
     /**
      * Media format (mp3, aac, etc)
      */
-    private FileType _fileType;
+	protected FileType _fileType;
     public FileType getFileType() { return _fileType; }
     public void setFileType(FileType fileType) { _fileType = fileType; }
 
     /**
      * Duration in seconds
      */
-    private int _duration;
+	protected int _duration;
     public int getDuration() { return _duration; }
     public void setDuration(int duration) { _duration = duration; }
 
     /**
      * Bitrate in bits per second
      */
-    private int _bitrate;
-    public int getBitrate() { return _bitrate; }
+	protected long _bitrate;
+    public long getBitrate() { return _bitrate; }
     public void setBitrate(int bitrate) { _bitrate = bitrate; }
 
     /**
      * Size on disk in bytes
      */
-    private long _fileSize;
+	protected long _fileSize;
     public long getFileSize() { return _fileSize; }
     public void setFileSize(long fileSize) { _fileSize = fileSize; }
 
     /**
      * File's last modified date in Unix timestamp
      */
-    private long _lastModified;
+	protected long _lastModified;
     public long getLastModified() { return _lastModified; }
     public void setLastModified(long lastModified) { _lastModified = lastModified; }
 
     /**
      * Name of file on disk
      */
-    private String _fileName;
+	protected String _fileName;
     public String getFileName() { return _fileName; }
     public void setFileName(String fileName) { _fileName = fileName; }
 
@@ -119,4 +123,29 @@ public class MediaItem
      */
     public void addToPlaylistAtIndex(Playlist thePlaylist, int index)
     {}
+
+	public static boolean fileNeedsUpdating(File file)
+	{
+		int folderId = (new Folder(file.getParent())).getFolderId();
+		String fileName = file.getName();
+		long lastModified = file.lastModified();
+
+		String query = "SELECT COUNT(*) FROM songs WHERE folder_id = " + folderId + ", file_name = " + fileName + ", last_modified = " + lastModified;
+		ResultSet result = null;
+		try
+		{
+			result = Settings.getDbStatement().executeQuery(query);
+			if (result.next())
+			{
+				if (result.getInt(0) >= 1)
+					return false;
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return true;
+	}
 }
