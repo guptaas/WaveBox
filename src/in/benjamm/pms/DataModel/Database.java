@@ -37,9 +37,10 @@ public class Database
             final BoneCPConfig config = new BoneCPConfig();
             config.setJdbcUrl("jdbc:sqlite:" + DATABASE_PATH);
             config.setMinConnectionsPerPartition(5);
-            config.setMaxConnectionsPerPartition(10);
+            config.setMaxConnectionsPerPartition(100);
             config.setPartitionCount(1);
-            _connectionPool = new BoneCP(config) // setup the connection pool
+            _connectionPool = new BoneCP(config);
+            /*_connectionPool = new BoneCP(config) // setup the connection pool
             {
                 @Override
                 protected Connection obtainRawInternalConnection() throws SQLException
@@ -48,7 +49,7 @@ public class Database
                     liteConfig.setOpenMode(SQLiteOpenMode.NOMUTEX);
                     return DriverManager.getConnection(config.getJdbcUrl(), liteConfig.toProperties());
                 }
-            };
+            };*/
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -85,6 +86,12 @@ public class Database
             {
                 System.out.println(e.getMessage());
             }
+        }
+
+        File artFolder = new File(CoverArt.ART_PATH);
+        if (!artFolder.exists())
+        {
+            artFolder.mkdirs();
         }
     }
 

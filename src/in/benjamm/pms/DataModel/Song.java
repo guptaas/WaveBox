@@ -21,6 +21,8 @@ public class Song extends MediaItem
      * Properties
      */
 
+    public Integer getItemTypeId() { return 3; }
+
     /**
      * Artist object for this song
      */
@@ -90,7 +92,6 @@ public class Song extends MediaItem
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-
         }
 
         String disc = tag.getFirst(FieldKey.DISC_NO);
@@ -109,6 +110,12 @@ public class Song extends MediaItem
 		_fileSize = file.length();
 		_lastModified = file.lastModified();
 		_fileName = file.getName();
+
+        CoverArt art = new CoverArt(audioFile);
+        if (art.getArtId() != null)
+        {
+            _artId = art.getArtId();
+        }
 	}
 
 
@@ -145,15 +152,13 @@ public class Song extends MediaItem
 
 	public void updateDatabase()
 	{
-        //System.out.println("SONG: " + getSongName());
-
-		// Prepare the query
-		String query = "INSERT INTO song ";
-        query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
-        query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
-        query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
 		try {
+            // Insert into the song table
+            String query = "INSERT INTO song ";
+            query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
+            query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
+            query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             Connection c = Database.getDbConnection();
             PreparedStatement s = c.prepareStatement(query);
             s.setNull(1, Types.INTEGER);
@@ -170,7 +175,28 @@ public class Song extends MediaItem
             s.setObject(12, getLastModified());
             s.setObject(13, getFileName());
             s.executeUpdate();
+
+            // Get the song_id
+            ResultSet r = s.getGeneratedKeys();
+            if (r.next())
+            {
+                setItemId(r.getInt(1));
+            }
+            r.close();
             s.close();
+
+            // Insert the art record
+            if (getArtId() != null)
+            {
+                query = "INSERT OR IGNORE INTO item_type_art (item_type_id, item_id, art_id) VALUES (?, ?, ?)";
+                s = c.prepareStatement(query);
+                s.setObject(1, getItemTypeId());
+                s.setObject(2, getItemId());
+                s.setObject(3, getArtId());
+                s.executeUpdate();
+                s.close();
+            }
+
             c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

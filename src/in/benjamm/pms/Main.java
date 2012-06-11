@@ -60,8 +60,10 @@ public class Main
         {
             public void run()
             {
+                long startTime = System.currentTimeMillis();
                 FileManager.sharedInstance().scanFolder(Folder.mediaFolders().get(0).getFolderPath());
-                System.out.println("All files scanned!");
+                long runTime = (System.currentTimeMillis() - startTime) / 1000;
+                System.out.println("All files scanned! It took " + runTime + " seconds");
             }
         };
         t.start();

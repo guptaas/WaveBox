@@ -16,6 +16,8 @@ public class Artist
      * Properties
      */
 
+    public Integer getItemTypeId() { return 1; }
+
     /**
      * Unique identifier
      */
@@ -51,7 +53,7 @@ public class Artist
     Artist(int artistId)
     {
         try {
-            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_art.item_type_id = 1, item_id = artist_id WHERE artist_id = ?";
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_art.item_type_id = " + getItemTypeId() + ", item_id = artist_id WHERE artist_id = ?";
             Connection c = Database.getDbConnection();
             PreparedStatement s = c.prepareStatement(query);
             s.setObject(1, artistId);

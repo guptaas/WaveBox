@@ -172,7 +172,6 @@ public class FileManager implements JNotifyListener
                 else
                 {
                     // This is a file, so scan it
-
                     processFile(subFile, topFolder.getFolderId());
                 }
             }
@@ -181,23 +180,27 @@ public class FileManager implements JNotifyListener
 
     public void processFolder(File folderFile)
     {
+        System.out.println("processing folder " + folderFile.getName());
+
         Folder folder = new Folder(folderFile.getAbsolutePath());
         if (folder.getFolderId() == null)
         {
             // This folder isn't in the database, so add it
             folder.addToDatabase();
         }
-
         scanFolder(folderFile.getAbsolutePath());
     }
 
     public void processFile(File file, int folderId)
     {
+        System.out.println("processing file " + file.getName());
+
         if (file.getName().endsWith(".DS_Store"))
             return;
 
 		if (MediaItem.fileNeedsUpdating(file))
 		{
+            System.out.println("File needs updating");
 			AudioFile f = null;
 			try {
 				f = AudioFileIO.read(file);

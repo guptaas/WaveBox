@@ -16,6 +16,8 @@ public class MediaItem
      * Properties
      */
 
+    public Integer getItemTypeId() { return null; }
+
     /**
      * Type of media (song, video, etc)
      */
@@ -26,22 +28,22 @@ public class MediaItem
     /**
      * Unique identifier
      */
-	protected int _itemId;
-    public int getItemId() { return _itemId; }
+	protected Integer _itemId;
+    public Integer getItemId() { return _itemId; }
     public void setItemId(int itemId) { _itemId = itemId; }
 
     /**
      * Associated cover art
      */
-	protected int _artId;
-    public int getArtId()  { return _artId; }
+	protected Integer _artId;
+    public Integer getArtId()  { return _artId; }
     public void setArtId(int artId) { _artId = artId; }
 
     /**
      * Folder containing this media
      */
-	protected int _folderId;
-    public int getFolderId() { return _folderId; }
+	protected Integer _folderId;
+    public Integer getFolderId() { return _folderId; }
     public void setFolderId(int folderId) { _folderId = folderId; }
 
     /**
@@ -54,30 +56,30 @@ public class MediaItem
     /**
      * Duration in seconds
      */
-	protected int _duration;
-    public int getDuration() { return _duration; }
+	protected Integer _duration;
+    public Integer getDuration() { return _duration; }
     public void setDuration(int duration) { _duration = duration; }
 
     /**
      * Bitrate in bits per second
      */
-	protected long _bitrate;
-    public long getBitrate() { return _bitrate; }
-    public void setBitrate(int bitrate) { _bitrate = bitrate; }
+	protected Long _bitrate;
+    public Long getBitrate() { return _bitrate; }
+    public void setBitrate(Long bitrate) { _bitrate = bitrate; }
 
     /**
      * Size on disk in bytes
      */
-	protected long _fileSize;
-    public long getFileSize() { return _fileSize; }
-    public void setFileSize(long fileSize) { _fileSize = fileSize; }
+	protected Long _fileSize;
+    public Long getFileSize() { return _fileSize; }
+    public void setFileSize(Long fileSize) { _fileSize = fileSize; }
 
     /**
      * File's last modified date in Unix timestamp
      */
-	protected long _lastModified;
-    public long getLastModified() { return _lastModified; }
-    public void setLastModified(long lastModified) { _lastModified = lastModified; }
+	protected Long _lastModified;
+    public Long getLastModified() { return _lastModified; }
+    public void setLastModified(Long lastModified) { _lastModified = lastModified; }
 
     /**
      * Name of file on disk

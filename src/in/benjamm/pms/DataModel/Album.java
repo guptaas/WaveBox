@@ -16,6 +16,8 @@ public class Album
      * Properties
      */
 
+    public Integer getItemTypeId() { return 2; }
+
     /**
      * Artist object for this album
      */
@@ -89,7 +91,7 @@ public class Album
             return;
 
         try {
-            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = 2 AND item_id = album_id WHERE album_name = ?";
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = " + getItemTypeId() + " AND item_id = album_id WHERE album_name = ?";
             Connection c = Database.getDbConnection();
             PreparedStatement s = c.prepareStatement(query);
             s.setObject(1, albumName);

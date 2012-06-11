@@ -90,7 +90,6 @@ public class Folder
         _folderPath = path;
         File folder = new File(_folderPath);
         _folderName = folder.getName();
-
         try {
             Connection c = Database.getDbConnection();
             String query;
@@ -185,7 +184,6 @@ public class Folder
 
     public void addToDatabase()
     {
-        System.out.println("adding " + getFolderName() + " to database");
         try {
             String query = "INSERT INTO folder (folder_name, folder_path, parent_folder_id) VALUES (?, ?, ?)";
 
