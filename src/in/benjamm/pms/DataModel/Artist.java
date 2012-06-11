@@ -1,5 +1,6 @@
 package in.benjamm.pms.DataModel;
 
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -18,9 +19,9 @@ public class Artist
     /**
      * Unique identifier
      */
-    private int _artistId;
-    public int getArtistId() { return _artistId; }
-    public void setArtistId(int artistId) { _artistId = artistId; }
+    private Integer _artistId;
+    public Integer getArtistId() { return _artistId; }
+    public void setArtistId(Integer artistId) { _artistId = artistId; }
 
     /**
      * Name from tags
@@ -32,9 +33,9 @@ public class Artist
     /**
      * Associated cover art
      */
-    private int _artId;
-    public int getArtId() { return _artId; }
-    public void setArtId(int artId) { _artId = artId; }
+    private Integer _artId;
+    public Integer getArtId() { return _artId; }
+    public void setArtId(Integer artId) { _artId = artId; }
 
 
 
@@ -42,15 +43,97 @@ public class Artist
      * Constructor(s)
      */
 
-    // Constuctors here
+    Artist()
+    {
 
+    }
+
+    Artist(int artistId)
+    {
+        try {
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_art.item_type_id = 1, item_id = artist_id WHERE artist_id = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setObject(1, artistId);
+            ResultSet r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing artist
+                _setPropertiesFromResultSet(r);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Artist(String artistName)
+    {
+        if (artistName == null || artistName.equals(""))
+            return;
+
+        try {
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_id = 1 AND item_id = artist_id WHERE artist_name = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setObject(1, artistName);
+            ResultSet r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing artist
+                _setPropertiesFromResultSet(r);
+            }
+            else
+            {
+                _artistName = artistName;
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /*
      * Private methods
      */
 
-    // Private methods here
+    private void _setPropertiesFromResultSet(ResultSet rs)
+    {
+        try {
+            _artistId = rs.getInt("artist_id");
+            _artistName = rs.getString("artist_name");
+            _artId = rs.getInt("art_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean _insertArtist(String artistName)
+    {
+        //System.out.println("ARTIST: " + artistName);
+
+        boolean success = false;
+        try {
+            String query = "INSERT INTO artist (artist_id, artist_name) VALUES (?, ?)";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setNull(1, Types.INTEGER);
+            s.setObject(2, artistName);
+            s.executeUpdate();
+            success = true;
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
 
 
 
@@ -74,13 +157,23 @@ public class Artist
         return null;
     }
 
-	public static int artistIdForName(String artistName)
-	{
-		return 0;
-	}
-
 	public static Artist artistForName(String artistName)
 	{
-		return new Artist();
+        if (artistName == null || artistName.equals(""))
+            return new Artist();
+
+        // Check to see if this artist exists
+        Artist anArtist = new Artist(artistName);
+        if (anArtist.getArtistId() == null)
+        {
+            // This artist doesn't exist in the db, so insert it
+            anArtist = null;
+            if (_insertArtist(artistName))
+            {
+                anArtist = artistForName(artistName);
+            }
+        }
+
+        return anArtist;
 	}
 }

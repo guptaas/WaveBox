@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact name="Personal Media Server:jar">
+    <output-path>/tmp/pms</output-path>
+    <root id="root">
+      <element id="archive" name="Personal Media Server.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="Personal Media Server" />
+        <element id="directory" name="res">
+          <element id="dir-copy" path="$PROJECT_DIR$/res" />
+        </element>
+      </element>
+      <element id="library" level="project" name="lib" />
+    </root>
+  </artifact>
+</component>

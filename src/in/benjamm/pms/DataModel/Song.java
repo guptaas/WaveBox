@@ -6,7 +6,7 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -74,11 +74,35 @@ public class Song extends MediaItem
 		// Get the attributes
 		_folderId = folderId;
 		_artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
-		_album = Album.albumForName(tag.getFirst(FieldKey.ALBUM));
+        _album = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artist.getArtistId());
 		_fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
 		_songName = tag.getFirst(FieldKey.TITLE);
-		_trackNumber = Integer.valueOf(tag.getFirst(FieldKey.TRACK));
-		_discNumber = Integer.valueOf(tag.getFirst(FieldKey.DISC_NO));
+
+        String track = tag.getFirst(FieldKey.TRACK);
+        if (track != null && !track.equals(""))
+        {
+            try {
+                if (track.contains("/"))
+                {
+                    track = track.split("/")[0];
+                }
+                _trackNumber = Integer.valueOf(track);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        String disc = tag.getFirst(FieldKey.DISC_NO);
+        if (disc != null && !disc.equals(""))
+        {
+            try {
+                _discNumber = Integer.valueOf(disc);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
 		_duration = header.getTrackLength();
 		_bitrate = header.getBitRateAsNumber();
 		File file = audioFile.getFile();
@@ -121,23 +145,33 @@ public class Song extends MediaItem
 
 	public void updateDatabase()
 	{
+        //System.out.println("SONG: " + getSongName());
+
 		// Prepare the query
-		String query = "INSERT INTO song";
-		query += "folder_id = " + getFolderId();
-		query += "artist_id = " + getArtist().getArtistId();
-		query += "album_id = " + getAlbum().getAlbumId();
-		query += "file_type_id = " + getFileType().fileTypeId();
-		query += "song_name = " + getSongName();
-		query += "track_num = " + getTrackNumber();
-		query += "disc_num = " + getDiscNumber();
-		query += "duration = " + getDuration();
-		query += "bitrate = " + getBitrate();
-		query += "file_size = " + getFileSize();
-		query += "last_modified = " + getLastModified();
-		query += "file_name = " + getFileName();
+		String query = "INSERT INTO song ";
+        query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
+        query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
+        query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
-			Settings.getDbStatement().executeUpdate(query);
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setNull(1, Types.INTEGER);
+            s.setObject(2, getFolderId());
+            s.setObject(3, getArtist().getArtistId());
+            s.setObject(4, getAlbum().getAlbumId());
+            s.setObject(5, getFileType().fileTypeId());
+            s.setObject(6, getSongName());
+            s.setObject(7, getTrackNumber());
+            s.setObject(8, getDiscNumber());
+            s.setObject(9, getDuration());
+            s.setObject(10, getBitrate());
+            s.setObject(11, getFileSize());
+            s.setObject(12, getLastModified());
+            s.setObject(13, getFileName());
+            s.executeUpdate();
+            s.close();
+            c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

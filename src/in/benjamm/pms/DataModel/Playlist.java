@@ -18,7 +18,7 @@ public class Playlist
     /**
      * Unique identifier
      */
-    private int _playlistId;
+    private Integer _playlistId;
     public int getPlaylistId() { return _playlistId; }
     public void setPlaylistId(int playlistId) { _playlistId = playlistId; }
 
@@ -32,7 +32,7 @@ public class Playlist
     /**
      * Number of media items in this playlist
      */
-    private int _playlistCount;
+    private Integer _playlistCount;
     public int getPlaylistCount() { return _playlistCount; }
     public void setPlaylistCount(int playlistCount) { _playlistCount = playlistCount; }
 

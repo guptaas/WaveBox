@@ -1,8 +1,7 @@
 package in.benjamm.pms.DataModel;
 
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -130,16 +129,24 @@ public class MediaItem
 		String fileName = file.getName();
 		long lastModified = file.lastModified();
 
-		String query = "SELECT COUNT(*) FROM songs WHERE folder_id = " + folderId + ", file_name = " + fileName + ", last_modified = " + lastModified;
-		ResultSet result = null;
+		String query = "SELECT COUNT(*) AS count FROM song WHERE folder_id = ? AND file_name = ? AND last_modified = ?";
 		try
 		{
-			result = Settings.getDbStatement().executeQuery(query);
-			if (result.next())
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setObject(1, folderId);
+            s.setObject(2, fileName);
+            s.setObject(3, lastModified);
+			ResultSet r = s.executeQuery();
+
+			if (r.next())
 			{
-				if (result.getInt(0) >= 1)
+				if (r.getInt("count") >= 1)
 					return false;
 			}
+            r.close();
+            s.close();
+            c.close();
 		}
 		catch (SQLException e)
 		{

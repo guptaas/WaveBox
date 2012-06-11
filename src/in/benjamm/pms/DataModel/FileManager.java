@@ -16,7 +16,7 @@ import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class FileManager implements JNotifyListener
 
     private FileManager()
     {
-        String overrideClass = System.getProperty("jnotify.impl.override");
+        /*String overrideClass = System.getProperty("jnotify.impl.override");
         if (overrideClass != null)
         {
             try {
@@ -104,7 +104,7 @@ public class FileManager implements JNotifyListener
             {
                 throw new RuntimeException("Unsupported OS : " + osName);
             }
-        }
+        }*/
     }
 
 
@@ -118,7 +118,7 @@ public class FileManager implements JNotifyListener
 
 
     /*
-     * Public methods
+     * JNotify delegate methods
      */
 
     public void fileCreated(int wd, String rootPath, String name)
@@ -141,59 +141,68 @@ public class FileManager implements JNotifyListener
         this.scanFolder(rootPath);
     }
 
+
+
+    /*
+     * Public methods
+     */
+
     /**
      * Scan a folder for file changes
      */
     public void scanFolder(String folderPath)
     {
-        // Need some kind of scan queue so that if a folder path receives multiple
-        // notifications quickly, it will only be scanned once
-
+        // TODO: Need some kind of scan queue so that if a folder path receives multiple notifications quickly, it will only be scanned once
         File topFile = new File(folderPath);
-
         if (topFile.isDirectory())
         {
+            // Retreive the folder object for this folder path
+            Folder topFolder = new Folder(topFile.getAbsolutePath());
+            System.out.println("scanning " + topFolder.getFolderName() + "  id: " + topFolder.getFolderId());
+
+            // Start recursively scanning the subfolders and files
+            // Note: These won't be in any particular order
             for (File subFile : topFile.listFiles())
             {
                 if (subFile.isDirectory())
                 {
                     // This is a folder, so scan it
-                    scanFolder(subFile.getAbsolutePath());
+                    processFolder(subFile);
                 }
                 else
                 {
                     // This is a file, so scan it
-                    processFile(subFile);
+
+                    processFile(subFile, topFolder.getFolderId());
                 }
             }
         }
     }
 
-    public void processFolder(File folder) throws SQLException
+    public void processFolder(File folderFile)
     {
-        // Get parent id
-        // TODO: maybe escape out the path properly
-        String parent = folder.getParent();
-        String query = "SELECT parent_folder_id FROM folders WHERE folder_path = " + parent;
-        Integer parentFolderId = Settings.getDbStatement().executeQuery(query).getInt(0);
+        Folder folder = new Folder(folderFile.getAbsolutePath());
+        if (folder.getFolderId() == null)
+        {
+            // This folder isn't in the database, so add it
+            folder.addToDatabase();
+        }
 
-        // Add to the folders table
-        query = "INSERT INTO folders";
-        query += " SET folder_name = " + folder.getName();
-        query += ", folder_path = " + folder.getAbsolutePath();
-        query += ", parent_folder_id = " + parentFolderId;
-        Settings.getDbStatement().executeUpdate(query);
+        scanFolder(folderFile.getAbsolutePath());
     }
 
     public void processFile(File file, int folderId)
     {
+        if (file.getName().endsWith(".DS_Store"))
+            return;
+
 		if (MediaItem.fileNeedsUpdating(file))
 		{
 			AudioFile f = null;
 			try {
 				f = AudioFileIO.read(file);
 			} catch (CannotReadException e) {
-				e.printStackTrace();
+                e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (TagException e) {
@@ -204,7 +213,11 @@ public class FileManager implements JNotifyListener
 				e.printStackTrace();
 			}
 
-			if (f != null)
+			if (f == null)
+            {
+                // This is either another media type, a random file, or just not supported by jAudioTagger
+            }
+            else
 			{
 				// This is a song, process it
 				Song song = new Song(f, folderId);

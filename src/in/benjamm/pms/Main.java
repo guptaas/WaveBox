@@ -15,14 +15,15 @@ package in.benjamm.pms;
  * under the License.
  */
 
-import in.benjamm.pms.DataModel.Settings;
+import in.benjamm.pms.DataModel.Database;
+import in.benjamm.pms.DataModel.FileManager;
+import in.benjamm.pms.DataModel.Folder;
 import in.benjamm.pms.Netty.HttpServerPipelineFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
-import java.io.*;
+import javax.xml.crypto.Data;
 import java.net.InetSocketAddress;
-import java.net.URL;
 import java.util.concurrent.Executors;
 
 /**
@@ -33,6 +34,18 @@ public class Main
 {
     public static void main(String[] args)
 	{
+        // Register a shutdown hook for resource cleanup
+        Runtime.getRuntime().addShutdownHook(new Thread()
+        {
+            @Override
+            public void run()
+            {
+                System.out.println("Shutdown hook started!");
+                Database.shutdownPool();
+                System.out.println("Shutdown hook finished!");
+            }
+        });
+
         // Configure the server.
         ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
@@ -41,40 +54,16 @@ public class Main
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(8080));
-    }
 
-    /**
-     * Copy the database from the jar if necessary
-     */
-    private static void databaseSetup
-    {
-        File dbFile = new File(Settings.databasePath);
-        if (!dbFile.exists())
+        // Scan the files
+        Thread t = new Thread()
         {
-            try
+            public void run()
             {
-                InputStream inStream = getClass().getResourceAsStream("/res/pms.db");
-                File outFile = new File(Settings.databasePath);
-                OutputStream outStream = new FileOutputStream(outFile);
-
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = inStream.read(buf)) > 0)
-                {
-                    outStream.write(buf, 0, len);
-                }
-                inStream.close();
-                outStream.close();
+                FileManager.sharedInstance().scanFolder(Folder.mediaFolders().get(0).getFolderPath());
+                System.out.println("All files scanned!");
             }
-            catch(FileNotFoundException ex)
-            {
-                System.out.println(ex.getMessage() + " in the specified directory.");
-                System.exit(0);
-            }
-            catch(IOException e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }
+        };
+        t.start();
     }
 }

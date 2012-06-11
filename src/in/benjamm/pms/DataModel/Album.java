@@ -1,5 +1,6 @@
 package in.benjamm.pms.DataModel;
 
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -25,9 +26,9 @@ public class Album
     /**
      * Unique identifier
      */
-    private int _albumId;
-    public int getAlbumId() { return _albumId; }
-    public void setAlbumId(int albumId) { _albumId = albumId; }
+    private Integer _albumId;
+    public Integer getAlbumId() { return _albumId; }
+    public void setAlbumId(Integer albumId) { _albumId = albumId; }
 
     /**
      * Name from tags
@@ -39,16 +40,16 @@ public class Album
     /**
      * Four digit release year from tags
      */
-    private int _releaseYear;
-    public int getReleaseYear() { return _releaseYear; }
-    public void setReleaseYear(int releaseYear) { _releaseYear = releaseYear; }
+    private Integer _releaseYear;
+    public Integer getReleaseYear() { return _releaseYear; }
+    public void setReleaseYear(Integer releaseYear) { _releaseYear = releaseYear; }
 
     /**
      * Associated cover art
      */
-    private int _artId;
-    public int getArtId() { return _artId; }
-    public void setArtId(int artId) { _artId = artId; }
+    private Integer _artId;
+    public Integer getArtId() { return _artId; }
+    public void setArtId(Integer artId) { _artId = artId; }
 
 
 
@@ -56,7 +57,61 @@ public class Album
      * Constructor(s)
      */
 
-    // Constuctors here
+    Album()
+    {
+
+    }
+
+    Album(int albumId)
+    {
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = 2, item_id = album_id WHERE album_id = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setObject(1, albumId);
+            ResultSet r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing artist
+                _setPropertiesFromResultSet(r);
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Album(String albumName)
+    {
+        if (albumName == null || albumName.equals(""))
+            return;
+
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = 2 AND item_id = album_id WHERE album_name = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setObject(1, albumName);
+            ResultSet r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing album
+                System.out.println("ALBUM " + albumName + " exists in database");
+                _setPropertiesFromResultSet(r);
+            }
+            else
+            {
+                System.out.println("ALBUM " + albumName + " does NOT exist in database");
+                _albumName = albumName;
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -64,7 +119,39 @@ public class Album
      * Private methods
      */
 
-    // Private methods here
+    private static boolean _insertAlbum(String albumName, int artistId)
+    {
+        System.out.println("ALBUM: " + albumName);
+
+        boolean success = false;
+        try {
+            String query = "INSERT INTO album (album_id, album_name, artist_id) VALUES (?, ?, ?)";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setNull(1, Types.INTEGER);
+            s.setObject(2, albumName);
+            s.setObject(3, Integer.valueOf(artistId));
+            s.executeUpdate();
+            success = true;
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    private void _setPropertiesFromResultSet(ResultSet rs)
+    {
+        try {
+            _albumId = rs.getInt("album_id");
+            _albumName = rs.getString("album_name");
+            _artId = rs.getInt("art_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -86,13 +173,28 @@ public class Album
         return null;
     }
 
-	static public int albumIdForName(String albumName)
-	{
-		return 0;
-	}
+    public static Album albumForName(String albumName, Integer artistId)
+    {
+        System.out.println("albumForName(" + albumName + ", " + artistId + ")");
 
-	static public Album albumForName(String albumName)
-	{
-		return new Album();
-	}
+        if (albumName == null || albumName.equals("") || artistId == null)
+            return new Album();
+
+        // Check to see if this album exists
+        Album anAlbum = new Album(albumName);
+        System.out.println("checking if album " + anAlbum.getAlbumName() + " has an id: " + anAlbum.getAlbumId());
+        if (anAlbum.getAlbumId() == null)
+        {
+            System.out.println("ALBUM " + albumName + " doesn't exist in database, so adding it");
+            // This album doesn't exist in the db, so insert it
+            anAlbum = null;
+            if (_insertAlbum(albumName, artistId))
+            {
+                System.out.println("ALBUM added " + albumName + " so grabbing id");
+                anAlbum = albumForName(albumName, artistId);
+            }
+        }
+
+        return anAlbum;
+    }
 }
