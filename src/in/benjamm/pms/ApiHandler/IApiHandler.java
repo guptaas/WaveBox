@@ -1,5 +1,7 @@
 package in.benjamm.pms.ApiHandler;
 
+import org.jboss.netty.handler.codec.http.HttpResponse;
+
 /**
  * Created by IntelliJ IDEA.
  * User: bbaron
@@ -9,5 +11,5 @@ package in.benjamm.pms.ApiHandler;
  */
 public interface IApiHandler
 {
-	public String processRequest();
+    public HttpResponse createResponse();
 }

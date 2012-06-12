@@ -3,6 +3,8 @@ package in.benjamm.pms.DataModel;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,8 +41,6 @@ public class Folder
     public Integer getParentFolderId() { return _parentFolderId; }
     public void setParentFolderId(Integer parentFolderId) { _parentFolderId = parentFolderId; }
 
-    public Folder getParentFolder() { return new Folder(getParentFolderId()); }
-
     /**
      * The absolute path of the folder
      */
@@ -62,7 +62,7 @@ public class Folder
 
     }*/
 
-    Folder(int folderId)
+    public Folder(int folderId)
     {
         try {
             Connection c = Database.getDbConnection();
@@ -85,7 +85,7 @@ public class Folder
         }
     }
 
-	Folder(String path)
+    public Folder(String path)
 	{
         _folderPath = path;
         File folder = new File(_folderPath);
@@ -147,9 +147,28 @@ public class Folder
     /**
      * Generate list of media items contained in this folder
      */
-    public List<MediaItem> listOfMediaItems()
+    // TODO: this needs to be MediaItems not Songs
+    public List<Song> listOfSongs()
     {
-        return null;
+        List<Song> songs = new ArrayList<Song>();
+        try {
+            String query = "SELECT * FROM song WHERE folder_id = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setInt(1, getFolderId());
+            ResultSet r = s.executeQuery();
+            while (r.next())
+            {
+                songs.add(new Song(r));
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return songs;
     }
 
     /**
@@ -157,7 +176,25 @@ public class Folder
      */
     public List<Folder> listOfSubFolders()
     {
-        return null;
+        List<Folder> folders = new ArrayList<Folder>();
+        try {
+            String query = "SELECT * FROM folder WHERE parent_folder_id = ?";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            s.setInt(1, getFolderId());
+            ResultSet r = s.executeQuery();
+            while (r.next())
+            {
+                folders.add(new Folder(r.getInt("folder_id")));
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return folders;
     }
 
     /**
@@ -182,6 +219,9 @@ public class Folder
         return null;
     }
 
+    public Folder parentFolder() { return new Folder(getParentFolderId()); }
+
+
     public void addToDatabase()
     {
         try {
@@ -192,13 +232,13 @@ public class Folder
             s = c.prepareStatement(query);
             s.setObject(1, getFolderName());
             s.setObject(2, getFolderPath());
-            s.setObject(3, getParentFolder().getFolderId());
+            s.setObject(3, getParentFolderId());
             s.executeUpdate();
             s.close();
 
             query = "SELECT folder_id FROM folder WHERE parent_folder_id = ? AND folder_name = ?";
             s = c.prepareStatement(query);
-            s.setObject(1, getParentFolder().getFolderId());
+            s.setObject(1, getParentFolderId());
             s.setObject(2, getFolderName());
             ResultSet r = s.executeQuery();
             if (r.next())
@@ -248,5 +288,29 @@ public class Folder
         }
 
         return folders;
+    }
+
+    // Rename this method
+    public static List<Folder> topLevelFolders()
+    {
+        // Retrieve all the folders
+        List<Folder> folders = new ArrayList<Folder>();
+        for (Folder mediaFolder : mediaFolders())
+        {
+            folders.addAll(mediaFolder.listOfSubFolders());
+        }
+
+        // Sort the folders alphabetically
+        Collections.sort(folders, new FolderNameComparator());
+
+        return folders;
+    }
+
+    static class FolderNameComparator implements Comparator<Folder>
+    {
+        public int compare(Folder folder1, Folder folder2)
+        {
+            return folder1.getFolderName().compareToIgnoreCase(folder2.getFolderName());
+        }
     }
 }

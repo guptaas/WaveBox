@@ -47,4 +47,16 @@ public enum FileType
 		}
 		return UNKNOWN;
 	}
+
+    public static FileType fileTypeForId(int fileTypeId)
+    {
+        for (FileType type : FileType.values())
+        {
+            if (type.fileTypeId() == fileTypeId)
+            {
+                return type;
+            }
+        }
+        return UNKNOWN;
+    }
 }

@@ -1,12 +1,17 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
+import in.benjamm.pms.DataModel.Album;
+import in.benjamm.pms.DataModel.Folder;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.util.CharsetUtil;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -15,22 +20,22 @@ import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 /**
- * Created by IntelliJ IDEA.
+ * Created with IntelliJ IDEA.
  * User: bbaron
- * Date: 1/7/12
- * Time: 6:11 PM
+ * Date: 6/11/12
+ * Time: 10:00 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TestApiHandler implements IApiHandler
+public class AlbumsApiHandler implements IApiHandler
 {
-	private UriWrapper _uri;
-	private Map<String, List<String>> _parameters;
+    private UriWrapper _uri;
+    private Map<String, List<String>> _parameters;
 
-	public TestApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters)
-	{
-		_uri = $uri;
-		_parameters = $parameters;
-	}
+    public AlbumsApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters)
+    {
+        _uri = $uri;
+        _parameters = $parameters;
+    }
 
     public HttpResponse createResponse()
     {
@@ -41,20 +46,22 @@ public class TestApiHandler implements IApiHandler
         return response;
     }
 
-	private String _processRequest()
-	{
-		System.out.println("TestApiHandler  uri:" + _uri);
-		System.out.println("Parameters:");
-		for (String key : _parameters.keySet())
-		{
-			System.out.print(key + ": ");
-			for (String value : _parameters.get(key))
-			{
-				System.out.print(value + "   ");
-			}
-			System.out.println("   ");
-		}
-		System.out.println("   ");
-		return "Yay it worked!";
-	}
+    private String _processRequest()
+    {
+        return _allAlbums();
+    }
+
+    private String _allAlbums()
+    {
+        List<Album> albums = Album.allAlbums();
+        ObjectMapper mapper = new ObjectMapper();
+        StringWriter writer = new StringWriter();
+        try {
+            mapper.writeValue(writer, albums);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "{\"error\":null, \"albums\":" + writer.toString() + "}";
+    }
 }

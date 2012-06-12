@@ -130,6 +130,7 @@ public class MediaItem
 		int folderId = (new Folder(file.getParent())).getFolderId();
 		String fileName = file.getName();
 		long lastModified = file.lastModified();
+        boolean needsUpdating = true;
 
 		String query = "SELECT COUNT(*) AS count FROM song WHERE folder_id = ? AND file_name = ? AND last_modified = ?";
 		try
@@ -144,7 +145,7 @@ public class MediaItem
 			if (r.next())
 			{
 				if (r.getInt("count") >= 1)
-					return false;
+                    needsUpdating = false;
 			}
             r.close();
             s.close();
@@ -155,6 +156,6 @@ public class MediaItem
 			e.printStackTrace();
 		}
 
-		return true;
+		return needsUpdating;
 	}
 }

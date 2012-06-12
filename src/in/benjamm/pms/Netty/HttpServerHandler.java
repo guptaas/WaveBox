@@ -60,12 +60,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 
 		// Create a rest handler
 		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters);
-		String responseString = apiHandler.processRequest();
-
-		// Create the response
-		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-		response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-		response.setContent(ChannelBuffers.copiedBuffer(responseString, CharsetUtil.UTF_8));
+        HttpResponse response = apiHandler.createResponse();
 
 		// Send the response
 		// Close the connection as soon as the response is sent

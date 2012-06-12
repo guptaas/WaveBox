@@ -7,6 +7,10 @@ import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,21 +25,22 @@ public class Song extends MediaItem
      * Properties
      */
 
-    public Integer getItemTypeId() { return 3; }
+    private static final int _ITEM_TYPE_ID = 3;
+    public Integer getItemTypeId() { return _ITEM_TYPE_ID; }
 
     /**
      * Artist object for this song
      */
-    private Artist _artist;
-    public Artist getArtist() { return _artist; }
-    public void setArtist(Artist artist) { _artist = artist; }
+    private Integer _artistId;
+    public Integer getArtistId() { return _artistId; }
+    public void setArtistId(Integer artistId) { _artistId = artistId; }
 
     /**
      * Album object for this song
      */
-    private Album _album;
-    public Album getAlbum() { return _album; }
-    public void setAlbum(Album album) { _album = album; }
+    private Integer _albumId;
+    public Integer getAlbumId() { return _albumId; }
+    public void setAlbumId(Integer albumId) { _albumId = _albumId; }
 
     /**
      * Song name from tags
@@ -65,9 +70,17 @@ public class Song extends MediaItem
      * Constructor(s)
      */
 
-    // Constuctors here
+    public Song()
+    {
 
-	Song (AudioFile audioFile, int folderId)
+    }
+
+    public Song(ResultSet rs)
+    {
+        _setPropertiesFromResultSet(rs);
+    }
+
+    public Song (AudioFile audioFile, int folderId)
 	{
 		// Create header and tag objects
 		AudioHeader header = audioFile.getAudioHeader();
@@ -75,8 +88,8 @@ public class Song extends MediaItem
 
 		// Get the attributes
 		_folderId = folderId;
-		_artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
-        _album = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artist.getArtistId());
+		_artistId = Artist.artistForName(tag.getFirst(FieldKey.ARTIST)).getArtistId();
+        _albumId = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artistId).getAlbumId();
 		_fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
 		_songName = tag.getFirst(FieldKey.TITLE);
 
@@ -124,13 +137,42 @@ public class Song extends MediaItem
      * Private methods
      */
 
-    // Private methods here
+    private void _setPropertiesFromResultSet(ResultSet rs)
+    {
+        try {
+            _itemId = rs.getInt("song_id");
+            _folderId = rs.getInt("folder_id");
+            _artistId = rs.getInt("artist_id");
+            _albumId = rs.getInt("album_id");
+            _fileType = FileType.fileTypeForId(rs.getInt("file_type_id"));
+            _songName = rs.getString("song_name");
+            _trackNumber = rs.getInt("track_num");
+            _discNumber = rs.getInt("disc_num");
+            _duration = rs.getInt("duration");
+            _bitrate = rs.getLong("bitrate");
+            _fileSize = rs.getLong("file_size");
+            _lastModified = rs.getLong("last_modified");
+            _fileName = rs.getString("file_name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
     /*
      * Public methods
      */
+
+    public Artist artist()
+    {
+        return new Artist(getArtistId());
+    }
+
+    public Album album()
+    {
+        return new Album(getAlbumId());
+    }
 
     /**
      * Add or update a tag
@@ -163,8 +205,8 @@ public class Song extends MediaItem
             PreparedStatement s = c.prepareStatement(query);
             s.setNull(1, Types.INTEGER);
             s.setObject(2, getFolderId());
-            s.setObject(3, getArtist().getArtistId());
-            s.setObject(4, getAlbum().getAlbumId());
+            s.setObject(3, getArtistId());
+            s.setObject(4, getAlbumId());
             s.setObject(5, getFileType().fileTypeId());
             s.setObject(6, getSongName());
             s.setObject(7, getTrackNumber());
@@ -202,4 +244,38 @@ public class Song extends MediaItem
 			e.printStackTrace();
 		}
 	}
+
+    public static List<Song> allSongs()
+    {
+        // Retrieve all the artists
+        List<Song> songs = new ArrayList<Song>();
+        try {
+            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = " + _ITEM_TYPE_ID + " AND item_id = song_id";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            ResultSet r = s.executeQuery();
+            while(r.next())
+            {
+                songs.add(new Song(r));
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Sort the folders alphabetically
+        Collections.sort(songs, new SongNameComparator());
+
+        return songs;
+    }
+
+    static class SongNameComparator implements Comparator<Song>
+    {
+        public int compare(Song song1, Song song2)
+        {
+            return song1.getSongName().compareToIgnoreCase(song2.getSongName());
+        }
+    }
 }

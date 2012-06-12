@@ -1,7 +1,6 @@
 package in.benjamm.pms.ApiHandler;
 
-import in.benjamm.pms.ApiHandler.Handlers.ErrorApiHandler;
-import in.benjamm.pms.ApiHandler.Handlers.TestApiHandler;
+import in.benjamm.pms.ApiHandler.Handlers.*;
 import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
 
 import java.util.List;
@@ -25,16 +24,30 @@ public class ApiHandlerFactory
 			UriWrapper uri = new UriWrapper($uri);
 
 			// Choose the proper rest handler
-			if (uri.getFirstPart().equals("api") && uri.getUriPart(1).equals(uri.getLastPart()))
+			if (uri.getFirstPart().equals("api"))// && uri.getUriPart(1).equals(uri.getLastPart()))
 			{
-				if (uri.getUriPart(1).equals("test"))
-				{
-					returnHandler = new TestApiHandler($uri, $parameters);
-				}
-				else if (uri.getUriPart(1).equals("getFolders"))
-				{
+                String part1 = uri.getUriPart(1);
 
+				if (part1.equals("test"))
+				{
+					returnHandler = new TestApiHandler(uri, $parameters);
 				}
+				else if (part1.equals("folders"))
+				{
+                    returnHandler = new FoldersApiHandler(uri, $parameters);
+				}
+                else if (part1.equals("artists"))
+                {
+                    returnHandler = new ArtistsApiHandler(uri, $parameters);
+                }
+                else if (part1.equals("albums"))
+                {
+                    returnHandler = new AlbumsApiHandler(uri, $parameters);
+                }
+                else if (part1.equals("songs"))
+                {
+                    returnHandler = new SongsApiHandler(uri, $parameters);
+                }
 			}
 		}
 		catch (NullPointerException e)

@@ -39,6 +39,7 @@ public class Database
             config.setMinConnectionsPerPartition(5);
             config.setMaxConnectionsPerPartition(100);
             config.setPartitionCount(1);
+            config.setCloseConnectionWatch(true);
             _connectionPool = new BoneCP(config);
             /*_connectionPool = new BoneCP(config) // setup the connection pool
             {

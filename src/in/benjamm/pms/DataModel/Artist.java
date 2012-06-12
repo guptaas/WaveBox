@@ -1,6 +1,10 @@
 package in.benjamm.pms.DataModel;
 
+import javax.accessibility.AccessibleEditableText;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -16,7 +20,8 @@ public class Artist
      * Properties
      */
 
-    public Integer getItemTypeId() { return 1; }
+    private static final int _ITEM_TYPE_ID = 1;
+    public Integer getItemTypeId() { return _ITEM_TYPE_ID; }
 
     /**
      * Unique identifier
@@ -45,12 +50,17 @@ public class Artist
      * Constructor(s)
      */
 
-    Artist()
+    public Artist()
     {
 
     }
 
-    Artist(int artistId)
+    public Artist(ResultSet rs)
+    {
+        _setPropertiesFromResultSet(rs);
+    }
+
+    public Artist(int artistId)
     {
         try {
             String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_art.item_type_id = " + getItemTypeId() + ", item_id = artist_id WHERE artist_id = ?";
@@ -71,13 +81,13 @@ public class Artist
         }
     }
 
-    Artist(String artistName)
+    public Artist(String artistName)
     {
         if (artistName == null || artistName.equals(""))
             return;
 
         try {
-            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_id = 1 AND item_id = artist_id WHERE artist_name = ?";
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_id = " + getItemTypeId() + " AND item_id = artist_id WHERE artist_name = ?";
             Connection c = Database.getDbConnection();
             PreparedStatement s = c.prepareStatement(query);
             s.setObject(1, artistName);
@@ -178,4 +188,38 @@ public class Artist
 
         return anArtist;
 	}
+
+    public static List<Artist> allArtists()
+    {
+        // Retrieve all the artists
+        List<Artist> artists = new ArrayList<Artist>();
+        try {
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_id = " + _ITEM_TYPE_ID + " AND item_id = artist_id";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            ResultSet r = s.executeQuery();
+            while(r.next())
+            {
+                artists.add(new Artist(r));
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Sort the folders alphabetically
+        Collections.sort(artists, new ArtistNameComparator());
+
+        return artists;
+    }
+
+    static class ArtistNameComparator implements Comparator<Artist>
+    {
+        public int compare(Artist artist1, Artist artist2)
+        {
+            return artist1.getArtistName().compareToIgnoreCase(artist2.getArtistName());
+        }
+    }
 }

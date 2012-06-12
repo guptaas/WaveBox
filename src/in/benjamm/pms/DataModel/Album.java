@@ -1,6 +1,9 @@
 package in.benjamm.pms.DataModel;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -16,7 +19,8 @@ public class Album
      * Properties
      */
 
-    public Integer getItemTypeId() { return 2; }
+    private static final int _ITEM_TYPE_ID = 2;
+    public Integer getItemTypeId() { return _ITEM_TYPE_ID; }
 
     /**
      * Artist object for this album
@@ -59,12 +63,17 @@ public class Album
      * Constructor(s)
      */
 
-    Album()
+    public Album()
     {
 
     }
 
-    Album(int albumId)
+    public Album(ResultSet rs)
+    {
+        _setPropertiesFromResultSet(rs);
+    }
+
+    public Album(int albumId)
     {
         try {
             String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = 2, item_id = album_id WHERE album_id = ?";
@@ -85,7 +94,7 @@ public class Album
         }
     }
 
-    Album(String albumName)
+    public Album(String albumName)
     {
         if (albumName == null || albumName.equals(""))
             return;
@@ -198,5 +207,39 @@ public class Album
         }
 
         return anAlbum;
+    }
+
+    public static List<Album> allAlbums()
+    {
+        // Retrieve all the artists
+        List<Album> albums = new ArrayList<Album>();
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = " + _ITEM_TYPE_ID + " AND item_id = album_id";
+            Connection c = Database.getDbConnection();
+            PreparedStatement s = c.prepareStatement(query);
+            ResultSet r = s.executeQuery();
+            while(r.next())
+            {
+                albums.add(new Album(r));
+            }
+            r.close();
+            s.close();
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Sort the folders alphabetically
+        Collections.sort(albums, new AlbumNameComparator());
+
+        return albums;
+    }
+
+    static class AlbumNameComparator implements Comparator<Album>
+    {
+        public int compare(Album album1, Album album2)
+        {
+            return album1.getAlbumName().compareToIgnoreCase(album2.getAlbumName());
+        }
     }
 }
