@@ -2,7 +2,10 @@ package in.benjamm.pms.ApiHandler.Handlers;
 
 import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
+import in.benjamm.pms.Netty.HttpServerHandler;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.ChannelFutureListener;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.util.CharsetUtil;
@@ -25,20 +28,18 @@ public class TestApiHandler implements IApiHandler
 {
 	private UriWrapper _uri;
 	private Map<String, List<String>> _parameters;
+    private HttpServerHandler _sh;
 
-	public TestApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters)
+	public TestApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
 	{
 		_uri = $uri;
 		_parameters = $parameters;
+        _sh = sh;
 	}
 
-    public HttpResponse createResponse()
+    public void process()
     {
-        // Create the response
-        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-        response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.setContent(ChannelBuffers.copiedBuffer(_processRequest(), CharsetUtil.UTF_8));
-        return response;
+        _sh.sendJson(_processRequest());
     }
 
 	private String _processRequest()

@@ -23,6 +23,9 @@ import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import javax.xml.crypto.Data;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -54,6 +57,17 @@ public class Main
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(8080));
+
+        /*System.out.println("Press any key to scan files");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String userName = null;
+        try {
+            userName = br.readLine();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        System.out.println("Scanning files");*/
 
         // Scan the files
         Thread t = new Thread()

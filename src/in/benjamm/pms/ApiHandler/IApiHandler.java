@@ -11,5 +11,5 @@ import org.jboss.netty.handler.codec.http.HttpResponse;
  */
 public interface IApiHandler
 {
-    public HttpResponse createResponse();
+    public void process();
 }

@@ -132,29 +132,28 @@ public class MediaItem
 		long lastModified = file.lastModified();
         boolean needsUpdating = true;
 
-		String query = "SELECT COUNT(*) AS count FROM song WHERE folder_id = ? AND file_name = ? AND last_modified = ?";
-		try
-		{
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+		try {
+            String query = "SELECT COUNT(*) AS count FROM song WHERE folder_id = ? AND file_name = ? AND last_modified = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setObject(1, folderId);
             s.setObject(2, fileName);
             s.setObject(3, lastModified);
-			ResultSet r = s.executeQuery();
+			r = s.executeQuery();
 
 			if (r.next())
 			{
 				if (r.getInt("count") >= 1)
                     needsUpdating = false;
 			}
-            r.close();
-            s.close();
-            c.close();
-		}
-		catch (SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} finally {
+            Database.close(c, s, r);
+        }
 
 		return needsUpdating;
 	}

@@ -19,6 +19,7 @@ import java.util.zip.Checksum;
 public class CoverArt
 {
     public static final String ART_PATH = "/tmp/pms/art/";
+    public static final String TMP_ART_PATH = "/tmp/pms/art/tmp/";
 
     /*
      * Properties
@@ -41,7 +42,7 @@ public class CoverArt
     /**
      * The file object for this art
      */
-    public File getArtFile()
+    public File artFile()
     {
         return new File(ART_PATH + getAdlerHash());
     }
@@ -52,7 +53,37 @@ public class CoverArt
      * Constructor(s)
      */
 
-    CoverArt(AudioFile af)
+    public CoverArt()
+    {
+
+    }
+
+    public CoverArt (int artId)
+    {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            String query = "SELECT * FROM art WHERE art_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, artId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // The art is already in the database
+                _artId = r.getInt("art_id");
+                _adlerHash = r.getLong("adler_hash");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
+        }
+
+    }
+
+    public CoverArt(AudioFile af)
     {
         Artwork art = af.getTag().getFirstArtwork();
 
@@ -63,12 +94,15 @@ public class CoverArt
             checksum.update(bytes, 0, bytes.length);
             _adlerHash = checksum.getValue();
 
-            String query = "SELECT * FROM art WHERE adler_hash = ?";
+            Connection c = null;
+            PreparedStatement s = null;
+            ResultSet r = null;
             try {
-                Connection c = Database.getDbConnection();
-                PreparedStatement s = c.prepareStatement(query);
+                String query = "SELECT * FROM art WHERE adler_hash = ?";
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
                 s.setObject(1, _adlerHash);
-                ResultSet r = s.executeQuery();
+                r = s.executeQuery();
                 if (r.next())
                 {
                     // The art is already in the database
@@ -88,26 +122,31 @@ public class CoverArt
                         e.printStackTrace();
                     }
 
-                    // Insert the record
-                    query = "INSERT INTO art (adler_hash) VALUES (?)";
-                    PreparedStatement s1 = c.prepareStatement(query);
-                    s1.setLong(1, _adlerHash);
-                    s1.executeUpdate();
+                    PreparedStatement s1 = null;
+                    ResultSet r1 = null;
+                    try {
+                        // Insert the record
+                        query = "INSERT INTO art (adler_hash) VALUES (?)";
+                        s1 = c.prepareStatement(query);
+                        s1.setLong(1, _adlerHash);
+                        s1.executeUpdate();
 
-                    // Pull the art id
-                    ResultSet r1 = s1.getGeneratedKeys();
-                    if (r1.next())
-                    {
-                        _artId = r1.getInt(1);
+                        // Pull the art id
+                        r1 = s1.getGeneratedKeys();
+                        if (r1.next())
+                        {
+                            _artId = r1.getInt(1);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        Database.close(null, s1, r1);
                     }
-                    r1.close();
-                    s1.close();
                 }
-                r.close();
-                s.close();
-                c.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                Database.close(c, s, r);
             }
         }
     }

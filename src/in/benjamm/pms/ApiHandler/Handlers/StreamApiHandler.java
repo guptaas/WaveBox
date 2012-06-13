@@ -1,14 +1,26 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
+import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
+import in.benjamm.pms.ApiHandler.IApiHandler;
+import in.benjamm.pms.DataModel.Song;
+import in.benjamm.pms.Netty.HttpServerHandler;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponse;
+import org.jboss.netty.handler.ssl.SslHandler;
+import org.jboss.netty.handler.stream.ChunkedFile;
 import org.jboss.netty.util.CharsetUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
+import java.nio.channels.Channel;
 import java.util.List;
 import java.util.Map;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.OK;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -19,72 +31,38 @@ import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  * Time: 6:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StreamApiHandler
+public class StreamApiHandler implements IApiHandler
 {
-	/*File file = new File(path);
-        if (file.isHidden() || !file.exists())
-		{
-            sendError(ctx, NOT_FOUND);
+    private UriWrapper _uri;
+    private Map<String, List<String>> _parameters;
+    private HttpServerHandler _sh;
+
+    public StreamApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+    {
+        _uri = $uri;
+        _parameters = $parameters;
+        _sh = sh;
+    }
+
+    public void process()
+    {
+        File file = null;
+        try {
+            if (_uri.getUriPart(2) != null)
+            {
+                int songId = Integer.parseInt(_uri.getUriPart(2));
+                Song song = new Song(songId);
+                file = song.songFile();
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            //_sh.sendError(_ctx, NOT_FOUND);
             return;
         }
-        if (!file.isFile())
-		{
-            sendError(ctx, FORBIDDEN);
-            return;
-        }
 
-        RandomAccessFile raf;
-        try
-		{
-            raf = new RandomAccessFile(file, "r");
-        }
-		catch (FileNotFoundException fnfe)
-		{
-            sendError(ctx, NOT_FOUND);
-            return;
-        }
-        long fileLength = raf.length();
-
-        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-        setContentLength(response, fileLength);
-
-        Channel ch = e.getChannel();
-
-        // Write the initial line and the header.
-        ch.write(response);
-
-        // Write the content.
-        ChannelFuture writeFuture;
-        if (ch.getPipeline().get(SslHandler.class) != null)
-		{
-            // Cannot use zero-copy with HTTPS.
-            writeFuture = ch.write(new ChunkedFile(raf, 0, fileLength, 8192));
-        }
-		else
-		{
-            // No encryption - use zero-copy.
-            final FileRegion region = new DefaultFileRegion(raf.getChannel(), 0, fileLength);
-            writeFuture = ch.write(region);
-            writeFuture.addListener(new ChannelFutureProgressListener()
-			{
-                public void operationComplete(ChannelFuture future)
-				{
-                    region.releaseExternalResources();
-                }
-
-                public void operationProgressed(ChannelFuture future, long amount, long current, long total)
-				{
-                    System.out.printf("%s: %d / %d (+%d)%n", path, current, total, amount);
-                }
-            });
-        }
-
-        // Decide whether to close the connection or not.
-        if (!isKeepAlive(request))
-		{
-            // Close the connection when the whole content is written out.
-            writeFuture.addListener(ChannelFutureListener.CLOSE);
-        }*/
+        _sh.sendFile(file);
+    }
+}
 
 
 
@@ -122,27 +100,3 @@ public class StreamApiHandler
 		// Convert to absolute path.
 		return System.getProperty("user.dir") + File.separator + uri;
 	}*/
-
-    private String _uri;
-    private Map<String, List<String>> _parameters;
-
-    public StreamApiHandler(String $uri, Map<String, List<String>> $parameters)
-    {
-        _uri = $uri;
-        _parameters = $parameters;
-    }
-
-    public HttpResponse createResponse()
-    {
-        // Create the response
-        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-        response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.setContent(ChannelBuffers.copiedBuffer(_processRequest(), CharsetUtil.UTF_8));
-        return response;
-    }
-
-    private String _processRequest()
-    {
-        return null;
-    }
-}

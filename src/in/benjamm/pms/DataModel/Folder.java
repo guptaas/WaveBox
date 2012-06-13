@@ -64,12 +64,15 @@ public class Folder
 
     public Folder(int folderId)
     {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            Connection c = Database.getDbConnection();
+            c = Database.getDbConnection();
             String query = "SELECT * FROM folder WHERE folder_id = ?";
-            PreparedStatement s = c.prepareStatement(query);
+            s = c.prepareStatement(query);
             s.setObject(1, folderId);
-            ResultSet r = s.executeQuery();
+            r = s.executeQuery();
             if (r.next())
             {
                 _folderId = r.getInt("folder_id");
@@ -77,11 +80,10 @@ public class Folder
                 _folderPath = r.getString("folder_path");
                 _parentFolderId = r.getInt("parent_folder_id");
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
     }
 
@@ -90,10 +92,12 @@ public class Folder
         _folderPath = path;
         File folder = new File(_folderPath);
         _folderName = folder.getName();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            Connection c = Database.getDbConnection();
-            String query;
-            PreparedStatement s;
+            c = Database.getDbConnection();
+            String query = null;
             if (isMediaFolder())
             {
                 query = "SELECT folder_id FROM folder WHERE folder_name = ? AND parent_folder_id IS NULL";
@@ -109,16 +113,15 @@ public class Folder
                 s.setObject(2, _parentFolderId);
             }
 
-            ResultSet r = s.executeQuery();
+            r = s.executeQuery();
             if (r.next())
             {
                 _folderId = r.getInt("folder_id");
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
     }
 
@@ -151,21 +154,23 @@ public class Folder
     public List<Song> listOfSongs()
     {
         List<Song> songs = new ArrayList<Song>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
             String query = "SELECT * FROM song WHERE folder_id = ?";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setInt(1, getFolderId());
-            ResultSet r = s.executeQuery();
+            r = s.executeQuery();
             while (r.next())
             {
                 songs.add(new Song(r));
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
 
         return songs;
@@ -177,21 +182,23 @@ public class Folder
     public List<Folder> listOfSubFolders()
     {
         List<Folder> folders = new ArrayList<Folder>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
             String query = "SELECT * FROM folder WHERE parent_folder_id = ?";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setInt(1, getFolderId());
-            ResultSet r = s.executeQuery();
+            r = s.executeQuery();
             while (r.next())
             {
                 folders.add(new Folder(r.getInt("folder_id")));
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
 
         return folders;
@@ -224,67 +231,78 @@ public class Folder
 
     public void addToDatabase()
     {
+        Connection c = null;
+        PreparedStatement s = null;
         try {
+            c = Database.getDbConnection();
             String query = "INSERT INTO folder (folder_name, folder_path, parent_folder_id) VALUES (?, ?, ?)";
-
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
             s = c.prepareStatement(query);
             s.setObject(1, getFolderName());
             s.setObject(2, getFolderPath());
             s.setObject(3, getParentFolderId());
             s.executeUpdate();
-            s.close();
 
-            query = "SELECT folder_id FROM folder WHERE parent_folder_id = ? AND folder_name = ?";
-            s = c.prepareStatement(query);
-            s.setObject(1, getParentFolderId());
-            s.setObject(2, getFolderName());
-            ResultSet r = s.executeQuery();
-            if (r.next())
-            {
-                setFolderId(r.getInt("folder_id"));
+            PreparedStatement s1 = null;
+            ResultSet r = null;
+            try {
+                query = "SELECT folder_id FROM folder WHERE parent_folder_id = ? AND folder_name = ?";
+                s1 = c.prepareStatement(query);
+                s1.setObject(1, getParentFolderId());
+                s1.setObject(2, getFolderName());
+                r = s1.executeQuery();
+                if (r.next())
+                {
+                    setFolderId(r.getInt("folder_id"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                Database.close(null, s1, r);
             }
-            r.close();
-            s.close();
-            c.close();
-        } catch (SQLException e) {
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.close(c, s, null);
         }
     }
 
     public void removeFromDatabase()
     {
+        Connection c = null;
+        PreparedStatement s = null;
         try {
             String query = "DELETE FROM folder WHERE folder_id = ?";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setObject(1, getFolderId());
             s.executeUpdate();
-            s.close();
-            c.close();
         } catch (SQLException e) {
-
+            e.printStackTrace();
+        } finally {
+            Database.close(c, s, null);
         }
     }
 
     public static List<Folder> mediaFolders()
     {
         List<Folder> folders = new ArrayList<Folder>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
             String query = "SELECT * FROM folder WHERE parent_folder_id IS NULL";
-            Connection c = Database.getDbConnection();
-            Statement s = c.createStatement();
-            ResultSet r = s.executeQuery(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            r = s.executeQuery();
             while (r.next())
             {
                 folders.add(new Folder(r.getInt("folder_id")));
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
 
         return folders;

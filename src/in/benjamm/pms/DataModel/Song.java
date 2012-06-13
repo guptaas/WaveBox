@@ -75,6 +75,29 @@ public class Song extends MediaItem
 
     }
 
+    public Song(int songId)
+    {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id WHERE song_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, getItemTypeId());
+            s.setObject(2, songId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                _setPropertiesFromResultSet(r);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
+        }
+    }
+
     public Song(ResultSet rs)
     {
         _setPropertiesFromResultSet(rs);
@@ -192,8 +215,19 @@ public class Song extends MediaItem
     public void rescan()
     {}
 
+    public File songFile()
+    {
+        String fullPath = new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
+        System.out.println("fullPath: " + fullPath);
+        return new File(fullPath);
+    }
+
+
 	public void updateDatabase()
 	{
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
 		try {
             // Insert into the song table
             String query = "INSERT INTO song ";
@@ -201,8 +235,8 @@ public class Song extends MediaItem
             query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
             query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setNull(1, Types.INTEGER);
             s.setObject(2, getFolderId());
             s.setObject(3, getArtistId());
@@ -219,50 +253,60 @@ public class Song extends MediaItem
             s.executeUpdate();
 
             // Get the song_id
-            ResultSet r = s.getGeneratedKeys();
+            r = s.getGeneratedKeys();
             if (r.next())
             {
                 setItemId(r.getInt(1));
             }
-            r.close();
-            s.close();
 
             // Insert the art record
             if (getArtId() != null)
             {
-                query = "INSERT OR IGNORE INTO item_type_art (item_type_id, item_id, art_id) VALUES (?, ?, ?)";
-                s = c.prepareStatement(query);
-                s.setObject(1, getItemTypeId());
-                s.setObject(2, getItemId());
-                s.setObject(3, getArtId());
-                s.executeUpdate();
-                s.close();
+                Connection c1 = null;
+                PreparedStatement s1 = null;
+                try {
+                    query = "INSERT OR IGNORE INTO item_type_art (item_type_id, item_id, art_id) VALUES (?, ?, ?)";
+                    c1 = Database.getDbConnection();
+                    s1 = c1.prepareStatement(query);
+                    s1.setObject(1, getItemTypeId());
+                    s1.setObject(2, getItemId());
+                    s1.setObject(3, getArtId());
+                    s1.executeUpdate();
+                    s1.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    Database.close(c1, s1, null);
+                }
             }
-
-            c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} finally {
+            Database.close(c, s, r);
+        }
 	}
 
     public static List<Song> allSongs()
     {
         // Retrieve all the artists
         List<Song> songs = new ArrayList<Song>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = " + _ITEM_TYPE_ID + " AND item_id = song_id";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
-            ResultSet r = s.executeQuery();
+            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = ? AND item_id = song_id";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, _ITEM_TYPE_ID);
+            r = s.executeQuery();
             while(r.next())
             {
                 songs.add(new Song(r));
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
 
         // Sort the folders alphabetically
@@ -278,4 +322,24 @@ public class Song extends MediaItem
             return song1.getSongName().compareToIgnoreCase(song2.getSongName());
         }
     }
+
+    static class SongOrderComparator implements Comparator<Song>
+   {
+       public int compare(Song song1, Song song2)
+       {
+           if (song1.getDiscNumber() != null && song2.getDiscNumber() != null)
+           {
+               return song1.getDiscNumber() - song2.getDiscNumber();
+           }
+           else if (song1.getTrackNumber() != null && song2.getTrackNumber() != null)
+           {
+               return song1.getTrackNumber() - song2.getTrackNumber();
+           }
+           else
+           {
+               // Compare by name
+               return new SongNameComparator().compare(song1, song2);
+           }
+       }
+   }
 }

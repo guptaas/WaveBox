@@ -6,9 +6,7 @@ import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -89,7 +87,7 @@ public class Database
             }
         }
 
-        File artFolder = new File(CoverArt.ART_PATH);
+        File artFolder = new File(CoverArt.TMP_ART_PATH);
         if (!artFolder.exists())
         {
             artFolder.mkdirs();
@@ -104,5 +102,23 @@ public class Database
     public static void shutdownPool()
     {
         _connectionPool.shutdown();
+    }
+
+    public static void close(Connection c, Statement s, ResultSet r)
+    {
+        if (r != null)
+        {
+            try { r.close(); } catch (SQLException e) { }
+        }
+
+        if (s != null)
+        {
+            try { s.close(); } catch (SQLException e) { }
+        }
+
+        if (c != null)
+        {
+            try { c.close(); } catch (SQLException e) { }
+        }
     }
 }

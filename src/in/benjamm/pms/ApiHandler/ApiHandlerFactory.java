@@ -2,6 +2,9 @@ package in.benjamm.pms.ApiHandler;
 
 import in.benjamm.pms.ApiHandler.Handlers.*;
 import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
+import in.benjamm.pms.Netty.HttpServerHandler;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.MessageEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,7 @@ import java.util.Map;
  */
 public class ApiHandlerFactory
 {
-	public static IApiHandler createRestHandler(String $uri, Map<String, List<String>> $parameters)
+	public static IApiHandler createRestHandler(String $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
 	{
 		IApiHandler returnHandler = null;
 
@@ -30,23 +33,31 @@ public class ApiHandlerFactory
 
 				if (part1.equals("test"))
 				{
-					returnHandler = new TestApiHandler(uri, $parameters);
+					returnHandler = new TestApiHandler(uri, $parameters, sh);
 				}
 				else if (part1.equals("folders"))
 				{
-                    returnHandler = new FoldersApiHandler(uri, $parameters);
+                    returnHandler = new FoldersApiHandler(uri, $parameters, sh);
 				}
                 else if (part1.equals("artists"))
                 {
-                    returnHandler = new ArtistsApiHandler(uri, $parameters);
+                    returnHandler = new ArtistsApiHandler(uri, $parameters, sh);
                 }
                 else if (part1.equals("albums"))
                 {
-                    returnHandler = new AlbumsApiHandler(uri, $parameters);
+                    returnHandler = new AlbumsApiHandler(uri, $parameters, sh);
                 }
                 else if (part1.equals("songs"))
                 {
-                    returnHandler = new SongsApiHandler(uri, $parameters);
+                    returnHandler = new SongsApiHandler(uri, $parameters, sh);
+                }
+                else if (part1.equals("stream"))
+                {
+                    returnHandler = new StreamApiHandler(uri, $parameters, sh);
+                }
+                else if (part1.equals("cover"))
+                {
+                    returnHandler = new CoverArtApiHandler(uri, $parameters, sh);
                 }
 			}
 		}
@@ -58,9 +69,9 @@ public class ApiHandlerFactory
 		// If no handler to use, return the error handler
 		if (returnHandler == null)
 		{
-			returnHandler = new ErrorApiHandler();
+			returnHandler = new ErrorApiHandler(sh);
 		}
 
-		return returnHandler;
+        return returnHandler;
 	}
 }

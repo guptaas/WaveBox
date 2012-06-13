@@ -5,7 +5,10 @@ import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Album;
 import in.benjamm.pms.DataModel.Folder;
+import in.benjamm.pms.Netty.HttpServerHandler;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.ChannelFutureListener;
+import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
 import org.jboss.netty.handler.codec.http.HttpResponse;
 import org.jboss.netty.util.CharsetUtil;
@@ -30,25 +33,35 @@ public class AlbumsApiHandler implements IApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
+    private HttpServerHandler _sh;
 
-    public AlbumsApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters)
+    public AlbumsApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
     {
         _uri = $uri;
         _parameters = $parameters;
+        _sh = sh;
     }
 
-    public HttpResponse createResponse()
+    public void process()
     {
-        // Create the response
-        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-        response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
-        response.setContent(ChannelBuffers.copiedBuffer(_processRequest(), CharsetUtil.UTF_8));
-        return response;
+        _sh.sendJson(_processRequest());
     }
 
     private String _processRequest()
     {
-        return _allAlbums();
+        if (_uri.getUriPart(2) == null)
+        {
+            return _allAlbums();
+        }
+        else
+        {
+            try {
+                int albumId = Integer.parseInt(_uri.getUriPart(2));
+                return _album(albumId);
+            } catch (NumberFormatException e) { }
+        }
+
+        return "{\"error\":\"Invalid API call\"}";
     }
 
     private String _allAlbums()
@@ -63,5 +76,21 @@ public class AlbumsApiHandler implements IApiHandler
         }
 
         return "{\"error\":null, \"albums\":" + writer.toString() + "}";
+    }
+
+    private String _album(int albumId)
+    {
+        Album album = new Album(albumId);
+
+        // Get the folders
+        ObjectMapper mapper = new ObjectMapper();
+        StringWriter writer = new StringWriter();
+        try {
+            mapper.writeValue(writer, album.listOfSongs());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "{\"error\":null, \"songs\":" + writer.toString() + "}";
     }
 }

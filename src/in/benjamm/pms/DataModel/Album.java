@@ -25,9 +25,9 @@ public class Album
     /**
      * Artist object for this album
      */
-    private Artist _artist;
-    public Artist getArtist() { return _artist; }
-    public void setArtist(Artist artist) { _artist = artist; }
+    private Integer _artistId;
+    public Integer getArtistId() { return _artistId; }
+    public void setArtistId(Integer artistId) { _artistId = artistId; }
 
     /**
      * Unique identifier
@@ -75,22 +75,25 @@ public class Album
 
     public Album(int albumId)
     {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = 2, item_id = album_id WHERE album_id = ?";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
-            s.setObject(1, albumId);
-            ResultSet r = s.executeQuery();
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = album_id WHERE album_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, getItemTypeId());
+            s.setObject(2, albumId);
+            r = s.executeQuery();
             if (r.next())
             {
                 // Return the existing artist
                 _setPropertiesFromResultSet(r);
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
     }
 
@@ -99,12 +102,16 @@ public class Album
         if (albumName == null || albumName.equals(""))
             return;
 
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = " + getItemTypeId() + " AND item_id = album_id WHERE album_name = ?";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
-            s.setObject(1, albumName);
-            ResultSet r = s.executeQuery();
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id WHERE album_name = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, getItemTypeId());
+            s.setObject(2, albumName);
+            r = s.executeQuery();
             if (r.next())
             {
                 // Return the existing album
@@ -116,11 +123,10 @@ public class Album
                 System.out.println("ALBUM " + albumName + " does NOT exist in database");
                 _albumName = albumName;
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
     }
 
@@ -135,19 +141,21 @@ public class Album
         System.out.println("ALBUM: " + albumName);
 
         boolean success = false;
+        Connection c = null;
+        PreparedStatement s = null;
         try {
             String query = "INSERT INTO album (album_id, album_name, artist_id) VALUES (?, ?, ?)";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
             s.setNull(1, Types.INTEGER);
             s.setObject(2, albumName);
             s.setObject(3, Integer.valueOf(artistId));
             s.executeUpdate();
             success = true;
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, null);
         }
 
         return success;
@@ -156,6 +164,7 @@ public class Album
     private void _setPropertiesFromResultSet(ResultSet rs)
     {
         try {
+            _artistId = rs.getInt("artist_id");
             _albumId = rs.getInt("album_id");
             _albumName = rs.getString("album_name");
             _artId = rs.getInt("art_id");
@@ -170,6 +179,11 @@ public class Album
      * Public methods
      */
 
+    public Artist artist()
+    {
+        return new Artist(getArtistId());
+    }
+
     /**
      * Use web service to tag this album's files automatically
      */
@@ -181,7 +195,32 @@ public class Album
      */
     public List<Song> listOfSongs()
     {
-        return null;
+        // Retrieve all the songs
+        List<Song> songs = new ArrayList<Song>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = ? AND item_id = song_id WHERE album_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, new Song().getItemTypeId());
+            s.setInt(2, getAlbumId());
+            r = s.executeQuery();
+            while(r.next())
+            {
+                songs.add(new Song(r));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
+        }
+
+        // Sort the songs by disc number, track number
+        Collections.sort(songs, new Song.SongOrderComparator());
+
+        return songs;
     }
 
     public static Album albumForName(String albumName, Integer artistId)
@@ -211,25 +250,28 @@ public class Album
 
     public static List<Album> allAlbums()
     {
-        // Retrieve all the artists
+        // Retrieve all the albums
         List<Album> albums = new ArrayList<Album>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
         try {
-            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = " + _ITEM_TYPE_ID + " AND item_id = album_id";
-            Connection c = Database.getDbConnection();
-            PreparedStatement s = c.prepareStatement(query);
-            ResultSet r = s.executeQuery();
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, _ITEM_TYPE_ID);
+            r = s.executeQuery();
             while(r.next())
             {
                 albums.add(new Album(r));
             }
-            r.close();
-            s.close();
-            c.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Database.close(c, s, r);
         }
 
-        // Sort the folders alphabetically
+        // Sort the albums alphabetically
         Collections.sort(albums, new AlbumNameComparator());
 
         return albums;

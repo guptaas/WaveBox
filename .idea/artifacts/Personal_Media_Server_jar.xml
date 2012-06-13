@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact name="Personal Media Server:jar">
+  <artifact build-on-make="true" name="Personal Media Server:jar">
     <output-path>/tmp/pms</output-path>
     <root id="root">
       <element id="archive" name="Personal Media Server.jar">

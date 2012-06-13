@@ -2,9 +2,11 @@ Manifest-Version: 1.0
 Class-Path: netty-3.2.6.Final.jar org.json.jar sqlite-jdbc-3.7.2.jar j
  notify-0.94.jar jaudiotagger-2.0.4-20111207.115108-15.jar bonecp-0.7.
  0.jar slf4j-api-1.6.5.jar guava-12.0.jar slf4j-simple-1.6.5.jar slf4j
- -nop-1.6.5.jar netty-3.2.6.Final.jar org.json.jar sqlite-jdbc-3.7.2.j
- ar jnotify-0.94.jar jaudiotagger-2.0.4-20111207.115108-15.jar bonecp-
- 0.7.0.jar slf4j-api-1.6.5.jar guava-12.0.jar slf4j-simple-1.6.5.jar s
- lf4j-nop-1.6.5.jar
+ -nop-1.6.5.jar jackson-annotations-2.0.2.jar jackson-databind-2.0.2.j
+ ar jackson-core-2.0.2.jar netty-3.2.6.Final.jar org.json.jar sqlite-j
+ dbc-3.7.2.jar jnotify-0.94.jar jaudiotagger-2.0.4-20111207.115108-15.
+ jar bonecp-0.7.0.jar slf4j-api-1.6.5.jar guava-12.0.jar slf4j-simple-
+ 1.6.5.jar slf4j-nop-1.6.5.jar jackson-annotations-2.0.2.jar jackson-d
+ atabind-2.0.2.jar jackson-core-2.0.2.jar java-image-scaling-0.8.5.jar
 Main-Class: in.benjamm.pms.Main
 

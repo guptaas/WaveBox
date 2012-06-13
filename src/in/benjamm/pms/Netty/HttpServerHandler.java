@@ -4,10 +4,18 @@ import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.ApiHandler.ApiHandlerFactory;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.handler.codec.http.*;
+import org.jboss.netty.handler.ssl.SslHandler;
+import org.jboss.netty.handler.stream.ChunkedFile;
 import org.jboss.netty.util.CharsetUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.*;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +31,15 @@ import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public class HttpServerHandler extends SimpleChannelUpstreamHandler
 {
+    private ChannelHandlerContext _ctx;
+    private MessageEvent _e;
+
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception
 	{
+        _ctx = ctx;
+        _e = e;
+
 		// Check the request type
 		// Only accept GET and POST requests
         HttpRequest request = (HttpRequest) e.getMessage();
@@ -59,12 +73,8 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 		}
 
 		// Create a rest handler
-		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters);
-        HttpResponse response = apiHandler.createResponse();
-
-		// Send the response
-		// Close the connection as soon as the response is sent
-		ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
+		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters, this);
+        apiHandler.process();
     }
 
     @Override
@@ -85,7 +95,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         }
     }
 
-    private void sendError(ChannelHandlerContext ctx, HttpResponseStatus status)
+    public void sendError(ChannelHandlerContext ctx, HttpResponseStatus status)
 	{
         HttpResponse response = new DefaultHttpResponse(HTTP_1_1, status);
         response.setHeader(CONTENT_TYPE, "text/plain; charset=UTF-8");
@@ -95,5 +105,92 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 
         // Close the connection as soon as the error message is sent.
         ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    public void sendFile(final File file)
+    {
+        if (file == null)
+            return;
+
+        RandomAccessFile raf;
+        try
+        {
+            raf = new RandomAccessFile(file, "r");
+        }
+        catch (FileNotFoundException fnfe)
+        {
+            sendError(_ctx, NOT_FOUND);
+            return;
+        }
+        long fileLength = 0;
+        try {
+            fileLength = raf.length();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
+        HttpHeaders.setContentLength(response, fileLength);
+
+        Channel ch = _e.getChannel();
+
+        // Write the initial line and the header.
+        ch.write(response);
+
+        // Write the content.
+        ChannelFuture writeFuture = null;
+        if (ch.getPipeline().get(SslHandler.class) != null)
+        {
+            // Cannot use zero-copy with HTTPS.
+            try {
+                writeFuture = ch.write(new ChunkedFile(raf, 0, fileLength, 8192));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            // No encryption - use zero-copy.
+            final FileRegion region = new DefaultFileRegion(raf.getChannel(), 0, fileLength);
+            writeFuture = ch.write(region);
+            writeFuture.addListener(new ChannelFutureProgressListener()
+            {
+                public void operationComplete(ChannelFuture future)
+                {
+                    region.releaseExternalResources();
+                }
+
+                public void operationProgressed(ChannelFuture future, long amount, long current, long total)
+                {
+                    System.out.printf("%s: %d / %d (+%d)%n", file.getName(), current, total, amount);
+                }
+            });
+        }
+
+        // Close the connection when the whole content is written out.
+        if (writeFuture != null)
+        {
+            writeFuture.addListener(ChannelFutureListener.CLOSE);
+        }
+    }
+
+    public void sendFile(byte bytes[])
+    {
+        // Create the response
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
+        //response.setHeader(CONTENT_TYPE, "application/json; charset=UTF-8");
+        response.setContent(ChannelBuffers.copiedBuffer(bytes));
+
+        _ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    public void sendJson(String json)
+    {
+        // Create the response
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
+        response.setHeader(CONTENT_TYPE, "application/json; charset=UTF-8");
+        response.setContent(ChannelBuffers.copiedBuffer(json, CharsetUtil.UTF_8));
+
+        _ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
     }
 }
