@@ -48,6 +48,10 @@ public class Folder
     public String getFolderPath() { return _folderPath; }
     public void setFolderPath(String folderPath) { _folderPath = folderPath; }
 
+    private Integer _artId;
+    public Integer getArtId() { return _artId; }
+    public void setArtId(Integer artId) { _artId = artId; }
+
     /*
      * Constructor(s)
      */
@@ -69,16 +73,22 @@ public class Folder
         ResultSet r = null;
         try {
             c = Database.getDbConnection();
-            String query = "SELECT * FROM folder WHERE folder_id = ?";
+            String query = "SELECT folder.*, item_type_art.art_id FROM folder ";
+                  query += "LEFT JOIN song USING(folder_id) ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "WHERE folder_id = ? ";
+                  query += "GROUP BY folder_id";
             s = c.prepareStatement(query);
-            s.setObject(1, folderId);
+            s.setObject(1, new Song().getItemTypeId());
+            s.setObject(2, folderId);
             r = s.executeQuery();
             if (r.next())
             {
                 _folderId = r.getInt("folder_id");
                 _folderName = r.getString("folder_name");
                 _folderPath = r.getString("folder_path");
-                _parentFolderId = r.getInt("parent_folder_id");
+                _parentFolderId = (Integer)r.getObject("parent_folder_id");
+                _artId = (Integer)r.getObject("art_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -158,10 +168,15 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
         try {
-            String query = "SELECT * FROM song WHERE folder_id = ?";
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist USING (artist_id) ";
+                  query += "LEFT JOIN album USING (album_id) ";
+                  query += "WHERE folder_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
-            s.setInt(1, getFolderId());
+            s.setObject(1, new Song().getItemTypeId());
+            s.setInt(2, getFolderId());
             r = s.executeQuery();
             while (r.next())
             {

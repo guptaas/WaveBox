@@ -35,12 +35,20 @@ public class Song extends MediaItem
     public Integer getArtistId() { return _artistId; }
     public void setArtistId(Integer artistId) { _artistId = artistId; }
 
+    private String _artistName;
+    public String getArtistName() { return _artistName; }
+    public void setArtistName(String artistName) { _artistName = artistName; }
+
     /**
      * Album object for this song
      */
     private Integer _albumId;
     public Integer getAlbumId() { return _albumId; }
     public void setAlbumId(Integer albumId) { _albumId = _albumId; }
+
+    private String _albumName;
+    public String getAlbumName() { return _albumName; }
+    public void setAlbumName(String albumName) { _albumName = albumName; }
 
     /**
      * Song name from tags
@@ -81,7 +89,11 @@ public class Song extends MediaItem
         PreparedStatement s = null;
         ResultSet r = null;
         try {
-            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id WHERE song_id = ?";
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist USING (artist_id) ";
+                  query += "LEFT JOIN album USING (album_id) ";
+                  query += "WHERE song_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setObject(1, getItemTypeId());
@@ -111,8 +123,12 @@ public class Song extends MediaItem
 
 		// Get the attributes
 		_folderId = folderId;
-		_artistId = Artist.artistForName(tag.getFirst(FieldKey.ARTIST)).getArtistId();
-        _albumId = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artistId).getAlbumId();
+        Artist artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
+		_artistId = artist.getArtistId();
+        _artistName = artist.getArtistName();
+        Album album = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artistId);
+        _albumId = album.getAlbumId();
+        _albumName = album.getAlbumName();
 		_fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
 		_songName = tag.getFirst(FieldKey.TITLE);
 
@@ -163,19 +179,22 @@ public class Song extends MediaItem
     private void _setPropertiesFromResultSet(ResultSet rs)
     {
         try {
-            _itemId = rs.getInt("song_id");
-            _folderId = rs.getInt("folder_id");
-            _artistId = rs.getInt("artist_id");
-            _albumId = rs.getInt("album_id");
+            _itemId = (Integer)rs.getObject("song_id");
+            _folderId = (Integer)rs.getObject("folder_id");
+            _artistId = (Integer)rs.getObject("artist_id");
+            _artistName = rs.getString("artist_name");
+            _albumId = (Integer)rs.getObject("album_id");
+            _albumName = rs.getString("album_name");
             _fileType = FileType.fileTypeForId(rs.getInt("file_type_id"));
             _songName = rs.getString("song_name");
-            _trackNumber = rs.getInt("track_num");
-            _discNumber = rs.getInt("disc_num");
-            _duration = rs.getInt("duration");
+            _trackNumber = (Integer)rs.getObject("track_num");
+            _discNumber = (Integer)rs.getObject("disc_num");
+            _duration = (Integer)rs.getObject("duration");
             _bitrate = rs.getLong("bitrate");
             _fileSize = rs.getLong("file_size");
             _lastModified = rs.getLong("last_modified");
             _fileName = rs.getString("file_name");
+            _artId = (Integer)rs.getObject("art_id");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -231,9 +250,9 @@ public class Song extends MediaItem
 		try {
             // Insert into the song table
             String query = "INSERT INTO song ";
-            query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
-            query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
-            query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                  query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
+                  query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
+                  query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
@@ -288,13 +307,16 @@ public class Song extends MediaItem
 
     public static List<Song> allSongs()
     {
-        // Retrieve all the artists
+        // Retrieve all the songs
         List<Song> songs = new ArrayList<Song>();
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
         try {
-            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = ? AND item_id = song_id";
+            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist USING (artist_id) ";
+                  query += "LEFT JOIN album USING (album_id)";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setInt(1, _ITEM_TYPE_ID);
@@ -309,7 +331,7 @@ public class Song extends MediaItem
             Database.close(c, s, r);
         }
 
-        // Sort the folders alphabetically
+        // Sort the songs alphabetically
         Collections.sort(songs, new SongNameComparator());
 
         return songs;

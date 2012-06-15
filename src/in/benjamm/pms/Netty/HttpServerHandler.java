@@ -2,6 +2,7 @@ package in.benjamm.pms.Netty;
 
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.ApiHandler.ApiHandlerFactory;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.Channel;
@@ -11,10 +12,7 @@ import org.jboss.netty.handler.ssl.SslHandler;
 import org.jboss.netty.handler.stream.ChunkedFile;
 import org.jboss.netty.util.CharsetUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.channels.*;
 import java.util.List;
 import java.util.Map;
@@ -107,21 +105,71 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
     }
 
+    /*public void sendFile(File file)
+    {
+        final long fileLength = file.length();
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, ACCEPTED);
+        HttpHeaders.setContentLength(response, fileLength);
+        ChannelFuture writeFuture = _e.getChannel().write(response);
+
+        final FileInputStream fis;
+        try {
+            fis = new FileInputStream(file);
+
+            writeFuture.addListener(new ChannelFutureListener() {
+                private final ChannelBuffer buffer = ChannelBuffers.buffer(4096);
+                private long offset = 0;
+
+                public void operationComplete(ChannelFuture future) throws Exception
+                {
+                    if (!future.isSuccess())
+                    {
+                        System.out.println("future not successful");
+                        future.getCause().printStackTrace();
+                        future.getChannel().close();
+                        fis.close();
+                        return;
+                    }
+
+                    System.out.println("SENDING: " + offset + " / " + fileLength);
+                    buffer.clear();
+                    buffer.writeBytes(fis, (int) Math.min(fileLength - offset, buffer.writableBytes()));
+                    offset += buffer.writerIndex();
+                    ChannelFuture chunkWriteFuture = future.getChannel().write(buffer);
+                    if (offset < fileLength)
+                    {
+                        // Send the next chunk
+                        chunkWriteFuture.addListener(this);
+                    }
+                    else
+                    {
+                        // Wrote the last chunk - close the connection if the write is done.
+                        System.out.println("DONE: " + fileLength);
+                        chunkWriteFuture.addListener(ChannelFutureListener.CLOSE);
+                        fis.close();
+                    }
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+
+
     public void sendFile(final File file)
     {
         if (file == null)
             return;
 
         RandomAccessFile raf;
-        try
-        {
+        try {
             raf = new RandomAccessFile(file, "r");
-        }
-        catch (FileNotFoundException fnfe)
-        {
+        } catch (FileNotFoundException e) {
             sendError(_ctx, NOT_FOUND);
             return;
         }
+
         long fileLength = 0;
         try {
             fileLength = raf.length();

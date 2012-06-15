@@ -59,6 +59,10 @@ public class ApiHandlerFactory
                 {
                     returnHandler = new CoverArtApiHandler(uri, $parameters, sh);
                 }
+                else if (part1.equals("status"))
+                {
+                    returnHandler = new StatusApiHandler(uri, $parameters, sh);
+                }
 			}
 		}
 		catch (NullPointerException e)

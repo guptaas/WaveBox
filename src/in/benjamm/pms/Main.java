@@ -18,6 +18,7 @@ package in.benjamm.pms;
 import in.benjamm.pms.DataModel.Database;
 import in.benjamm.pms.DataModel.FileManager;
 import in.benjamm.pms.DataModel.Folder;
+import in.benjamm.pms.Netty.HttpServer;
 import in.benjamm.pms.Netty.HttpServerPipelineFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
@@ -49,14 +50,8 @@ public class Main
             }
         });
 
-        // Configure the server.
-        ServerBootstrap bootstrap = new ServerBootstrap(new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
-
-        // Set up the event pipeline factory.
-        bootstrap.setPipelineFactory(new HttpServerPipelineFactory());
-
-        // Bind and start to accept incoming connections.
-        bootstrap.bind(new InetSocketAddress(8080));
+        HttpServer server = new HttpServer(8080);
+        server.bootstrap();
 
         /*System.out.println("Press any key to scan files");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

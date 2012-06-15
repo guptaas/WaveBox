@@ -205,7 +205,11 @@ public class Artist
         PreparedStatement s = null;
         ResultSet r = null;
         try {
-            String query = "SELECT * FROM song LEFT JOIN item_type_art ON item_type_id = ? AND item_id = song_id WHERE artist_id = ?";
+            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist USING (artist_id) ";
+                  query += "LEFT JOIN album USING (album_id) ";
+                  query += "WHERE artist_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setInt(1, new Song().getItemTypeId());
