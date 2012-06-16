@@ -14,6 +14,7 @@ import org.jboss.netty.util.CharsetUtil;
 
 import java.io.*;
 import java.nio.channels.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +71,15 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 				parameters.putAll(postParameters);
 		}
 
+        // Get the headers
+        Map<String, String> headers = new HashMap<String, String>();
+        for (Map.Entry<String,String> header : request.getHeaders())
+        {
+            headers.put(header.getKey(), header.getValue());
+        }
+
 		// Create a rest handler
-		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters, this);
+		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters, headers, this);
         apiHandler.process();
     }
 
@@ -157,7 +165,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
     */
 
 
-    public void sendFile(final File file)
+    public void sendFile(final File file, long offset)
     {
         if (file == null)
             return;
@@ -172,12 +180,12 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 
         long fileLength = 0;
         try {
-            fileLength = raf.length();
+            fileLength = raf.length() - offset;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
+        HttpResponse response = new DefaultHttpResponse(HTTP_1_1, offset == 0 ? OK : PARTIAL_CONTENT);
         HttpHeaders.setContentLength(response, fileLength);
 
         Channel ch = _e.getChannel();
@@ -191,7 +199,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         {
             // Cannot use zero-copy with HTTPS.
             try {
-                writeFuture = ch.write(new ChunkedFile(raf, 0, fileLength, 8192));
+                writeFuture = ch.write(new ChunkedFile(raf, offset, fileLength, 8192));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -199,7 +207,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         else
         {
             // No encryption - use zero-copy.
-            final FileRegion region = new DefaultFileRegion(raf.getChannel(), 0, fileLength);
+            final FileRegion region = new DefaultFileRegion(raf.getChannel(), offset, fileLength);
             writeFuture = ch.write(region);
             writeFuture.addListener(new ChannelFutureProgressListener()
             {

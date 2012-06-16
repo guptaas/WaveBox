@@ -18,50 +18,50 @@ import java.util.Map;
  */
 public class ApiHandlerFactory
 {
-	public static IApiHandler createRestHandler(String $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+	public static IApiHandler createRestHandler(String uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
 	{
 		IApiHandler returnHandler = null;
 
 		try
 		{
-			UriWrapper uri = new UriWrapper($uri);
+			UriWrapper uriW = new UriWrapper(uri);
 
 			// Choose the proper rest handler
-			if (uri.getFirstPart().equals("api"))// && uri.getUriPart(1).equals(uri.getLastPart()))
+			if (uriW.getFirstPart().equals("api"))// && uri.getUriPart(1).equals(uri.getLastPart()))
 			{
-                String part1 = uri.getUriPart(1);
+                String part1 = uriW.getUriPart(1);
 
 				if (part1.equals("test"))
 				{
-					returnHandler = new TestApiHandler(uri, $parameters, sh);
+					returnHandler = new TestApiHandler(uriW, parameters, sh);
 				}
 				else if (part1.equals("folders"))
 				{
-                    returnHandler = new FoldersApiHandler(uri, $parameters, sh);
+                    returnHandler = new FoldersApiHandler(uriW, parameters, sh);
 				}
                 else if (part1.equals("artists"))
                 {
-                    returnHandler = new ArtistsApiHandler(uri, $parameters, sh);
+                    returnHandler = new ArtistsApiHandler(uriW, parameters, sh);
                 }
                 else if (part1.equals("albums"))
                 {
-                    returnHandler = new AlbumsApiHandler(uri, $parameters, sh);
+                    returnHandler = new AlbumsApiHandler(uriW, parameters, sh);
                 }
                 else if (part1.equals("songs"))
                 {
-                    returnHandler = new SongsApiHandler(uri, $parameters, sh);
+                    returnHandler = new SongsApiHandler(uriW, parameters, sh);
                 }
                 else if (part1.equals("stream"))
                 {
-                    returnHandler = new StreamApiHandler(uri, $parameters, sh);
+                    returnHandler = new StreamApiHandler(uriW, parameters, headers, sh);
                 }
                 else if (part1.equals("cover"))
                 {
-                    returnHandler = new CoverArtApiHandler(uri, $parameters, sh);
+                    returnHandler = new CoverArtApiHandler(uriW, parameters, sh);
                 }
                 else if (part1.equals("status"))
                 {
-                    returnHandler = new StatusApiHandler(uri, $parameters, sh);
+                    returnHandler = new StatusApiHandler(uriW, parameters, sh);
                 }
 			}
 		}

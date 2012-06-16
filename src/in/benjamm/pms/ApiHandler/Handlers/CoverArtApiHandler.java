@@ -29,10 +29,10 @@ public class CoverArtApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
 
-    public CoverArtApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+    public CoverArtApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh)
     {
-        _uri = $uri;
-        _parameters = $parameters;
+        _uri = uri;
+        _parameters = parameters;
         _sh = sh;
     }
 
@@ -66,13 +66,13 @@ public class CoverArtApiHandler implements IApiHandler
                         }
                     } catch (NumberFormatException e) {
                         // Send the original file
-                        _sh.sendFile(new CoverArt(artId).artFile());
+                        _sh.sendFile(new CoverArt(artId).artFile(), 0);
                     }
                 }
                 else
                 {
                     // Send the original file
-                    _sh.sendFile(art.artFile());
+                    _sh.sendFile(art.artFile(), 0);
                 }
             } catch (NumberFormatException e) {
                 _sh.sendJson("{\"error\":\"Invalid API call\"}");

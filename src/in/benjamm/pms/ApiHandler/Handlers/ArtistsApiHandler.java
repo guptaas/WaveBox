@@ -35,10 +35,10 @@ public class ArtistsApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
 
-    public ArtistsApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+    public ArtistsApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh)
     {
-        _uri = $uri;
-        _parameters = $parameters;
+        _uri = uri;
+        _parameters = parameters;
         _sh = sh;
     }
 

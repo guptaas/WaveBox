@@ -36,10 +36,10 @@ public class FoldersApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
 
-    public FoldersApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+    public FoldersApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh)
     {
-        _uri = $uri;
-        _parameters = $parameters;
+        _uri = uri;
+        _parameters = parameters;
         _sh = sh;
     }
 

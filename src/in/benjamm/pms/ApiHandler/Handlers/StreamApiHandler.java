@@ -36,11 +36,13 @@ public class StreamApiHandler implements IApiHandler
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
+    private Map<String, String> _headers;
 
-    public StreamApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+    public StreamApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
     {
-        _uri = $uri;
-        _parameters = $parameters;
+        _uri = uri;
+        _parameters = parameters;
+        _headers = headers;
         _sh = sh;
     }
 
@@ -60,7 +62,20 @@ public class StreamApiHandler implements IApiHandler
             return;
         }
 
-        _sh.sendFile(file);
+        long offset = 0;
+        if (_headers.containsKey("Range"))
+        {
+            try {
+                String range = _headers.get("Range");
+                String[] ranges = range.substring("bytes=".length()).split("-");
+                offset = Long.valueOf(ranges[0]);
+                //long to = Long.valueOf(ranges[1]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        _sh.sendFile(file, offset);
     }
 }
 

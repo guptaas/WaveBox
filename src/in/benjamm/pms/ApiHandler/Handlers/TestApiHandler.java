@@ -29,12 +29,14 @@ public class TestApiHandler implements IApiHandler
 	private UriWrapper _uri;
 	private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
+    private Map<String, String> _headers;
 
-	public TestApiHandler(UriWrapper $uri, Map<String, List<String>> $parameters, HttpServerHandler sh)
+	public TestApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
 	{
-		_uri = $uri;
-		_parameters = $parameters;
+		_uri = uri;
+		_parameters = parameters;
         _sh = sh;
+        _headers = headers;
 	}
 
     public void process()
@@ -55,6 +57,14 @@ public class TestApiHandler implements IApiHandler
 			}
 			System.out.println("   ");
 		}
+        System.out.println("Headers:");
+        for (String key : _headers.keySet())
+        {
+            System.out.print(key + ": ");
+            String value = _headers.get(key);
+            System.out.print(value + "   ");
+            System.out.println("   ");
+        }
 		System.out.println("   ");
 		return "Yay it worked!";
 	}

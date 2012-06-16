@@ -249,14 +249,14 @@ public class Song extends MediaItem
         ResultSet r = null;
 		try {
             // Insert into the song table
-            String query = "INSERT INTO song ";
+            String query = "REPLACE INTO song ";
                   query += "(song_id, folder_id, artist_id, album_id, file_type_id, song_name, track_num";
                   query += ", disc_num, duration, bitrate, file_size, last_modified, file_name) ";
                   query += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
-            s.setNull(1, Types.INTEGER);
+            s.setObject(1, getItemId());
             s.setObject(2, getFolderId());
             s.setObject(3, getArtistId());
             s.setObject(4, getAlbumId());
@@ -271,11 +271,14 @@ public class Song extends MediaItem
             s.setObject(13, getFileName());
             s.executeUpdate();
 
-            // Get the song_id
-            r = s.getGeneratedKeys();
-            if (r.next())
+            if (getItemId() == null)
             {
-                setItemId(r.getInt(1));
+                // Get the song_id
+                r = s.getGeneratedKeys();
+                if (r.next())
+                {
+                    setItemId(r.getInt(1));
+                }
             }
 
             // Insert the art record
