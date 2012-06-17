@@ -33,7 +33,7 @@ public class ApiHandlerFactory
 
 				if (part1.equals("test"))
 				{
-					returnHandler = new TestApiHandler(uriW, parameters, sh);
+					returnHandler = new TestApiHandler(uriW, parameters, headers, sh);
 				}
 				else if (part1.equals("folders"))
 				{

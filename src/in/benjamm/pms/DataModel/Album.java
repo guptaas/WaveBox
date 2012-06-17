@@ -19,8 +19,7 @@ public class Album
      * Properties
      */
 
-    private static final int _ITEM_TYPE_ID = 2;
-    public Integer getItemTypeId() { return _ITEM_TYPE_ID; }
+    public Integer getItemTypeId() { return ItemType.ALBUM.getItemTypeId(); }
 
     /**
      * Artist object for this album
@@ -203,8 +202,8 @@ public class Album
         try {
             String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                  query += "LEFT JOIN artist USING (artist_id) ";
-                  query += "LEFT JOIN album USING (album_id) ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist_id ";
+                  query += "LEFT JOIN album USING song_album_id = album_id ";
                   query += "WHERE album_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
@@ -263,7 +262,7 @@ public class Album
             String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
-            s.setInt(1, _ITEM_TYPE_ID);
+            s.setInt(1, ItemType.ALBUM.getItemTypeId());
             r = s.executeQuery();
             while(r.next())
             {

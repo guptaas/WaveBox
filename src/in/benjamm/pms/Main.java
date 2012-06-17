@@ -53,7 +53,7 @@ public class Main
         HttpServer server = new HttpServer(8080);
         server.bootstrap();
 
-        /*System.out.println("Press any key to scan files");
+        System.out.println("Press any key to scan files");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String userName = null;
         try {
@@ -62,7 +62,7 @@ public class Main
             ioe.printStackTrace();
         }
 
-        System.out.println("Scanning files");*/
+        System.out.println("Scanning files");
 
         // Scan the files
         Thread t = new Thread()

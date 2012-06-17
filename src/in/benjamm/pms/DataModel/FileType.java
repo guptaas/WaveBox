@@ -20,13 +20,13 @@ public enum FileType
 	UNKNOWN(-1, "UNKNOWN", "");
 
 	private int _fileTypeId;
-	public int fileTypeId() { return _fileTypeId; }
+	public int getFileTypeId() { return _fileTypeId; }
 
 	private String _jAudioTaggerFormatString;
-	public String jAudioTaggerFormatString() { return _jAudioTaggerFormatString; }
+	public String getJAudioTaggerFormatString() { return _jAudioTaggerFormatString; }
 
 	private String _longDescription;
-	public String longDescription() { return _longDescription; }
+	public String getLongDescription() { return _longDescription; }
 
 	FileType(int fileTypeId, String longDescription, String jAudioTaggerFormatString)
 	{
@@ -40,7 +40,7 @@ public enum FileType
         //System.out.println("format: " + jAudioTaggerFormatString);
 		for (FileType type : FileType.values())
 		{
-			if (type.jAudioTaggerFormatString().equals(jAudioTaggerFormatString))
+			if (type.getJAudioTaggerFormatString().equals(jAudioTaggerFormatString))
 			{
 				return type;
 			}
@@ -52,7 +52,7 @@ public enum FileType
     {
         for (FileType type : FileType.values())
         {
-            if (type.fileTypeId() == fileTypeId)
+            if (type.getFileTypeId() == fileTypeId)
             {
                 return type;
             }

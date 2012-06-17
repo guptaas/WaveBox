@@ -35,20 +35,21 @@ public class Database
             final BoneCPConfig config = new BoneCPConfig();
             config.setJdbcUrl("jdbc:sqlite:" + DATABASE_PATH);
             config.setMinConnectionsPerPartition(5);
-            config.setMaxConnectionsPerPartition(100);
+            config.setMaxConnectionsPerPartition(15);
             config.setPartitionCount(1);
-            config.setCloseConnectionWatch(true);
-            _connectionPool = new BoneCP(config);
-            /*_connectionPool = new BoneCP(config) // setup the connection pool
+            //config.setCloseConnectionWatch(true); // Only enable for debugging orphaned connections, creates tons of threads
+            //_connectionPool = new BoneCP(config); // Just create default connections
+            _connectionPool = new BoneCP(config) // Create custom connections
             {
                 @Override
                 protected Connection obtainRawInternalConnection() throws SQLException
                 {
                     SQLiteConfig liteConfig = new SQLiteConfig();
                     liteConfig.setOpenMode(SQLiteOpenMode.NOMUTEX);
+                    liteConfig.setTempStore(SQLiteConfig.TempStore.MEMORY);
                     return DriverManager.getConnection(config.getJdbcUrl(), liteConfig.toProperties());
                 }
-            };*/
+            };
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

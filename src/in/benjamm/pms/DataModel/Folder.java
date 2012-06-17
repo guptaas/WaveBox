@@ -74,7 +74,7 @@ public class Folder
         try {
             c = Database.getDbConnection();
             String query = "SELECT folder.*, item_type_art.art_id FROM folder ";
-                  query += "LEFT JOIN song USING(folder_id) ";
+                  query += "LEFT JOIN song ON song_folder_id = folder_id ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                   query += "WHERE folder_id = ? ";
                   query += "GROUP BY folder_id";
@@ -170,8 +170,8 @@ public class Folder
         try {
             String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                  query += "LEFT JOIN artist USING (artist_id) ";
-                  query += "LEFT JOIN album USING (album_id) ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist_id ";
+                  query += "LEFT JOIN album ON song_album_id = album_id ";
                   query += "WHERE folder_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
