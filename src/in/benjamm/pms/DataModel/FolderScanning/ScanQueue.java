@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * Time: 4:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FolderScanQueue
+public class ScanQueue
 {
     public static final int DEFAULT_DELAY = 10;
 
@@ -34,8 +34,8 @@ public class FolderScanQueue
     private boolean _scanQueueShouldLoop = true;
     private Thread _scanQueueThread;
     private Object _scanQueueSyncObject = new Object();
-    private DelayQueue<FolderScanOperation> _scanQueue = new DelayQueue<FolderScanOperation>();
-    private FolderScanOperation _currentOperation;
+    private DelayQueue<ScanOperation> _scanQueue = new DelayQueue<ScanOperation>();
+    private ScanOperation _currentOperation;
 
     public void startScanQueue()
     {
@@ -80,7 +80,7 @@ public class FolderScanQueue
 
         System.out.println("Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
 
-        FolderScanOperation operation = new FolderScanOperation(folderPath, secondsDelay);
+        ScanOperation operation = new ScanOperation(folderPath, secondsDelay);
         synchronized (_scanQueueSyncObject)
         {
             if (operation.equals(_currentOperation))
@@ -94,7 +94,7 @@ public class FolderScanQueue
                 Iterator itr = _scanQueue.iterator();
                 while(itr.hasNext())
                 {
-                    FolderScanOperation existingOperation = (FolderScanOperation)itr.next();
+                    ScanOperation existingOperation = (ScanOperation)itr.next();
                     existingOperation.resetDelay();
                 }
             }

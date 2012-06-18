@@ -56,7 +56,8 @@ public class StreamApiHandler implements IApiHandler
                 offset = Long.valueOf(ranges[0]);
                 //long to = Long.valueOf(ranges[1]);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                offset = 0;
+                //e.printStackTrace();
             }
         }
 

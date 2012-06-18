@@ -50,31 +50,5 @@ public class Main
 
         // Initialize the FileManager
         FileManager.sharedInstance();
-
-        /* ------------------------------ */
-
-        System.out.println("Press any key to scan files");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String userName = null;
-        try {
-            userName = br.readLine();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        System.out.println("Scanning files");
-
-        // Scan the files
-        Thread t = new Thread()
-        {
-            public void run()
-            {
-                long startTime = System.currentTimeMillis();
-                FileManager.sharedInstance().getFolderScanQueue().queueFolderScan(Folder.mediaFolders().get(0).getFolderPath(), 0);
-                long runTime = (System.currentTimeMillis() - startTime) / 1000;
-                System.out.println("All files scanned! It took " + runTime + " seconds");
-            }
-        };
-        t.start();
     }
 }

@@ -120,26 +120,33 @@ public class Playlist
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            // Insert into the playlist table
-            String query = "SELECT * FROM playlist_item WHERE playlist_id = ?";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getPlaylistId());
-            r = s.executeQuery();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the playlist table
+                String query = "SELECT * FROM playlist_item WHERE playlist_id = ?";
 
-            StringBuilder itemIds = new StringBuilder();
-            while (r.next())
-            {
-                itemIds.append(r.getInt("item_id")).append(",");
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getPlaylistId());
+                r = s.executeQuery();
+
+                StringBuilder itemIds = new StringBuilder();
+                while (r.next())
+                {
+                    itemIds.append(r.getInt("item_id")).append(",");
+                }
+                hash = _md5OfString(itemIds.toString());
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-            hash = _md5OfString(itemIds.toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
-        }
+        } while (retry);
 
         return hash;
     }
@@ -164,36 +171,44 @@ public class Playlist
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            // Insert into the playlist table
-            String query = "REPLACE INTO playlist ";
-                  query += "(playlist_id, playlist_name, playlist_count, playlist_duration, adler_hash, last_update)";
-                  query += "VALUES (?, ?, ?, ?, ?, ?)";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getPlaylistId());
-            s.setObject(2, getPlaylistName());
-            s.setObject(3, getPlaylistCount());
-            s.setObject(4, getPlaylistDuration());
-            s.setObject(5, getMd5Hash());
-            s.setObject(6, getLastUpdateTime());
-            s.executeUpdate();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the playlist table
+                String query = "MERGE INTO playlist ";
+                      query += "(playlist_id, playlist_name, playlist_count, playlist_duration, adler_hash, last_update)";
+                      query += "VALUES (?, ?, ?, ?, ?, ?)";
 
-            if (getPlaylistId() == null)
-            {
-                // Get the playlist_id
-                r = s.getGeneratedKeys();
-                if (r.next())
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getPlaylistId());
+                s.setObject(2, getPlaylistName());
+                s.setObject(3, getPlaylistCount());
+                s.setObject(4, getPlaylistDuration());
+                s.setObject(5, getMd5Hash());
+                s.setObject(6, getLastUpdateTime());
+                s.executeUpdate();
+
+                if (getPlaylistId() == null)
                 {
-                    setPlaylistId(r.getInt(1));
+                    // Get the playlist_id
+                    r = s.getGeneratedKeys();
+                    if (r.next())
+                    {
+                        setPlaylistId(r.getInt(1));
+                    }
                 }
+            } catch (SQLException e) {
+                 //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
     }
 
     /*
@@ -206,28 +221,36 @@ public class Playlist
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            // Insert into the playlist table
-            String query = "SELECT item_position FROM playlist_item ";
-                  query += "WHERE playlist_id = ? AND item_id = ? AND item_type_id = ? ";
-                  query += "ORDER BY item_position LIMIT 1";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getPlaylistId());
-            s.setObject(2, item.getItemId());
-            s.setObject(3, item.getItemTypeId());
-            r = s.executeQuery();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the playlist table
+                String query = "SELECT item_position FROM playlist_item ";
+                      query += "WHERE playlist_id = ? AND item_id = ? AND item_type_id = ? ";
+                      query += "ORDER BY item_position LIMIT 1";
 
-            if (r.next())
-            {
-                index = r.getInt("item_position");
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getPlaylistId());
+                s.setObject(2, item.getItemId());
+                s.setObject(3, item.getItemTypeId());
+                r = s.executeQuery();
+
+                if (r.next())
+                {
+                    index = r.getInt("item_position");
+                }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
 
         return index;
     }
@@ -241,34 +264,42 @@ public class Playlist
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            // Insert into the playlist table
-            String query = "SELECT * FROM playlist_item WHERE playlist_id = ? AND item_position = ?";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getPlaylistId());
-            s.setObject(2, index);
-            r = s.executeQuery();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the playlist table
+                String query = "SELECT * FROM playlist_item WHERE playlist_id = ? AND item_position = ?";
 
-            if (r.next())
-            {
-                int itemTypeId = r.getInt("item_type_id");
-                int itemId = r.getInt("item_id");
-                if (itemTypeId == ItemType.SONG.getItemTypeId())
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getPlaylistId());
+                s.setObject(2, index);
+                r = s.executeQuery();
+
+                if (r.next())
                 {
-                    item = new Song(itemId);
+                    int itemTypeId = r.getInt("item_type_id");
+                    int itemId = r.getInt("item_id");
+                    if (itemTypeId == ItemType.SONG.getItemTypeId())
+                    {
+                        item = new Song(itemId);
+                    }
+                    else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
+                    {
+                        // Fill in later
+                    }
                 }
-                else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
-                {
-                    // Fill in later
-                }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
 
         return item;
     }
@@ -282,39 +313,47 @@ public class Playlist
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            // Insert into the playlist table
-            String query = "SELECT *, artist.artist_name, album.album_name FROM playlist_item ";
-                  query += "LEFT JOIN song ON item_id = song_id AND item_type_id = ? ";
-                  query += "LEFT JOIN artist ON song_artist_id = artist_id ";
-                  query += "LEFT JOIN album ON song_album_id = album_id ";
-                  query += "LEFT JOIN video ON item_id = video_id AND item_type_id = ? ";
-                  query += "WHERE playlist_id = ? ORDER BY item_position";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, ItemType.SONG.getItemTypeId());
-            s.setObject(2, ItemType.VIDEO.getItemTypeId());
-            s.setObject(3, getPlaylistId());
-            r = s.executeQuery();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the playlist table
+                String query = "SELECT *, artist.artist_name, album.album_name FROM playlist_item ";
+                      query += "LEFT JOIN song ON item_id = song_id AND item_type_id = ? ";
+                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                      query += "LEFT JOIN album ON song_album_id = album.album_id ";
+                      query += "LEFT JOIN video ON item_id = video_id AND item_type_id = ? ";
+                      query += "WHERE playlist_id = ? ORDER BY item_position";
 
-            while (r.next())
-            {
-                int itemTypeId = r.getInt("item_type_id");
-                if (itemTypeId == ItemType.SONG.getItemTypeId())
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, ItemType.SONG.getItemTypeId());
+                s.setObject(2, ItemType.VIDEO.getItemTypeId());
+                s.setObject(3, getPlaylistId());
+                r = s.executeQuery();
+
+                while (r.next())
                 {
-                    mediaItems.add(new Song(r));
+                    int itemTypeId = r.getInt("item_type_id");
+                    if (itemTypeId == ItemType.SONG.getItemTypeId())
+                    {
+                        mediaItems.add(new Song(r));
+                    }
+                    else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
+                    {
+                        // Fill in later
+                    }
                 }
-                else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
-                {
-                    // Fill in later
-                }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
 
         return mediaItems;
     }
@@ -354,34 +393,50 @@ public class Playlist
     {
         Connection c = null;
         PreparedStatement s = null;
-        try {
-            // Delete the item
-            String query = "DELETE FROM playlist_item WHERE playlist_id = ? AND item_position = ?";
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getPlaylistId());
-            s.setInt(2, index);
-            s.executeUpdate();
 
-            // Fix the track numbers
-            PreparedStatement s1 = null;
+        boolean retry = false;
+        do
+        {
             try {
-                query = "UPDATE playlist_item SET item_position = item_position + 1 ";
-                query += "WHERE playlist_id = ? AND item_position > ?";
-                s1 = c.prepareStatement(query);
-                s1.setObject(1, getPlaylistId());
-                s1.setInt(2, index);
-                s1.executeUpdate();
+                // Delete the item
+                String query = "DELETE FROM playlist_item WHERE playlist_id = ? AND item_position = ?";
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getPlaylistId());
+                s.setInt(2, index);
+                s.executeUpdate();
+
+                // Fix the track numbers
+                PreparedStatement s1 = null;
+
+                boolean retry2 = false;
+                do
+                {
+                    try {
+                        query = "UPDATE playlist_item SET item_position = item_position + 1 ";
+                        query += "WHERE playlist_id = ? AND item_position > ?";
+                        s1 = c.prepareStatement(query);
+                        s1.setObject(1, getPlaylistId());
+                        s1.setInt(2, index);
+                        s1.executeUpdate();
+                    } catch (SQLException e) {
+                        //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                        e.printStackTrace();
+                        //retry2 = true;
+                    } finally {
+                        Database.close(null, s1, null);
+                    }
+                }
+                while (retry2);
             } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
                 e.printStackTrace();
+                //retry = true;
             } finally {
-                Database.close(null, s1, null);
+                Database.close(c, s, null);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, null);
         }
+        while (retry);
     }
 
     /**
@@ -507,22 +562,30 @@ public class Playlist
     {
         Connection c = null;
         PreparedStatement s = null;
-        try {
-            // Delete the item
-            String query = "INSERT INTO playlist_item VALUES (?, ?, ?, ?, ?)";
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setNull(1, Types.INTEGER);
-            s.setObject(2, getPlaylistId());
-            s.setObject(3, item.getItemTypeId());
-            s.setObject(4, item.getItemId());
-            s.setObject(5, getPlaylistCount());
-            s.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, null);
+
+        boolean retry = false;
+        do
+        {
+            try {
+                // Delete the item
+                String query = "INSERT INTO playlist_item VALUES (?, ?, ?, ?, ?)";
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setNull(1, Types.INTEGER);
+                s.setObject(2, getPlaylistId());
+                s.setObject(3, item.getItemTypeId());
+                s.setObject(4, item.getItemId());
+                s.setObject(5, getPlaylistCount());
+                s.executeUpdate();
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, null);
+            }
         }
+        while (retry);
 
         if (updateDatabase)
         {

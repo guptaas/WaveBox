@@ -18,7 +18,9 @@ import java.sql.*;
  */
 public class Database
 {
-    public static final String DATABASE_PATH = "/tmp/pms.db";
+    //public static final String DATABASE_PATH = "pms.db";
+    public static final String DATABASE_PATH = "pms";
+    public static final String DATABASE_EXT = ".h2.db";
 
     private static BoneCP _connectionPool = null;
 
@@ -31,16 +33,20 @@ public class Database
         try {
             // load the database driver (make sure this is in your classpath!)
             Class.forName("org.sqlite.JDBC");
+            //Class.forName("org.h2.Driver");
 
             // setup the connection pool
             final BoneCPConfig config = new BoneCPConfig();
-            config.setJdbcUrl("jdbc:sqlite:" + DATABASE_PATH);
+            //config.setJdbcUrl("jdbc:sqlite:" + DATABASE_PATH);
+            config.setJdbcUrl("jdbc:h2:file:" + DATABASE_PATH + ";IFEXISTS=TRUE;FILE_LOCK=SOCKET");
+            config.setUsername("pms");
+            config.setPassword("pms");
             config.setMinConnectionsPerPartition(5);
-            config.setMaxConnectionsPerPartition(15);
+            config.setMaxConnectionsPerPartition(100);
             config.setPartitionCount(1);
             //config.setCloseConnectionWatch(true); // Only enable for debugging orphaned connections, creates tons of threads
-            //_connectionPool = new BoneCP(config); // Just create default connections
-            _connectionPool = new BoneCP(config) // Create custom connections
+            _connectionPool = new BoneCP(config); // Just create default connections
+            /*_connectionPool = new BoneCP(config) // Create custom connections
             {
                 @Override
                 protected Connection obtainRawInternalConnection() throws SQLException
@@ -50,7 +56,7 @@ public class Database
                     liteConfig.setTempStore(SQLiteConfig.TempStore.MEMORY);
                     return DriverManager.getConnection(config.getJdbcUrl(), liteConfig.toProperties());
                 }
-            };
+            };*/
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -60,13 +66,15 @@ public class Database
 
     private static void _databaseFileSetup()
     {
-        File dbFile = new File(DATABASE_PATH);
+        File dbFile = new File(DATABASE_PATH + DATABASE_EXT);
+        System.out.println("db file: " + DATABASE_PATH + DATABASE_EXT);
         if (!dbFile.exists())
         {
+            System.out.println("doesn't exist, copying");
             try
             {
-                InputStream inStream = Database.class.getResourceAsStream("/res/pms.db");
-                File outFile = new File(DATABASE_PATH);
+                InputStream inStream = Database.class.getResourceAsStream("/res/pms.h2.db");
+                File outFile = new File(DATABASE_PATH + DATABASE_EXT);
                 OutputStream outStream = new FileOutputStream(outFile);
 
                 byte[] buf = new byte[1024];
@@ -98,6 +106,7 @@ public class Database
 
     public static Connection getDbConnection() throws SQLException
     {
+        //System.out.println("Connections used: " + _connectionPool.getTotalLeased() + " / " + _connectionPool.getTotalCreatedConnections());
         return _connectionPool.getConnection();
     }
 

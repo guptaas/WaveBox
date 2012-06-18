@@ -89,26 +89,34 @@ public class Song extends MediaItem
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
-                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                  query += "LEFT JOIN artist ON song_artist_id = artist_id ";
-                  query += "LEFT JOIN album ON song_album_id = album_id ";
-                  query += "WHERE song_id = ?";
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setObject(1, getItemTypeId());
-            s.setObject(2, songId);
-            r = s.executeQuery();
-            if (r.next())
-            {
-                _setPropertiesFromResultSet(r);
+
+        boolean retry = false;
+        do
+        {
+            try {
+                String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
+                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                      query += "LEFT JOIN album ON song_album_id = album.album_id ";
+                      query += "WHERE song_id = ?";
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setObject(1, getItemTypeId());
+                s.setObject(2, songId);
+                r = s.executeQuery();
+                if (r.next())
+                {
+                    _setPropertiesFromResultSet(r);
+                }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
     }
 
     public Song(ResultSet rs)
@@ -124,37 +132,68 @@ public class Song extends MediaItem
 
 		// Get the attributes
 		_folderId = folderId;
-        Artist artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
-		_artistId = artist.getArtistId();
-        _artistName = artist.getArtistName();
-        Album album = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artistId);
-        _albumId = album.getAlbumId();
-        _albumName = album.getAlbumName();
-		_fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
-		_songName = tag.getFirst(FieldKey.TITLE);
 
-        String track = tag.getFirst(FieldKey.TRACK);
-        if (track != null && !track.equals(""))
-        {
-            try {
-                if (track.contains("/"))
-                {
-                    track = track.split("/")[0];
-                }
-                _trackNumber = Integer.valueOf(track);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
+        try {
+            Artist artist = Artist.artistForName(tag.getFirst(FieldKey.ARTIST));
+            _artistId = artist.getArtistId();
+            _artistName = artist.getArtistName();
+        } catch (NullPointerException e) {
+            _artistId = null;
+            _artistName = null;
         }
 
-        String disc = tag.getFirst(FieldKey.DISC_NO);
-        if (disc != null && !disc.equals(""))
-        {
-            try {
-                _discNumber = Integer.valueOf(disc);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+        try {
+            Album album = Album.albumForName(tag.getFirst(FieldKey.ALBUM), _artistId);
+            _albumId = album.getAlbumId();
+            _albumName = album.getAlbumName();
+        } catch (NullPointerException e) {
+            _albumId = null;
+            _albumName = null;
+        }
+
+        try {
+		    _fileType = FileType.fileTypeForJAudioTaggerFormatString(header.getFormat());
+        } catch (NullPointerException e) {
+            _fileType = FileType.UNKNOWN;
+        }
+
+        try {
+		    _songName = tag.getFirst(FieldKey.TITLE);
+        } catch (NullPointerException e) {
+            _songName = null;
+        }
+
+        try {
+            String track = tag.getFirst(FieldKey.TRACK);
+            if (track != null)
+            {
+                try {
+                    if (track.contains("/"))
+                    {
+                        track = track.split("/")[0];
+                    }
+                    _trackNumber = Integer.valueOf(track);
+                } catch (NumberFormatException e) {
+                    _trackNumber = null;
+                    //e.printStackTrace();
+                }
             }
+        } catch (NullPointerException e) {
+            _trackNumber = null;
+        }
+
+        try {
+            String disc = tag.getFirst(FieldKey.DISC_NO);
+            if (disc != null)
+            {
+                try {
+                    _discNumber = Integer.valueOf(disc);
+                } catch (NumberFormatException e) {
+                    _discNumber = null;
+                }
+            }
+        } catch (NullPointerException e) {
+            _discNumber = null;
         }
 
 		_duration = header.getTrackLength();
@@ -248,65 +287,81 @@ public class Song extends MediaItem
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-		try {
-            // Insert into the song table
-            String query = "REPLACE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            //s.setNull(1, Types.INTEGER);
-            s.setObject(1, getItemId());
-            s.setObject(2, getFolderId());
-            s.setObject(3, getArtistId());
-            s.setObject(4, getAlbumId());
-            s.setObject(5, getFileType().getFileTypeId());
-            s.setObject(6, getSongName());
-            s.setObject(7, getTrackNumber());
-            s.setObject(8, getDiscNumber());
-            s.setObject(9, getDuration());
-            s.setObject(10, getBitrate());
-            s.setObject(11, getFileSize());
-            s.setObject(12, getLastModified());
-            s.setObject(13, getFileName());
-            s.setObject(14, getReleaseYear());
-            s.executeUpdate();
+        boolean retry = false;
+        do
+        {
+            try {
+                // Insert into the song table
+                String query = "MERGE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            if (getItemId() == null)
-            {
-                // Get the song_id
-                r = s.getGeneratedKeys();
-                if (r.next())
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                //s.setNull(1, Types.INTEGER);
+                s.setObject(1, getItemId());
+                s.setObject(2, getFolderId());
+                s.setObject(3, getArtistId());
+                s.setObject(4, getAlbumId());
+                s.setObject(5, getFileType().getFileTypeId());
+                s.setObject(6, getSongName());
+                s.setObject(7, getTrackNumber());
+                s.setObject(8, getDiscNumber());
+                s.setObject(9, getDuration());
+                s.setObject(10, getBitrate());
+                s.setObject(11, getFileSize());
+                s.setObject(12, getLastModified());
+                s.setObject(13, getFileName());
+                s.setObject(14, getReleaseYear());
+                s.executeUpdate();
+
+                if (getItemId() == null)
                 {
-                    setItemId(r.getInt(1));
+                    // Get the song_id
+                    r = s.getGeneratedKeys();
+                    if (r.next())
+                    {
+                        setItemId(r.getInt(1));
+                    }
                 }
-            }
 
-            // Insert the art record
-            if (getArtId() != null)
-            {
-                Connection c1 = null;
-                PreparedStatement s1 = null;
-                try {
-                    query = "INSERT OR IGNORE INTO item_type_art VALUES (?, ?, ?, ?)";
-                    c1 = Database.getDbConnection();
-                    s1 = c1.prepareStatement(query);
-                    s1.setNull(1, Types.INTEGER);
-                    s1.setObject(2, getItemTypeId());
-                    s1.setObject(3, getItemId());
-                    s1.setObject(4, getArtId());
-                    s1.executeUpdate();
-                    s1.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    Database.close(c1, s1, null);
+                // Insert the art record
+                if (getArtId() != null)
+                {
+                    Connection c1 = null;
+                    PreparedStatement s1 = null;
+
+                    boolean retry2 = false;
+                    do
+                    {
+                        try {
+                            query = "MERGE INTO item_type_art VALUES (?, ?, ?, ?)";
+                            c1 = Database.getDbConnection();
+                            s1 = c1.prepareStatement(query);
+                            s1.setNull(1, Types.INTEGER);
+                            s1.setObject(2, getItemTypeId());
+                            s1.setObject(3, getItemId());
+                            s1.setObject(4, getArtId());
+                            s1.executeUpdate();
+                            s1.close();
+                        } catch (SQLException e) {
+                            //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                            e.printStackTrace();
+                            //retry2 = true;
+                        } finally {
+                            Database.close(c1, s1, null);
+                        }
+                    }
+                    while (retry2);
                 }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-            Database.close(c, s, r);
         }
+        while (retry);
 	}
 
     public static List<Song> allSongs()
@@ -316,24 +371,32 @@ public class Song extends MediaItem
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
-        try {
-            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
-                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                  query += "LEFT JOIN artist ON song_artist_id = artist_id ";
-                  query += "LEFT JOIN album ON song_album_id = album_id";
-            c = Database.getDbConnection();
-            s = c.prepareStatement(query);
-            s.setInt(1, _ITEM_TYPE_ID);
-            r = s.executeQuery();
-            while(r.next())
-            {
-                songs.add(new Song(r));
+
+        boolean retry = false;
+        do
+        {
+            try {
+                String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                      query += "LEFT JOIN album ON song_album_id = album.album_id";
+                c = Database.getDbConnection();
+                s = c.prepareStatement(query);
+                s.setInt(1, _ITEM_TYPE_ID);
+                r = s.executeQuery();
+                while(r.next())
+                {
+                    songs.add(new Song(r));
+                }
+            } catch (SQLException e) {
+                //System.out.println("TABLE LOCKED, RETRYING QUERY");
+                e.printStackTrace();
+                //retry = true;
+            } finally {
+                Database.close(c, s, r);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            Database.close(c, s, r);
         }
+        while (retry);
 
         // Sort the songs alphabetically
         Collections.sort(songs, new SongNameComparator());
