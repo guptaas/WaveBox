@@ -51,31 +51,25 @@ public class FileManager implements JNotifyListener
 
     private FileManager()
     {
-        System.out.println("FileManager()");
-
-        /*// Setup JNotify
+        // Setup JNotify
         try {
             _bootstrapJNotify();
         } catch (RuntimeException e) {
             e.printStackTrace();
-        }*/
+        }
 
         // Scan and watch all media folders
         for (Folder folder : Folder.mediaFolders())
         {
-            System.out.println("media folder: " + folder.getFolderName());
-
             // Queue folder scan
             _folderScanQueue.queueFolderScan(folder, 0);
 
-            System.out.println("queued folder: " + folder.getFolderName());
-
-            /*// Watch this folder for changes
+            // Watch this folder for changes
             try {
                 addFolderWatch(folder);
             } catch (JNotifyException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
 
         // Start the folder scan
@@ -99,6 +93,10 @@ public class FileManager implements JNotifyListener
 
     private void _bootstrapJNotify() throws RuntimeException
     {
+/*        System.out.println("java.library.path: " + System.getProperty("java.library.path", "unset"));
+        System.setProperty("java.library.path", ".");
+        System.out.println("java.library.path: " + System.getProperty("java.library.path", "unset"));*/
+
         String overrideClass = System.getProperty("jnotify.impl.override");
         if (overrideClass != null)
         {
@@ -174,21 +172,31 @@ public class FileManager implements JNotifyListener
 
     public void fileCreated(int wd, String rootPath, String name)
     {
-        _folderScanQueue.queueFolderScan(rootPath, FolderScanQueue.DEFAULT_DELAY);
+        File file = new File(rootPath + File.separator + name);
+        System.out.println("fileCreated - path: " + file.getParent());
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
    	public void fileDeleted(int wd, String rootPath, String name)
     {
-        _folderScanQueue.queueFolderScan(rootPath, FolderScanQueue.DEFAULT_DELAY);
+        File file = new File(rootPath + File.separator + name);
+        System.out.println("fileCreated - path: " + file.getParent());
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
     public void fileModified(int wd, String rootPath, String name)
     {
-        _folderScanQueue.queueFolderScan(rootPath, FolderScanQueue.DEFAULT_DELAY);
+        File file = new File(rootPath + File.separator + name);
+        System.out.println("fileCreated - path: " + file.getParent());
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
    	public void fileRenamed(int wd, String rootPath, String oldName, String newName)
     {
-        _folderScanQueue.queueFolderScan(rootPath, FolderScanQueue.DEFAULT_DELAY);
+        File oldFile = new File(rootPath + File.separator + oldName);
+        File newFile = new File(rootPath + File.separator + newName);
+        System.out.println("fileCreated - oldPath: " + oldFile.getParent() + " newPath: " + newFile.getParent());
+        _folderScanQueue.queueFolderScan(oldFile.getParent(), FolderScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(newFile.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 }

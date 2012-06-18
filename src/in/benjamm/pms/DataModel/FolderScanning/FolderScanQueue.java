@@ -39,29 +39,25 @@ public class FolderScanQueue
 
     public void startScanQueue()
     {
-        System.out.println("Starting scan queue");
-        _scanQueueThread = new Thread(new Runnable() {
+        _scanQueueThread = new Thread(new Runnable()
+        {
             public void run()
             {
-                System.out.println("Starting scan thread");
                 while (_scanQueueShouldLoop)
                 {
                     // Scan the next folder
                     synchronized (_scanQueueSyncObject)
                     {
-                        System.out.println("Entering sync and getting operation");
                         _currentOperation = _scanQueue.poll();
                     }
 
                     if (_currentOperation != null)
                     {
-                        System.out.println("Running operation");
                         _currentOperation.run(); // This is blocking
                     }
 
                     // Sleep for a second
                     try {
-                        System.out.println("Scan thread sleeping");
                         Thread.sleep(TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS));
                     } catch (InterruptedException e) {}
                 }
@@ -81,6 +77,8 @@ public class FolderScanQueue
     {
         if (folderPath == null)
             return;
+
+        System.out.println("Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
 
         FolderScanOperation operation = new FolderScanOperation(folderPath, secondsDelay);
         synchronized (_scanQueueSyncObject)

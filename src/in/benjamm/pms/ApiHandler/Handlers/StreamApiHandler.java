@@ -86,7 +86,7 @@ public class StreamApiHandler implements IApiHandler
 		}
 
 		// Convert file separators.
-		uri = uri.replace('/', File.separatorChar);
+		uri = uri.replace('/', File.separator);
 
 		// Simplistic dumb security check.
 		// You will have to do something serious in the production environment.

@@ -12,6 +12,7 @@
         </element>
       </element>
       <element id="library" level="project" name="lib" />
+      <element id="dir-copy" path="$PROJECT_DIR$/nlib" />
     </root>
   </artifact>
 </component>
