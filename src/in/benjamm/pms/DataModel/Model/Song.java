@@ -1,5 +1,6 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
 
+import in.benjamm.pms.DataModel.Singletons.Database;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.tag.FieldKey;
@@ -249,7 +250,7 @@ public class Song extends MediaItem
         ResultSet r = null;
 		try {
             // Insert into the song table
-            String query = "REPLACE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "REPLACE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
@@ -267,6 +268,7 @@ public class Song extends MediaItem
             s.setObject(11, getFileSize());
             s.setObject(12, getLastModified());
             s.setObject(13, getFileName());
+            s.setObject(14, getReleaseYear());
             s.executeUpdate();
 
             if (getItemId() == null)
@@ -285,12 +287,13 @@ public class Song extends MediaItem
                 Connection c1 = null;
                 PreparedStatement s1 = null;
                 try {
-                    query = "INSERT OR IGNORE INTO item_type_art VALUES (?, ?, ?)";
+                    query = "INSERT OR IGNORE INTO item_type_art VALUES (?, ?, ?, ?)";
                     c1 = Database.getDbConnection();
                     s1 = c1.prepareStatement(query);
-                    s1.setObject(1, getItemTypeId());
-                    s1.setObject(2, getItemId());
-                    s1.setObject(3, getArtId());
+                    s1.setNull(1, Types.INTEGER);
+                    s1.setObject(2, getItemTypeId());
+                    s1.setObject(3, getItemId());
+                    s1.setObject(4, getArtId());
                     s1.executeUpdate();
                     s1.close();
                 } catch (SQLException e) {

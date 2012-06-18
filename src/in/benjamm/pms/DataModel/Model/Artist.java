@@ -1,6 +1,7 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
 
-import javax.accessibility.AccessibleEditableText;
+import in.benjamm.pms.DataModel.Singletons.Database;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -208,7 +209,7 @@ public class Artist
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                   query += "LEFT JOIN artist ON song_artist_id = artist_id ";
                   query += "LEFT JOIN album ON song_album_id = album_id ";
-                  query += "WHERE artist_id = ?";
+                  query += "WHERE song_artist_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setInt(1, new Song().getItemTypeId());

@@ -1,4 +1,4 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
 
 /**
  * Created with IntelliJ IDEA.

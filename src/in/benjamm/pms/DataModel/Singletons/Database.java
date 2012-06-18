@@ -1,7 +1,8 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Singletons;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
+import in.benjamm.pms.DataModel.Model.CoverArt;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 

@@ -1,4 +1,6 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
+
+import in.benjamm.pms.DataModel.Singletons.Database;
 
 import java.io.File;
 import java.sql.*;
@@ -88,7 +90,9 @@ public class MediaItem
     public String getFileName() { return _fileName; }
     public void setFileName(String fileName) { _fileName = fileName; }
 
-
+    protected Integer _releaseYear;
+    public Integer getReleaseYear() { return _releaseYear; }
+    public void setReleaseYear(int releaseYear) { _releaseYear = releaseYear; }
 
     /*
      * Constructor(s)
@@ -136,7 +140,7 @@ public class MediaItem
         PreparedStatement s = null;
         ResultSet r = null;
 		try {
-            String query = "SELECT COUNT(*) AS count FROM song WHERE folder_id = ? AND file_name = ? AND last_modified = ?";
+            String query = "SELECT COUNT(*) AS count FROM song WHERE song_folder_id = ? AND song_file_name = ? AND song_last_modified = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setObject(1, folderId);

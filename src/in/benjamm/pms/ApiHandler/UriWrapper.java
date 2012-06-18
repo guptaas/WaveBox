@@ -1,4 +1,4 @@
-package in.benjamm.pms.ApiHandler.HelperObjects;
+package in.benjamm.pms.ApiHandler;
 
 import java.util.LinkedList;
 import java.util.List;

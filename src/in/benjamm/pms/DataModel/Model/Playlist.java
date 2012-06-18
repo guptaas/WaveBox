@@ -1,16 +1,12 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
 
-import org.jaudiotagger.audio.mp4.atom.Mp4HdlrBox;
-import sun.jvm.hotspot.runtime.ResultTypeFinder;
-import sun.plugin.util.GrayBoxPainter;
+import in.benjamm.pms.DataModel.Singletons.Database;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Adler32;
-import java.util.zip.Checksum;
 
 /**
  * Created with IntelliJ IDEA.

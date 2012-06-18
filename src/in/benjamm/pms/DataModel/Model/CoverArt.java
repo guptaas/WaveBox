@@ -1,8 +1,8 @@
-package in.benjamm.pms.DataModel;
+package in.benjamm.pms.DataModel.Model;
 
+import in.benjamm.pms.DataModel.Singletons.Database;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.images.Artwork;
-import org.jaudiotagger.tag.images.ArtworkFactory;
 
 import java.io.*;
 import java.sql.*;

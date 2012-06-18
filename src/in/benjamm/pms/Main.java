@@ -15,20 +15,14 @@ package in.benjamm.pms;
  * under the License.
  */
 
-import in.benjamm.pms.DataModel.Database;
-import in.benjamm.pms.DataModel.FileManager;
-import in.benjamm.pms.DataModel.Folder;
+import in.benjamm.pms.DataModel.Singletons.Database;
+import in.benjamm.pms.DataModel.Singletons.FileManager;
+import in.benjamm.pms.DataModel.Model.Folder;
 import in.benjamm.pms.Netty.HttpServer;
-import in.benjamm.pms.Netty.HttpServerPipelineFactory;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
 
 /**
  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
@@ -50,8 +44,14 @@ public class Main
             }
         });
 
+        // Start the HTTP server
         HttpServer server = new HttpServer(8080);
         server.bootstrap();
+
+        // Initialize the FileManager
+        FileManager.sharedInstance();
+
+        /* ------------------------------ */
 
         System.out.println("Press any key to scan files");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -70,7 +70,7 @@ public class Main
             public void run()
             {
                 long startTime = System.currentTimeMillis();
-                FileManager.sharedInstance().scanFolder(Folder.mediaFolders().get(0).getFolderPath());
+                FileManager.sharedInstance().getFolderScanQueue().queueFolderScan(Folder.mediaFolders().get(0).getFolderPath(), 0);
                 long runTime = (System.currentTimeMillis() - startTime) / 1000;
                 System.out.println("All files scanned! It took " + runTime + " seconds");
             }

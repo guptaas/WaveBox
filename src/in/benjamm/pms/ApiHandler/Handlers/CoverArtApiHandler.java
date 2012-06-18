@@ -3,15 +3,14 @@ package in.benjamm.pms.ApiHandler.Handlers;
 import com.mortennobel.imagescaling.DimensionConstrain;
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
-import in.benjamm.pms.ApiHandler.HelperObjects.UriWrapper;
+import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
-import in.benjamm.pms.DataModel.CoverArt;
+import in.benjamm.pms.DataModel.Model.CoverArt;
 import in.benjamm.pms.Netty.HttpServerHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
