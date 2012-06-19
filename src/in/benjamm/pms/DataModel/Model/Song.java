@@ -277,7 +277,6 @@ public class Song extends MediaItem
     public File songFile()
     {
         String fullPath = new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
-        System.out.println("fullPath: " + fullPath);
         return new File(fullPath);
     }
 

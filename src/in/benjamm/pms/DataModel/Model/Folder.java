@@ -84,7 +84,7 @@ public class Folder
                       query += "LEFT JOIN song ON song_folder_id = folder_id ";
                       query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                       query += "WHERE folder_id = ? ";
-                      query += "GROUP BY folder_id";
+                      query += "GROUP BY folder_id, item_type_art.art_id";
                 s = c.prepareStatement(query);
                 s.setObject(1, new Song().getItemTypeId());
                 s.setObject(2, folderId);
