@@ -61,7 +61,7 @@ public class FileManager implements JNotifyListener
             _folderScanQueue.queueFolderScan(folder, 0);
         }
 
-        //--------------------------------------
+        //-------- Remove this later -------------
         System.out.println("Press any key to scan files");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String userName = null;
@@ -70,7 +70,7 @@ public class FileManager implements JNotifyListener
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        //--------------------------------------
+        //----------------------------------------
 
         // Start the folder scan
         System.out.println("starting folder scan");
@@ -79,7 +79,8 @@ public class FileManager implements JNotifyListener
         // Watch media folders for changes
         // Do this here instead of in the loop above because it can take a while for many subfolders
         // so no need to hold off the folder scan
-        for (Folder folder : Folder.mediaFolders())
+        //for (Folder folder : Folder.mediaFolders())
+        for (Folder folder : Settings.getMediaFolders())
         {
             try {
                 addFolderWatch(folder);

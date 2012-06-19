@@ -1,7 +1,9 @@
 package in.benjamm.pms.DataModel.FolderScanning;
 
+import in.benjamm.pms.DataModel.Model.Folder;
 import in.benjamm.pms.DataModel.Model.Song;
 import in.benjamm.pms.DataModel.Singletons.Database;
+import in.benjamm.pms.DataModel.Singletons.Settings;
 
 import java.io.File;
 import java.sql.Connection;
@@ -40,6 +42,14 @@ public class OrphanScanOperation extends ScanOperation
         PreparedStatement s = null;
         ResultSet r = null;
 
+        // Get the current media folder ids
+        List<Integer> mediaFolderIds = new ArrayList<Integer>();
+        for (Folder mediaFolder : Settings.getMediaFolders())
+        {
+            mediaFolderIds.add(mediaFolder.getFolderId());
+        }
+
+        // Check for folders that are deleted from disk or who's media folder was removed from settings
         List<Integer> folderIds = new ArrayList<Integer>();
         try {
             // Get all orphaned folders
@@ -54,12 +64,15 @@ public class OrphanScanOperation extends ScanOperation
 
                 String path = r.getString("folder_path");
                 int folderId = r.getInt("folder_id");
+                Integer mediaFolderId = (Integer)r.getObject("media_folder_id");
 
-                File folderFile = new File(path);
-                if (!folderFile.exists())
+                if (mediaFolderId != null)
                 {
-                    System.out.println("Folder " + folderId + " is orphaned");
-                    folderIds.add(folderId);
+                    if (!mediaFolderIds.contains(mediaFolderId) || !new File(path).exists())
+                    {
+                        System.out.println("Folder " + folderId + " is orphaned");
+                        folderIds.add(folderId);
+                    }
                 }
             }
 

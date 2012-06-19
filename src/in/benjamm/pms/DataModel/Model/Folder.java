@@ -45,6 +45,13 @@ public class Folder
     public void setParentFolderId(Integer parentFolderId) { _parentFolderId = parentFolderId; }
 
     /**
+     * The main media folder that contains this folder, null if this is a media folder
+     */
+    private Integer _mediaFolderId;
+    public Integer getMediaFolderId() { return _mediaFolderId; }
+    public void setMediaFolderId(Integer mediaFolderId) { _mediaFolderId = mediaFolderId; }
+
+    /**
      * The absolute path of the folder
      */
     private String _folderPath;
@@ -95,6 +102,7 @@ public class Folder
                     _folderName = r.getString("folder_name");
                     _folderPath = r.getString("folder_path");
                     _parentFolderId = (Integer)r.getObject("parent_folder_id");
+                    _mediaFolderId = (Integer)r.getObject("media_folder_id");
                     _artId = (Integer)r.getObject("art_id");
                 }
             } catch (SQLException e) {
@@ -110,6 +118,9 @@ public class Folder
 
     public Folder(String path)
 	{
+        if (path == null)
+            return;
+
         _folderPath = path;
         File folder = new File(_folderPath);
         _folderName = folder.getName();
@@ -296,7 +307,12 @@ public class Folder
      */
     public boolean isMediaFolder()
     {
-        return getFolderPath().equals(mediaFolder().getFolderPath());
+        Folder mediaFolder = mediaFolder();
+
+        if (mediaFolder == null)
+            return true;
+
+        return getFolderPath().equals(mediaFolder.getFolderPath());
     }
 
     /**
@@ -322,51 +338,37 @@ public class Folder
     {
         Connection c = null;
         PreparedStatement s = null;
+        ResultSet r = null;
 
         boolean retry = false;
         do
         {
             try {
                 c = Database.getDbConnection();
-                String query = "INSERT INTO folder (folder_name, folder_path, parent_folder_id) VALUES (?, ?, ?)";
+                String query = "INSERT INTO folder VALUES (?, ?, ?, ?, ?)";
                 s = c.prepareStatement(query);
-                s.setObject(1, getFolderName());
-                s.setObject(2, getFolderPath());
-                s.setObject(3, getParentFolderId());
+                s.setNull(1, Types.INTEGER);
+                s.setObject(2, getFolderName());
+                s.setObject(3, getFolderPath());
+                s.setObject(4, getParentFolderId());
+                if (mediaFolder() == null)
+                    s.setNull(5, Types.INTEGER);
+                else
+                    s.setObject(5, mediaFolder().getFolderId());
                 s.executeUpdate();
 
-                PreparedStatement s1 = null;
-                ResultSet r = null;
-
-                boolean retry2 = false;
-                do
+                r = s.getGeneratedKeys();
+                if (r.next())
                 {
-                    try {
-                        query = "SELECT folder_id FROM folder WHERE parent_folder_id = ? AND folder_name = ?";
-                        s1 = c.prepareStatement(query);
-                        s1.setObject(1, getParentFolderId());
-                        s1.setObject(2, getFolderName());
-                        r = s1.executeQuery();
-                        if (r.next())
-                        {
-                            setFolderId(r.getInt("folder_id"));
-                        }
-                    } catch (SQLException e) {
-                        //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                        e.printStackTrace();
-                        //retry2 = true;
-                    } finally {
-                        Database.close(null, s1, r);
-                    }
+                    setFolderId(r.getInt(1));
                 }
-                while (retry2);
 
             } catch (SQLException e) {
                 //System.out.println("TABLE LOCKED, RETRYING QUERY");
                 e.printStackTrace();
                 //retry = true;
             } finally {
-                Database.close(c, s, null);
+                Database.close(c, s, r);
             }
         }
         while (retry);

@@ -18,6 +18,7 @@ package in.benjamm.pms;
 import in.benjamm.pms.DataModel.Singletons.Database;
 import in.benjamm.pms.DataModel.Singletons.FileManager;
 import in.benjamm.pms.DataModel.Model.Folder;
+import in.benjamm.pms.DataModel.Singletons.Settings;
 import in.benjamm.pms.Netty.HttpServer;
 
 import java.io.BufferedReader;
@@ -32,6 +33,9 @@ public class Main
 {
     public static void main(String[] args)
 	{
+        // Load settings
+        Settings.reload();
+
         // Register a shutdown hook for resource cleanup
         Runtime.getRuntime().addShutdownHook(new Thread()
         {
