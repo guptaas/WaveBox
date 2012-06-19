@@ -313,8 +313,10 @@ public class Folder
         return null;
     }
 
-    public Folder parentFolder() { return new Folder(getParentFolderId()); }
-
+    public Folder parentFolder()
+    {
+        return new Folder(getParentFolderId());
+    }
 
     public void addToDatabase()
     {

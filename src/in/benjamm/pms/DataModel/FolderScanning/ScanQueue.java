@@ -73,14 +73,8 @@ public class ScanQueue
         _scanQueue.clear();
     }
 
-    public void queueFolderScan(String folderPath, int secondsDelay)
+    public void queueOperation(ScanOperation operation)
     {
-        if (folderPath == null)
-            return;
-
-        System.out.println("Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
-
-        ScanOperation operation = new ScanOperation(folderPath, secondsDelay);
         synchronized (_scanQueueSyncObject)
         {
             if (operation.equals(_currentOperation))
@@ -106,6 +100,17 @@ public class ScanQueue
         }
     }
 
+    public void queueFolderScan(String folderPath, int secondsDelay)
+    {
+        if (folderPath == null)
+            return;
+
+        System.out.println("Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
+
+        FolderScanOperation operation = new FolderScanOperation(folderPath, secondsDelay);
+        queueOperation(operation);
+    }
+
     public void queueFolderScan(Folder folder, int secondsDelay)
     {
         queueFolderScan(folder.getFolderPath(), secondsDelay);
@@ -115,5 +120,11 @@ public class ScanQueue
     {
         Folder folder = new Folder(folderId);
         queueFolderScan(folder, secondsDelay);
+    }
+
+    public void queueOrphanScan(int secondsDelay)
+    {
+        OrphanScanOperation operation = new OrphanScanOperation(secondsDelay);
+        queueOperation(operation);
     }
 }

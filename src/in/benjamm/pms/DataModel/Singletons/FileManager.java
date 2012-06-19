@@ -51,6 +51,9 @@ public class FileManager implements JNotifyListener
             e.printStackTrace();
         }
 
+        // Scan for orphaned files in the database
+        _folderScanQueue.queueOrphanScan(0);
+
         // Scan and watch all media folders
         for (Folder folder : Folder.mediaFolders())
         {
