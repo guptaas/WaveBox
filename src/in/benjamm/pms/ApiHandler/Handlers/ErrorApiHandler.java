@@ -23,10 +23,17 @@ import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 public class ErrorApiHandler implements IApiHandler
 {
     private HttpServerHandler _sh;
+    private String _message = "Sorry this function is not supported";
 
     public ErrorApiHandler(HttpServerHandler sh)
     {
         _sh = sh;
+    }
+
+    public ErrorApiHandler(HttpServerHandler sh, String message)
+    {
+        _sh = sh;
+        _message = message;
     }
 
     public void process()
@@ -36,6 +43,6 @@ public class ErrorApiHandler implements IApiHandler
 
 	private String _processRequest()
 	{
-		return "Sorry this function is not supported";
+		return _message;
 	}
 }

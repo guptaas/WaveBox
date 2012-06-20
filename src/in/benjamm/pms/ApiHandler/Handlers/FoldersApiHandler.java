@@ -88,6 +88,8 @@ public class FoldersApiHandler implements IApiHandler
     private String _folder(int folderId)
     {
         Folder folder = new Folder(folderId);
+        if (folder.getFolderId() == null)
+            return "{\"error\":\"folder doesn't exist\"}";
 
         String response = "{\"error\":null, \"folders\":";
 

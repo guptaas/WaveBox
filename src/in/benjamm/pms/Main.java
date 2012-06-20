@@ -15,6 +15,7 @@ package in.benjamm.pms;
  * under the License.
  */
 
+import in.benjamm.pms.DataModel.Model.User;
 import in.benjamm.pms.DataModel.Singletons.Database;
 import in.benjamm.pms.DataModel.Singletons.FileManager;
 import in.benjamm.pms.DataModel.Model.Folder;

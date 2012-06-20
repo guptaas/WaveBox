@@ -1,6 +1,8 @@
 package in.benjamm.pms.ApiHandler;
 
+import com.jolbox.bonecp.UsernamePassword;
 import in.benjamm.pms.ApiHandler.Handlers.*;
+import in.benjamm.pms.DataModel.Model.User;
 import in.benjamm.pms.Netty.HttpServerHandler;
 
 import java.util.List;
@@ -17,8 +19,20 @@ public class ApiHandlerFactory
 {
 	public static IApiHandler createRestHandler(String uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
 	{
-		IApiHandler returnHandler = null;
+        // Verify the login credentials
+        try {
+            String username = parameters.get("u") .get(0);
+            String password = parameters.get("p").get(0);
 
+            User user = new User(username);
+            if (!user.authenticate(password))
+                return new ErrorApiHandler(sh, "Invalid username or password");
+
+        } catch (Exception e) {
+            return new ErrorApiHandler(sh, "Invalid username or password");
+        }
+
+        IApiHandler returnHandler = null;
 		try
 		{
 			UriWrapper uriW = new UriWrapper(uri);
@@ -27,6 +41,7 @@ public class ApiHandlerFactory
 			if (uriW.getFirstPart().equals("api"))// && uri.getUriPart(1).equals(uri.getLastPart()))
 			{
                 String part1 = uriW.getUriPart(1);
+                System.out.println("part1 = " + part1 + " part2 = " + uriW.getUriPart(2));
 
 				if (part1.equals("test"))
 				{

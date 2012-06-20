@@ -272,32 +272,30 @@ public class Folder
     public List<Folder> listOfSubFolders()
     {
         List<Folder> folders = new ArrayList<Folder>();
+        if (getFolderId() == null)
+            return folders;
+
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM folder WHERE parent_folder_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, getFolderId());
-                r = s.executeQuery();
-                while (r.next())
-                {
-                    folders.add(new Folder(r.getInt("folder_id")));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM folder WHERE parent_folder_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, getFolderId());
+            r = s.executeQuery();
+            while (r.next())
+            {
+                folders.add(new Folder(r.getInt("folder_id")));
             }
+        } catch (SQLException e) {
+            //System.out.println("TABLE LOCKED, RETRYING QUERY");
+            e.printStackTrace();
+            //retry = true;
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         return folders;
     }
