@@ -3,6 +3,7 @@ package in.benjamm.pms.DataModel.Model;
 import in.benjamm.pms.DataModel.Singletons.Database;
 import org.jboss.netty.util.internal.ReusableIterator;
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -112,8 +113,7 @@ public class User
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.reset();
             md.update(input.getBytes("utf8"));
-            HexBinaryAdapter adapter = new HexBinaryAdapter();
-            sha1 = adapter.marshal(md.digest());
+            sha1 = DatatypeConverter.printHexBinary(md.digest());
         } catch(UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch(NoSuchAlgorithmException e) {
