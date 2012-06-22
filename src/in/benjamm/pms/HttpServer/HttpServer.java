@@ -1,4 +1,4 @@
-package in.benjamm.pms.Netty;
+package in.benjamm.pms.HttpServer;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;

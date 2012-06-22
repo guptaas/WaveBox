@@ -1,4 +1,4 @@
-package in.benjamm.pms.Netty;
+package in.benjamm.pms.HttpServer;
 
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.ApiHandler.ApiHandlerFactory;

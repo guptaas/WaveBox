@@ -1,4 +1,4 @@
-package in.benjamm.pms.Netty;
+package in.benjamm.pms.HttpServer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

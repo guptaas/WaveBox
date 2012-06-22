@@ -1,4 +1,4 @@
-package in.benjamm.pms.Netty;
+package in.benjamm.pms.HttpServer;
 
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;

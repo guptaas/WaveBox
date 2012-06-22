@@ -1,4 +1,4 @@
-package in.benjamm.pms.Netty;
+package in.benjamm.pms.HttpServer;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
