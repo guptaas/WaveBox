@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -80,30 +83,23 @@ public class Album
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = album_id WHERE album_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, getItemTypeId());
-                s.setObject(2, albumId);
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    // Return the existing artist
-                    _setPropertiesFromResultSet(r);
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = album_id WHERE album_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, getItemTypeId());
+            s.setObject(2, albumId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing artist
+                _setPropertiesFromResultSet(r);
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
     public Album(String albumName)
@@ -115,36 +111,29 @@ public class Album
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id WHERE album_name = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, getItemTypeId());
-                s.setObject(2, albumName);
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    // Return the existing album
-                    //System.out.println("ALBUM " + albumName + " exists in database");
-                    _setPropertiesFromResultSet(r);
-                }
-                else
-                {
-                    //System.out.println("ALBUM " + albumName + " does NOT exist in database");
-                    _albumName = albumName;
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id WHERE album_name = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, getItemTypeId());
+            s.setObject(2, albumName);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing album
+                //log2Out(TEST, "ALBUM " + albumName + " exists in database");
+                _setPropertiesFromResultSet(r);
             }
+            else
+            {
+                //log2Out(TEST, "ALBUM " + albumName + " does NOT exist in database");
+                _albumName = albumName;
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
 
@@ -155,33 +144,26 @@ public class Album
 
     private static boolean _insertAlbum(String albumName, int artistId)
     {
-        //System.out.println("ALBUM: " + albumName);
+        //log2Out(TEST, "ALBUM: " + albumName);
 
         boolean success = false;
         Connection c = null;
         PreparedStatement s = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "INSERT INTO album (album_id, album_name, artist_id) VALUES (?, ?, ?)";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setNull(1, Types.INTEGER);
-                s.setObject(2, albumName);
-                s.setObject(3, Integer.valueOf(artistId));
-                s.executeUpdate();
-                success = true;
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, null);
-            }
+        try {
+            String query = "INSERT INTO album (album_id, album_name, artist_id) VALUES (?, ?, ?)";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setNull(1, Types.INTEGER);
+            s.setObject(2, albumName);
+            s.setObject(3, Integer.valueOf(artistId));
+            s.executeUpdate();
+            success = true;
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, null);
         }
-        while (retry);
 
         return success;
     }
@@ -194,7 +176,7 @@ public class Album
             _albumName = rs.getString("album_name");
             _artId = rs.getInt("art_id");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
     }
 
@@ -226,33 +208,26 @@ public class Album
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
-                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
-                      query += "LEFT JOIN album USING song_album_id = album.album_id ";
-                      query += "WHERE song_album_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, new Song().getItemTypeId());
-                s.setInt(2, getAlbumId());
-                r = s.executeQuery();
-                while(r.next())
-                {
-                    songs.add(new Song(r));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                  query += "LEFT JOIN album USING song_album_id = album.album_id ";
+                  query += "WHERE song_album_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, new Song().getItemTypeId());
+            s.setInt(2, getAlbumId());
+            r = s.executeQuery();
+            while(r.next())
+            {
+                songs.add(new Song(r));
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         // Sort the songs by disc number, track number
         Collections.sort(songs, new Song.SongOrderComparator());
@@ -262,22 +237,22 @@ public class Album
 
     public static Album albumForName(String albumName, Integer artistId)
     {
-        //System.out.println("albumForName(" + albumName + ", " + artistId + ")");
+        //log2Out(TEST, "albumForName(" + albumName + ", " + artistId + ")");
 
         if (albumName == null || albumName.equals("") || artistId == null)
             return new Album();
 
         // Check to see if this album exists
         Album anAlbum = new Album(albumName);
-        //System.out.println("checking if album " + anAlbum.getAlbumName() + " has an id: " + anAlbum.getAlbumId());
+        //log2Out(TEST, "checking if album " + anAlbum.getAlbumName() + " has an id: " + anAlbum.getAlbumId());
         if (anAlbum.getAlbumId() == null)
         {
-            //System.out.println("ALBUM " + albumName + " doesn't exist in database, so adding it");
+            //log2Out(TEST, "ALBUM " + albumName + " doesn't exist in database, so adding it");
             // This album doesn't exist in the db, so insert it
             anAlbum = null;
             if (_insertAlbum(albumName, artistId))
             {
-                //System.out.println("ALBUM added " + albumName + " so grabbing id");
+                //log2Out(TEST, "ALBUM added " + albumName + " so grabbing id");
                 anAlbum = albumForName(albumName, artistId);
             }
         }
@@ -293,28 +268,21 @@ public class Album
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, ItemType.ALBUM.getItemTypeId());
-                r = s.executeQuery();
-                while(r.next())
-                {
-                    albums.add(new Album(r));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, ItemType.ALBUM.getItemTypeId());
+            r = s.executeQuery();
+            while(r.next())
+            {
+                albums.add(new Album(r));
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         // Sort the albums alphabetically
         Collections.sort(albums, new AlbumNameComparator());

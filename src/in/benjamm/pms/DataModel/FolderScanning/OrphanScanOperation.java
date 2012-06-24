@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -70,7 +72,7 @@ public class OrphanScanOperation extends ScanOperation
                 {
                     if (!mediaFolderIds.contains(mediaFolderId) || !new File(path).exists())
                     {
-                        System.out.println("Folder " + folderId + " is orphaned");
+                        log2Out(TEST, "Folder " + folderId + " is orphaned");
                         folderIds.add(folderId);
                     }
                 }
@@ -87,7 +89,7 @@ public class OrphanScanOperation extends ScanOperation
                 ResultSet r1 = null;
                 try {
                     // Delete folder
-                    System.out.println("Folder " + folderId + " deleted");
+                    log2Out(TEST, "Folder " + folderId + " deleted");
                     query = "DELETE FROM folder WHERE folder_Id = ?";
                     c1 = Database.getDbConnection();
                     s1 = c1.prepareStatement(query);
@@ -99,33 +101,27 @@ public class OrphanScanOperation extends ScanOperation
                     PreparedStatement s2 = null;
                     ResultSet r2 = null;
                     try {
-                        System.out.println("Songs for folder " + folderId + " deleted");
+                        log2Out(TEST, "Songs for folder " + folderId + " deleted");
                         query = "DELETE FROM song WHERE song_folder_Id = ?";
                         c2 = Database.getDbConnection();
                         s2 = c2.prepareStatement(query);
                         s2.setInt(1, folderId);
                         s2.executeUpdate();
                     } catch (SQLException e) {
-                        //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                        e.printStackTrace();
-                        //retry = true;
+                        log2File(ERROR, e);
                     } finally {
                         Database.close(c2, s2, r2);
                     }
 
                 } catch (SQLException e) {
-                    //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                    e.printStackTrace();
-                    //retry = true;
+                    log2File(ERROR, e);
                 } finally {
                     Database.close(c1, s1, r1);
                 }
             }
 
         } catch (SQLException e) {
-            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-            e.printStackTrace();
-            //retry = true;
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -156,14 +152,12 @@ public class OrphanScanOperation extends ScanOperation
                 Song song = new Song(songId);
                 if (!song.songFile().exists())
                 {
-                    System.out.println("Song " + songId + " is orphaned");
+                    log2Out(TEST, "Song " + songId + " is orphaned");
                     songIds.add(songId);
                 }
             }
         } catch (SQLException e) {
-            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-            e.printStackTrace();
-            //retry = true;
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -179,7 +173,7 @@ public class OrphanScanOperation extends ScanOperation
             ResultSet r1 = null;
             try {
                 // Delete song
-                System.out.println("Song " + songId + " deleted");
+                log2Out(TEST, "Song " + songId + " deleted");
                 String query = "DELETE FROM song WHERE song_id = ?";
                 c1 = Database.getDbConnection();
                 s1 = c1.prepareStatement(query);
@@ -187,9 +181,7 @@ public class OrphanScanOperation extends ScanOperation
                 s1.executeUpdate();
 
             } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
+                log2File(ERROR, e);
             } finally {
                 Database.close(c1, s1, r1);
             }

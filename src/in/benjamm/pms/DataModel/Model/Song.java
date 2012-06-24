@@ -13,6 +13,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -90,33 +93,26 @@ public class Song extends MediaItem
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
-                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
-                      query += "LEFT JOIN album ON song_album_id = album.album_id ";
-                      query += "WHERE song_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setObject(1, getItemTypeId());
-                s.setObject(2, songId);
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    _setPropertiesFromResultSet(r);
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                  query += "LEFT JOIN album ON song_album_id = album.album_id ";
+                  query += "WHERE song_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, getItemTypeId());
+            s.setObject(2, songId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                _setPropertiesFromResultSet(r);
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
     public Song(ResultSet rs)
@@ -175,7 +171,7 @@ public class Song extends MediaItem
                     _trackNumber = Integer.valueOf(track);
                 } catch (NumberFormatException e) {
                     _trackNumber = null;
-                    //e.printStackTrace();
+                    //log2File(ERROR, e);
                 }
             }
         } catch (NullPointerException e) {
@@ -236,7 +232,7 @@ public class Song extends MediaItem
             _fileName = rs.getString("song_file_name");
             _artId = (Integer)rs.getObject("art_id");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
     }
 
@@ -283,84 +279,64 @@ public class Song extends MediaItem
 
 	public void updateDatabase()
 	{
+        String query;
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                // Insert into the song table
-                String query = "MERGE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            c = Database.getDbConnection();
 
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                //s.setNull(1, Types.INTEGER);
-                s.setObject(1, getItemId());
-                s.setObject(2, getFolderId());
-                s.setObject(3, getArtistId());
-                s.setObject(4, getAlbumId());
-                s.setObject(5, getFileType().getFileTypeId());
-                s.setObject(6, getSongName());
-                s.setObject(7, getTrackNumber());
-                s.setObject(8, getDiscNumber());
-                s.setObject(9, getDuration());
-                s.setObject(10, getBitrate());
-                s.setObject(11, getFileSize());
-                s.setObject(12, getLastModified());
-                s.setObject(13, getFileName());
-                s.setObject(14, getReleaseYear());
-                s.executeUpdate();
+            // Insert into the song table
+            query = "MERGE INTO song VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                if (getItemId() == null)
+            s = c.prepareStatement(query);
+            //s.setNull(1, Types.INTEGER);
+            s.setObject(1, getItemId());
+            s.setObject(2, getFolderId());
+            s.setObject(3, getArtistId());
+            s.setObject(4, getAlbumId());
+            s.setObject(5, getFileType().getFileTypeId());
+            s.setObject(6, getSongName());
+            s.setObject(7, getTrackNumber());
+            s.setObject(8, getDiscNumber());
+            s.setObject(9, getDuration());
+            s.setObject(10, getBitrate());
+            s.setObject(11, getFileSize());
+            s.setObject(12, getLastModified());
+            s.setObject(13, getFileName());
+            s.setObject(14, getReleaseYear());
+            s.executeUpdate();
+
+            if (getItemId() == null)
+            {
+                // Get the song_id
+                r = s.getGeneratedKeys();
+                if (r.next())
                 {
-                    // Get the song_id
-                    r = s.getGeneratedKeys();
-                    if (r.next())
-                    {
-                        setItemId(r.getInt(1));
-                    }
+                    setItemId(r.getInt(1));
                 }
-
-                // Insert the art record
-                if (getArtId() != null)
-                {
-                    Connection c1 = null;
-                    PreparedStatement s1 = null;
-
-                    boolean retry2 = false;
-                    do
-                    {
-                        try {
-                            query = "MERGE INTO item_type_art VALUES (?, ?, ?, ?)";
-                            c1 = Database.getDbConnection();
-                            s1 = c1.prepareStatement(query);
-                            s1.setNull(1, Types.INTEGER);
-                            s1.setObject(2, getItemTypeId());
-                            s1.setObject(3, getItemId());
-                            s1.setObject(4, getArtId());
-                            s1.executeUpdate();
-                            s1.close();
-                        } catch (SQLException e) {
-                            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                            e.printStackTrace();
-                            //retry2 = true;
-                        } finally {
-                            Database.close(c1, s1, null);
-                        }
-                    }
-                    while (retry2);
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
             }
+
+            Database.close(null, s, r);
+
+            // Insert the art record
+            if (getArtId() != null)
+            {
+                query = "MERGE INTO item_type_art VALUES (?, ?, ?, ?)";
+                s = c.prepareStatement(query);
+                s.setNull(1, Types.INTEGER);
+                s.setObject(2, getItemTypeId());
+                s.setObject(3, getItemId());
+                s.setObject(4, getArtId());
+                s.executeUpdate();
+                s.close();
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 	}
 
     public static List<Song> allSongs()
@@ -371,31 +347,24 @@ public class Song extends MediaItem
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
-                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
-                      query += "LEFT JOIN album ON song_album_id = album.album_id";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setInt(1, _ITEM_TYPE_ID);
-                r = s.executeQuery();
-                while(r.next())
-                {
-                    songs.add(new Song(r));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                  query += "LEFT JOIN album ON song_album_id = album.album_id";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, _ITEM_TYPE_ID);
+            r = s.executeQuery();
+            while(r.next())
+            {
+                songs.add(new Song(r));
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         // Sort the songs alphabetically
         Collections.sort(songs, new SongNameComparator());

@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -59,9 +61,7 @@ public class User
                 _setPropertiesFromResultSet(r);
             }
         } catch (SQLException e) {
-            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-            e.printStackTrace();
-            //retry = true;
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -86,9 +86,7 @@ public class User
                 _setPropertiesFromResultSet(r);
             }
         } catch (SQLException e) {
-            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-            e.printStackTrace();
-            //retry = true;
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -102,7 +100,7 @@ public class User
             setPasswordHash(r.getString("password_hash"));
             setPasswordSalt(r.getString("password_salt"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
     }
 
@@ -115,9 +113,9 @@ public class User
             md.update(input.getBytes("utf8"));
             sha1 = DatatypeConverter.printHexBinary(md.digest());
         } catch(UnsupportedEncodingException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         return sha1;
@@ -134,7 +132,7 @@ public class User
             hash = _sha1(hash + salt);
         }
 
-        System.out.println("hash calculated in " + (System.currentTimeMillis() - startTime) + "ms");
+        log2Out(TEST, "hash calculated in " + (System.currentTimeMillis() - startTime) + "ms");
 
         return hash;
     }
@@ -161,7 +159,7 @@ public class User
             s.setObject(2, salt);
             s.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, null);
         }
@@ -204,7 +202,7 @@ public class User
                 user = new User(userId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, null);
         }

@@ -3,6 +3,8 @@ package in.benjamm.pms.ApiHandler;
 import java.util.LinkedList;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 /**
  * Created by IntelliJ IDEA.
  * User: bbaron
@@ -18,7 +20,7 @@ public class UriWrapper
 	{
 		if (uri != null)
 		{
-			System.out.println("uri: " + uri);
+            log2Out(TEST, "uri: " + uri);
 			_uriParts = _removeEmptyElements(uri.split("/"));
 		}
 	}

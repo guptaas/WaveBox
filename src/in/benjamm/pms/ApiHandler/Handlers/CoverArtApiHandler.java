@@ -6,7 +6,7 @@ import com.mortennobel.imagescaling.ResampleOp;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.CoverArt;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

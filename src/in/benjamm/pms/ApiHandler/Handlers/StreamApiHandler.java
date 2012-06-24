@@ -3,11 +3,14 @@ package in.benjamm.pms.ApiHandler.Handlers;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Song;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +45,7 @@ public class StreamApiHandler implements IApiHandler
                 file = song.songFile();
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
             //_sh.sendError(_ctx, NOT_FOUND);
             return;
         }
@@ -57,7 +60,7 @@ public class StreamApiHandler implements IApiHandler
                 //long to = Long.valueOf(ranges[1]);
             } catch (NumberFormatException e) {
                 offset = 0;
-                //e.printStackTrace();
+                //log2File(ERROR, e);
             }
         }
 

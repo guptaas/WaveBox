@@ -15,16 +15,13 @@ package in.benjamm.pms;
  * under the License.
  */
 
-import in.benjamm.pms.DataModel.Model.User;
 import in.benjamm.pms.DataModel.Singletons.Database;
 import in.benjamm.pms.DataModel.Singletons.FileManager;
-import in.benjamm.pms.DataModel.Model.Folder;
+import in.benjamm.pms.DataModel.Singletons.Log;
 import in.benjamm.pms.DataModel.Singletons.Settings;
-import in.benjamm.pms.Netty.HttpServer;
+import in.benjamm.pms.HttpServer.HttpServer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
 
 /**
  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
@@ -43,9 +40,10 @@ public class Main
             @Override
             public void run()
             {
-                System.out.println("Shutdown hook started!");
+                log2Out(TEST, "Shutdown hook started!");
                 Database.shutdownPool();
-                System.out.println("Shutdown hook finished!");
+                Log.cleanup();
+                log2Out(TEST, "Shutdown hook finished!");
             }
         });
 

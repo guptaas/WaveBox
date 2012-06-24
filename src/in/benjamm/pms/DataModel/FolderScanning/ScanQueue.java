@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -105,7 +107,7 @@ public class ScanQueue
         if (folderPath == null)
             return;
 
-        System.out.println("Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
+        log2Out(TEST, "Queuing folder scan for " + folderPath + " in " + secondsDelay + " seconds");
 
         FolderScanOperation operation = new FolderScanOperation(folderPath, secondsDelay);
         queueOperation(operation);

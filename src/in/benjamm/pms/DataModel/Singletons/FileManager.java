@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +50,7 @@ public class FileManager implements JNotifyListener
         try {
             _bootstrapJNotify();
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         // Scan for orphaned files in the database
@@ -62,18 +64,18 @@ public class FileManager implements JNotifyListener
         }
 
         //-------- Remove this later -------------
-        System.out.println("Press any key to scan files");
+        log2Out(INFO, "Press any key to scan files");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String userName = null;
         try {
             userName = br.readLine();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException e) {
+            log2File(ERROR, e);
         }
         //----------------------------------------
 
         // Start the folder scan
-        System.out.println("starting folder scan");
+        log2Out(TEST, "starting folder scan");
         _folderScanQueue.startScanQueue();
 
         // Watch media folders for changes
@@ -85,7 +87,7 @@ public class FileManager implements JNotifyListener
             try {
                 addFolderWatch(folder);
             } catch (JNotifyException e) {
-                e.printStackTrace();
+                log2File(ERROR, e);
             }
         }
     }
@@ -106,9 +108,9 @@ public class FileManager implements JNotifyListener
 
     private void _bootstrapJNotify() throws RuntimeException
     {
-/*        System.out.println("java.library.path: " + System.getProperty("java.library.path", "unset"));
-        System.setProperty("java.library.path", ".");
-        System.out.println("java.library.path: " + System.getProperty("java.library.path", "unset"));*/
+        /*log2Out("java.library.path: " + System.getProperty("java.library.path", "unset"));
+        log2Out("java.library.path", ".");
+        log2Out("java.library.path: " + System.getProperty("java.library.path", "unset"));*/
 
         String overrideClass = System.getProperty("jnotify.impl.override");
         if (overrideClass != null)
@@ -186,21 +188,21 @@ public class FileManager implements JNotifyListener
     public void fileCreated(int wd, String rootPath, String name)
     {
         File file = new File(rootPath + File.separator + name);
-        System.out.println("fileCreated - path: " + file.getParent());
+        log2Out(TEST, "fileCreated - path: " + file.getParent());
         _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
     }
 
    	public void fileDeleted(int wd, String rootPath, String name)
     {
         File file = new File(rootPath + File.separator + name);
-        System.out.println("fileCreated - path: " + file.getParent());
+        log2Out(TEST, "fileCreated - path: " + file.getParent());
         _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
     }
 
     public void fileModified(int wd, String rootPath, String name)
     {
         File file = new File(rootPath + File.separator + name);
-        System.out.println("fileCreated - path: " + file.getParent());
+        log2Out(TEST, "fileCreated - path: " + file.getParent());
         _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
     }
 
@@ -208,7 +210,7 @@ public class FileManager implements JNotifyListener
     {
         File oldFile = new File(rootPath + File.separator + oldName);
         File newFile = new File(rootPath + File.separator + newName);
-        System.out.println("fileCreated - oldPath: " + oldFile.getParent() + " newPath: " + newFile.getParent());
+        log2Out(TEST, "fileCreated - oldPath: " + oldFile.getParent() + " newPath: " + newFile.getParent());
         _folderScanQueue.queueFolderScan(oldFile.getParent(), ScanQueue.DEFAULT_DELAY);
         _folderScanQueue.queueFolderScan(newFile.getParent(), ScanQueue.DEFAULT_DELAY);
     }

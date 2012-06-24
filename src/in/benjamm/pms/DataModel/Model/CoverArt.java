@@ -9,6 +9,9 @@ import java.sql.*;
 import java.util.zip.Adler32;
 import java.util.zip.Checksum;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -64,31 +67,23 @@ public class CoverArt
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM art WHERE art_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setObject(1, artId);
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    // The art is already in the database
-                    _artId = r.getInt("art_id");
-                    _adlerHash = r.getLong("adler_hash");
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM art WHERE art_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, artId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // The art is already in the database
+                _artId = r.getInt("art_id");
+                _adlerHash = r.getLong("adler_hash");
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
-
     }
 
     public CoverArt(AudioFile af)
@@ -107,77 +102,58 @@ public class CoverArt
             checksum.update(bytes, 0, bytes.length);
             _adlerHash = checksum.getValue();
 
+            String query;
             Connection c = null;
             PreparedStatement s = null;
             ResultSet r = null;
 
-            boolean retry = false;
-            do
-            {
-                try {
-                    String query = "SELECT * FROM art WHERE adler_hash = ?";
-                    c = Database.getDbConnection();
+            try {
+                c = Database.getDbConnection();
+
+                query = "SELECT * FROM art WHERE adler_hash = ?";
+                s = c.prepareStatement(query);
+                s.setObject(1, _adlerHash);
+                r = s.executeQuery();
+                if (r.next())
+                {
+                    // The art is already in the database
+                    _artId = r.getInt("art_id");
+                    Database.close(null, s, r);
+                }
+                else
+                {
+                    Database.close(null, s, r);
+
+                    // The art isn't in the database
+                    // Save the art to disk
+                    try {
+                        OutputStream outStream = new FileOutputStream(ART_PATH + _adlerHash);
+                        outStream.write(bytes, 0, bytes.length);
+                        outStream.close();
+                    } catch (FileNotFoundException e) {
+                        log2File(ERROR, e);
+                    } catch (IOException e) {
+                        log2File(ERROR, e);
+                    }
+
+                    // Insert the record
+                    query = "INSERT INTO art (adler_hash) VALUES (?)";
                     s = c.prepareStatement(query);
-                    s.setObject(1, _adlerHash);
-                    r = s.executeQuery();
+                    s.setLong(1, _adlerHash);
+                    s.executeUpdate();
+
+                    // Pull the art id
+                    r = s.getGeneratedKeys();
                     if (r.next())
                     {
-                        // The art is already in the database
-                        _artId = r.getInt("art_id");
+                        _artId = r.getInt(1);
                     }
-                    else
-                    {
-                        // The art isn't in the database
-                        // Save the art to disk
-                        try {
-                            OutputStream outStream = new FileOutputStream(ART_PATH + _adlerHash);
-                            outStream.write(bytes, 0, bytes.length);
-                            outStream.close();
-                        } catch (FileNotFoundException e) {
-                            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                            e.printStackTrace();
-                            //retry = true;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        PreparedStatement s1 = null;
-                        ResultSet r1 = null;
-                        boolean retry2 = false;
-                        do
-                        {
-                            try {
-                                // Insert the record
-                                query = "INSERT INTO art (adler_hash) VALUES (?)";
-                                s1 = c.prepareStatement(query);
-                                s1.setLong(1, _adlerHash);
-                                s1.executeUpdate();
-
-                                // Pull the art id
-                                r1 = s1.getGeneratedKeys();
-                                if (r1.next())
-                                {
-                                    _artId = r1.getInt(1);
-                                }
-                            } catch (SQLException e) {
-                                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                                e.printStackTrace();
-                                //retry2 = true;
-                            } finally {
-                                Database.close(null, s1, r1);
-                            }
-                        }
-                        while (retry2);
-                    }
-                } catch (SQLException e) {
-                    //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                    e.printStackTrace();
-                    //retry = true;
-                } finally {
-                    Database.close(c, s, r);
                 }
+            } catch (SQLException e) {
+                log2File(ERROR, e);
+            } finally {
+                Database.close(c, s, r);
             }
-            while (retry);
         }
     }
 

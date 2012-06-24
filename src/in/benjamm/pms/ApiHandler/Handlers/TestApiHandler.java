@@ -2,10 +2,12 @@ package in.benjamm.pms.ApiHandler.Handlers;
 
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.util.List;
 import java.util.Map;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,26 +38,26 @@ public class TestApiHandler implements IApiHandler
 
 	private String _processRequest()
 	{
-		System.out.println("TestApiHandler  uri:" + _uri);
-		System.out.println("Parameters:");
+        log2Out(TEST, "TestApiHandler  uri:" + _uri);
+        log2Out(TEST, "Parameters:");
 		for (String key : _parameters.keySet())
 		{
-			System.out.print(key + ": ");
+            log2Out(TEST, key + ": ");
 			for (String value : _parameters.get(key))
 			{
-				System.out.print(value + "   ");
+                log2Out(TEST, value + "   ");
 			}
-			System.out.println("   ");
+            log2Out(TEST, "   ");
 		}
-        System.out.println("Headers:");
+        log2Out(TEST, "Headers:");
         for (String key : _headers.keySet())
         {
-            System.out.print(key + ": ");
+            log2Out(TEST, key + ": ");
             String value = _headers.get(key);
-            System.out.print(value + "   ");
-            System.out.println("   ");
+            log2Out(TEST, value + "   ");
+            log2Out(TEST, "   ");
         }
-		System.out.println("   ");
+        log2Out(TEST, "   ");
 		return "Yay it worked!";
 	}
 }

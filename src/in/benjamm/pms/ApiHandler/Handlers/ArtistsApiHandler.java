@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Artist;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -61,7 +64,7 @@ public class ArtistsApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, artists);
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         return "{\"error\":null, \"artists\":" + writer.toString() + "}";
@@ -79,7 +82,7 @@ public class ArtistsApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, artist.listOfAlbums());
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         response += writer.toString();
@@ -91,7 +94,7 @@ public class ArtistsApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, artist.listOfSongs());
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         response += ",\"songs\":" + writer.toString() + "}";

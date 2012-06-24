@@ -3,11 +3,11 @@ package in.benjamm.pms.DataModel.Singletons;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 import in.benjamm.pms.DataModel.Model.CoverArt;
-import org.sqlite.SQLiteConfig;
-import org.sqlite.SQLiteOpenMode;
 
 import java.io.*;
 import java.sql.*;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,19 +58,19 @@ public class Database
                 }
             };*/
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
     }
 
     private static void _databaseFileSetup()
     {
         File dbFile = new File(DATABASE_PATH + DATABASE_EXT);
-        System.out.println("db file: " + DATABASE_PATH + DATABASE_EXT);
+        log2Out(TEST, "db file: " + DATABASE_PATH + DATABASE_EXT);
         if (!dbFile.exists())
         {
-            System.out.println("doesn't exist, copying");
+            log2Out(TEST, "doesn't exist, copying");
             try
             {
                 InputStream inStream = Database.class.getResourceAsStream("/res/pms.h2.db");
@@ -88,12 +88,12 @@ public class Database
             }
             catch(FileNotFoundException ex)
             {
-                System.out.println(ex.getMessage() + " in the specified directory.");
+                log2File(ERROR, ex);
                 System.exit(0);
             }
             catch(IOException e)
             {
-                System.out.println(e.getMessage());
+                log2File(ERROR, e);
             }
         }
 
@@ -106,7 +106,7 @@ public class Database
 
     public static Connection getDbConnection() throws SQLException
     {
-        //System.out.println("Connections used: " + _connectionPool.getTotalLeased() + " / " + _connectionPool.getTotalCreatedConnections());
+        //log2Out("Connections used: " + _connectionPool.getTotalLeased() + " / " + _connectionPool.getTotalCreatedConnections());
         return _connectionPool.getConnection();
     }
 
@@ -131,5 +131,20 @@ public class Database
         {
             try { c.close(); } catch (SQLException e) { }
         }
+    }
+
+    public static void close(Connection c)
+    {
+        close(c, null, null);
+    }
+
+    public static void close(Statement s)
+    {
+        close(null, s, null);
+    }
+
+    public static void close(ResultSet r)
+    {
+        close(null, null, r);
     }
 }

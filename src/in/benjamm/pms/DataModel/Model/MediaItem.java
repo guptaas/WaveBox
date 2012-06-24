@@ -5,6 +5,9 @@ import in.benjamm.pms.DataModel.Singletons.Database;
 import java.io.File;
 import java.sql.*;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -140,35 +143,25 @@ public class MediaItem
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT COUNT(*) AS count FROM song WHERE song_folder_id = ? AND song_file_name = ? AND song_last_modified = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setObject(1, folderId);
-                s.setObject(2, fileName);
-                s.setObject(3, lastModified);
-                r = s.executeQuery();
+        try {
+            String query = "SELECT COUNT(*) AS count FROM song WHERE song_folder_id = ? AND song_file_name = ? AND song_last_modified = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, folderId);
+            s.setObject(2, fileName);
+            s.setObject(3, lastModified);
+            r = s.executeQuery();
 
-                if (r.next())
-                {
-                    if (r.getInt("count") >= 1)
-                        needsUpdating = false;
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+            if (r.next())
+            {
+                if (r.getInt("count") >= 1)
+                    needsUpdating = false;
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
-
-        //if (needsUpdating)
-        //    System.out.println(fileName + " needs updating");
 
 		return needsUpdating;
 	}

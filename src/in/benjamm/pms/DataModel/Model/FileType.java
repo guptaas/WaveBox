@@ -37,7 +37,7 @@ public enum FileType
 
 	public static FileType fileTypeForJAudioTaggerFormatString(String jAudioTaggerFormatString)
 	{
-        //System.out.println("format: " + jAudioTaggerFormatString);
+        //log2Out(TEST, "format: " + jAudioTaggerFormatString);
 		for (FileType type : FileType.values())
 		{
 			if (type.getJAudioTaggerFormatString().equals(jAudioTaggerFormatString))

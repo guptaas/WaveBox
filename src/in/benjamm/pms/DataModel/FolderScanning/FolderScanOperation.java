@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -65,7 +67,7 @@ public class FolderScanOperation extends ScanOperation
         {
             // Retreive the folder object for this folder path
             final Folder topFolder = new Folder(topFile.getAbsolutePath());
-            System.out.println("scanning " + topFolder.getFolderName() + "  id: " + topFolder.getFolderId());
+            log2Out(TEST, "scanning " + topFolder.getFolderName() + "  id: " + topFolder.getFolderId());
 
             // Start recursively scanning the subfolders and files
             // Note: These won't be in any particular order
@@ -115,7 +117,7 @@ public class FolderScanOperation extends ScanOperation
         if (!_validExtensionsList.contains(extension.toLowerCase()))
             return;
 
-        //System.out.println("processing file " + file.getName());
+        //log2Out(TEST, "processing file " + file.getName());
 
 		if (MediaItem.fileNeedsUpdating(file))
 		{
@@ -123,20 +125,15 @@ public class FolderScanOperation extends ScanOperation
 			try {
 				f = AudioFileIO.read(file);
 			} catch (CannotReadException e) {
-                System.out.println("Can't read file " + file.getName());
-                //e.printStackTrace();
+                log2Out(TEST, "Can't read file " + file.getName());
 			} catch (IOException e) {
-                System.out.println("Can't read file " + file.getName());
-				//e.printStackTrace();
+                log2Out(TEST, "Can't read file " + file.getName());
 			} catch (TagException e) {
-                System.out.println("Can't read file " + file.getName());
-				//e.printStackTrace();
+                log2Out(TEST, "Can't read file " + file.getName());
 			} catch (ReadOnlyFileException e) {
-                System.out.println("Can't read file " + file.getName());
-				//e.printStackTrace();
+                log2Out(TEST, "Can't read file " + file.getName());
 			} catch (InvalidAudioFrameException e) {
-                System.out.println("Can't read file " + file.getName());
-				//e.printStackTrace();
+                log2Out(TEST, "Can't read file " + file.getName());
 			}
 
 			if (f == null)

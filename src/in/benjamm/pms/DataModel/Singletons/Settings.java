@@ -1,22 +1,17 @@
 package in.benjamm.pms.DataModel.Singletons;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import in.benjamm.pms.DataModel.Model.CoverArt;
 import in.benjamm.pms.DataModel.Model.Folder;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +43,7 @@ public class Settings
         File dbFile = new File(SETTINGS_PATH);
         if (!dbFile.exists())
         {
-            System.out.println("settings don't exist, copying");
+            log2Out(TEST, "settings don't exist, copying");
             try
             {
                 InputStream inStream = Database.class.getResourceAsStream("/res/pms.conf");
@@ -66,12 +61,12 @@ public class Settings
             }
             catch(FileNotFoundException ex)
             {
-                System.out.println(ex.getMessage() + " in the specified directory.");
+                log2File(ERROR, ex);
                 System.exit(0);
             }
             catch(IOException e)
             {
-                System.out.println(e.getMessage());
+                log2File(ERROR, e);
             }
         }
     }
@@ -86,7 +81,7 @@ public class Settings
             JsonParser jp = factory.createJsonParser(settingsFile);
             return mapper.readTree(jp);
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
             return null;
         }
     }
@@ -97,7 +92,7 @@ public class Settings
 
     public static List<Folder> _mediaFolders(JsonNode settingsNode)
     {
-        System.out.println("loading media folders");
+        log2Out(TEST, "loading media folders");
         List<Folder> folders = new ArrayList<Folder>();
 
         JsonNode mediaFoldersNode = settingsNode.get("mediaFolders");
@@ -109,7 +104,7 @@ public class Settings
                 JsonNode folderPath = iter.next();
                 if (folderPath.isTextual())
                 {
-                    System.out.println("media folder: " + folderPath.textValue());
+                    log2Out(TEST, "media folder: " + folderPath.textValue());
                     Folder mediaFolder = new Folder(folderPath.textValue());
                     if (mediaFolder.getFolderId() == null)
                     {

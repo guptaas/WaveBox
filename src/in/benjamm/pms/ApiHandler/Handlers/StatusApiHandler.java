@@ -2,7 +2,7 @@ package in.benjamm.pms.ApiHandler.Handlers;
 
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.util.List;
 import java.util.Map;

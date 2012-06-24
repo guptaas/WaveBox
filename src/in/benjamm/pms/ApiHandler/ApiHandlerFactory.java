@@ -3,10 +3,13 @@ package in.benjamm.pms.ApiHandler;
 import com.jolbox.bonecp.UsernamePassword;
 import in.benjamm.pms.ApiHandler.Handlers.*;
 import in.benjamm.pms.DataModel.Model.User;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.util.List;
 import java.util.Map;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.Log.LogLevel;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,7 +44,7 @@ public class ApiHandlerFactory
 			if (uriW.getFirstPart().equals("api"))// && uri.getUriPart(1).equals(uri.getLastPart()))
 			{
                 String part1 = uriW.getUriPart(1);
-                System.out.println("part1 = " + part1 + " part2 = " + uriW.getUriPart(2));
+                log2Out(TEST, "part1 = " + part1 + " part2 = " + uriW.getUriPart(2));
 
 				if (part1.equals("test"))
 				{

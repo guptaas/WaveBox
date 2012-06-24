@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: bbaron
@@ -82,38 +85,31 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                c = Database.getDbConnection();
-                String query = "SELECT folder.*, item_type_art.art_id FROM folder ";
-                      query += "LEFT JOIN song ON song_folder_id = folder_id ";
-                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                      query += "WHERE folder_id = ? ";
-                      query += "GROUP BY folder_id, item_type_art.art_id";
-                s = c.prepareStatement(query);
-                s.setObject(1, new Song().getItemTypeId());
-                s.setObject(2, folderId);
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    _folderId = r.getInt("folder_id");
-                    _folderName = r.getString("folder_name");
-                    _folderPath = r.getString("folder_path");
-                    _parentFolderId = (Integer)r.getObject("parent_folder_id");
-                    _mediaFolderId = (Integer)r.getObject("media_folder_id");
-                    _artId = (Integer)r.getObject("art_id");
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            c = Database.getDbConnection();
+            String query = "SELECT folder.*, item_type_art.art_id FROM folder ";
+                  query += "LEFT JOIN song ON song_folder_id = folder_id ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "WHERE folder_id = ? ";
+                  query += "GROUP BY folder_id, item_type_art.art_id";
+            s = c.prepareStatement(query);
+            s.setObject(1, new Song().getItemTypeId());
+            s.setObject(2, folderId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                _folderId = r.getInt("folder_id");
+                _folderName = r.getString("folder_name");
+                _folderPath = r.getString("folder_path");
+                _parentFolderId = (Integer)r.getObject("parent_folder_id");
+                _mediaFolderId = (Integer)r.getObject("media_folder_id");
+                _artId = (Integer)r.getObject("art_id");
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
     public Folder(String path)
@@ -128,41 +124,34 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                c = Database.getDbConnection();
-                String query = null;
-                if (isMediaFolder())
-                {
-                    query = "SELECT folder_id FROM folder WHERE folder_name = ? AND parent_folder_id IS NULL";
-                    s = c.prepareStatement(query);
-                    s.setObject(1, _folderName);
-                }
-                else
-                {
-                    _parentFolderId = new Folder(folder.getParent()).getFolderId();
-                    query = "SELECT folder_id FROM folder WHERE folder_name = ? AND parent_folder_id = ?";
-                    s = c.prepareStatement(query);
-                    s.setObject(1, _folderName);
-                    s.setObject(2, _parentFolderId);
-                }
-
-                r = s.executeQuery();
-                if (r.next())
-                {
-                    _folderId = r.getInt("folder_id");
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            c = Database.getDbConnection();
+            String query = null;
+            if (isMediaFolder())
+            {
+                query = "SELECT folder_id FROM folder WHERE folder_name = ? AND parent_folder_id IS NULL";
+                s = c.prepareStatement(query);
+                s.setObject(1, _folderName);
             }
+            else
+            {
+                _parentFolderId = new Folder(folder.getParent()).getFolderId();
+                query = "SELECT folder_id FROM folder WHERE folder_name = ? AND parent_folder_id = ?";
+                s = c.prepareStatement(query);
+                s.setObject(1, _folderName);
+                s.setObject(2, _parentFolderId);
+            }
+
+            r = s.executeQuery();
+            if (r.next())
+            {
+                _folderId = r.getInt("folder_id");
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
 
@@ -210,7 +199,7 @@ public class Folder
                 _folderId = r.getInt("folder_id");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -235,33 +224,26 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
-                      query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
-                      query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
-                      query += "LEFT JOIN album ON song_album_id = album.album_id ";
-                      query += "WHERE song_folder_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setObject(1, new Song().getItemTypeId());
-                s.setInt(2, getFolderId());
-                r = s.executeQuery();
-                while (r.next())
-                {
-                    songs.add(new Song(r));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                  query += "LEFT JOIN album ON song_album_id = album.album_id ";
+                  query += "WHERE song_folder_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, new Song().getItemTypeId());
+            s.setInt(2, getFolderId());
+            r = s.executeQuery();
+            while (r.next())
+            {
+                songs.add(new Song(r));
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         return songs;
     }
@@ -290,9 +272,7 @@ public class Folder
                 folders.add(new Folder(r.getInt("folder_id")));
             }
         } catch (SQLException e) {
-            //System.out.println("TABLE LOCKED, RETRYING QUERY");
-            e.printStackTrace();
-            //retry = true;
+            log2File(ERROR, e);
         } finally {
             Database.close(c, s, r);
         }
@@ -338,38 +318,31 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                c = Database.getDbConnection();
-                String query = "INSERT INTO folder VALUES (?, ?, ?, ?, ?)";
-                s = c.prepareStatement(query);
-                s.setNull(1, Types.INTEGER);
-                s.setObject(2, getFolderName());
-                s.setObject(3, getFolderPath());
-                s.setObject(4, getParentFolderId());
-                if (mediaFolder() == null)
-                    s.setNull(5, Types.INTEGER);
-                else
-                    s.setObject(5, mediaFolder().getFolderId());
-                s.executeUpdate();
+        try {
+            c = Database.getDbConnection();
+            String query = "INSERT INTO folder VALUES (?, ?, ?, ?, ?)";
+            s = c.prepareStatement(query);
+            s.setNull(1, Types.INTEGER);
+            s.setObject(2, getFolderName());
+            s.setObject(3, getFolderPath());
+            s.setObject(4, getParentFolderId());
+            if (mediaFolder() == null)
+                s.setNull(5, Types.INTEGER);
+            else
+                s.setObject(5, mediaFolder().getFolderId());
+            s.executeUpdate();
 
-                r = s.getGeneratedKeys();
-                if (r.next())
-                {
-                    setFolderId(r.getInt(1));
-                }
-
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+            r = s.getGeneratedKeys();
+            if (r.next())
+            {
+                setFolderId(r.getInt(1));
             }
+
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
     }
 
     public void removeFromDatabase()
@@ -377,24 +350,17 @@ public class Folder
         Connection c = null;
         PreparedStatement s = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "DELETE FROM folder WHERE folder_id = ?";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                s.setObject(1, getFolderId());
-                s.executeUpdate();
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, null);
-            }
+        try {
+            String query = "DELETE FROM folder WHERE folder_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, getFolderId());
+            s.executeUpdate();
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, null);
         }
-        while (retry);
     }
 
     public static List<Folder> mediaFolders()
@@ -404,27 +370,20 @@ public class Folder
         PreparedStatement s = null;
         ResultSet r = null;
 
-        boolean retry = false;
-        do
-        {
-            try {
-                String query = "SELECT * FROM folder WHERE parent_folder_id IS NULL";
-                c = Database.getDbConnection();
-                s = c.prepareStatement(query);
-                r = s.executeQuery();
-                while (r.next())
-                {
-                    folders.add(new Folder(r.getInt("folder_id")));
-                }
-            } catch (SQLException e) {
-                //System.out.println("TABLE LOCKED, RETRYING QUERY");
-                e.printStackTrace();
-                //retry = true;
-            } finally {
-                Database.close(c, s, r);
+        try {
+            String query = "SELECT * FROM folder WHERE parent_folder_id IS NULL";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            r = s.executeQuery();
+            while (r.next())
+            {
+                folders.add(new Folder(r.getInt("folder_id")));
             }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
         }
-        while (retry);
 
         return folders;
     }

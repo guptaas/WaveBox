@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Folder;
-import in.benjamm.pms.Netty.HttpServerHandler;
+import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -65,7 +68,7 @@ public class FoldersApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, folders);
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         return "{\"error\":null, \"folders\":" + writer.toString() + "}";
@@ -79,7 +82,7 @@ public class FoldersApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, folders);
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         return "{\"error\":null, \"folders\":" + writer.toString() + "}";
@@ -99,7 +102,7 @@ public class FoldersApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, folder.listOfSubFolders());
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         response += writer.toString();
@@ -111,7 +114,7 @@ public class FoldersApiHandler implements IApiHandler
         try {
             mapper.writeValue(writer, folder.listOfSongs());
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         response += ",\"songs\":" + writer.toString() + "}";

@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.Log.log2File;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpMethod.GET;
 import static org.jboss.netty.handler.codec.http.HttpMethod.POST;
@@ -94,7 +96,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
             return;
         }
 
-        cause.printStackTrace();
+        log2File(ERROR, cause);
         if (ch.isConnected())
 		{
             sendError(ctx, INTERNAL_SERVER_ERROR);
@@ -132,14 +134,14 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
                 {
                     if (!future.isSuccess())
                     {
-                        System.out.println("future not successful");
-                        future.getCause().printStackTrace();
+                        log2File(ERROR, "future not successful");
+                        log2File(ERROR, future.getCause());
                         future.getChannel().close();
                         fis.close();
                         return;
                     }
 
-                    System.out.println("SENDING: " + offset + " / " + fileLength);
+                    log2Out(TEST, "SENDING: " + offset + " / " + fileLength);
                     buffer.clear();
                     buffer.writeBytes(fis, (int) Math.min(fileLength - offset, buffer.writableBytes()));
                     offset += buffer.writerIndex();
@@ -152,14 +154,14 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
                     else
                     {
                         // Wrote the last chunk - close the connection if the write is done.
-                        System.out.println("DONE: " + fileLength);
+                        log2Out(TEST, "DONE: " + fileLength);
                         chunkWriteFuture.addListener(ChannelFutureListener.CLOSE);
                         fis.close();
                     }
                 }
             });
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
     }
     */
@@ -182,7 +184,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         try {
             fileLength = raf.length() - offset;
         } catch (IOException e) {
-            e.printStackTrace();
+            log2File(ERROR, e);
         }
 
         HttpResponse response = new DefaultHttpResponse(HTTP_1_1, offset == 0 ? OK : PARTIAL_CONTENT);
@@ -201,7 +203,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
             try {
                 writeFuture = ch.write(new ChunkedFile(raf, offset, fileLength, 8192));
             } catch (IOException e) {
-                e.printStackTrace();
+                log2File(ERROR, e);
             }
         }
         else
@@ -218,7 +220,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
 
                 public void operationProgressed(ChannelFuture future, long amount, long current, long total)
                 {
-                    System.out.printf("%s: %d / %d (+%d)%n", file.getName(), current, total, amount);
+                    log2Out(TEST, file.getName() + ": " + current+ " / " + total);
                 }
             });
         }

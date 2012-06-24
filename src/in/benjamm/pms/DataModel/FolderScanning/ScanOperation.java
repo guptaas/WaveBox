@@ -1,20 +1,8 @@
 package in.benjamm.pms.DataModel.FolderScanning;
 
-import in.benjamm.pms.DataModel.Model.Folder;
-import in.benjamm.pms.DataModel.Model.MediaItem;
-import in.benjamm.pms.DataModel.Model.Song;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.TagException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.*;
+
+import static in.benjamm.pms.DataModel.Singletons.Log.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,7 +45,7 @@ public abstract class ScanOperation implements Delayed, Runnable
     {
         _secondsDelay = secondsDelay;
         resetDelay();
-        System.out.println("number of threads: " + _numThreads);
+        log2Out(TEST, "number of threads: " + _numThreads);
     }
 
     public void resetDelay()
@@ -91,7 +79,7 @@ public abstract class ScanOperation implements Delayed, Runnable
             start();
 
             long runTime = (System.currentTimeMillis() - startTime) / 1000;
-            System.out.println("scanned in " + runTime + " seconds");
+            log2Out(TEST, "scanned in " + runTime + " seconds");
         }
         while (isRestart());
     }
@@ -100,7 +88,7 @@ public abstract class ScanOperation implements Delayed, Runnable
 
     public void restart()
     {
-        System.out.println("Restarting scan");
+        log2Out(TEST, "Restarting scan");
         setIsRestart(true);
     }
 
