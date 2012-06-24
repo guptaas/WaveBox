@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.

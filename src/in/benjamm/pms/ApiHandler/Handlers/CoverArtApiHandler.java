@@ -28,7 +28,7 @@ public class CoverArtApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
 
-    public CoverArtApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh)
+    public CoverArtApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh, int userId)
     {
         _uri = uri;
         _parameters = parameters;

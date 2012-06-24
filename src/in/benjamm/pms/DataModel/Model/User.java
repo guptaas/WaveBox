@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -161,7 +162,7 @@ public class User
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
 
         setPasswordHash(hash);
@@ -204,7 +205,7 @@ public class User
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
 
         return user;

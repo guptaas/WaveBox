@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.

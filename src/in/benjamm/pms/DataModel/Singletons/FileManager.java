@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 
 /**

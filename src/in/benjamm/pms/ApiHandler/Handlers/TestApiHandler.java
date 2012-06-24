@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,7 +24,7 @@ public class TestApiHandler implements IApiHandler
     private HttpServerHandler _sh;
     private Map<String, String> _headers;
 
-	public TestApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
+	public TestApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh, int userId)
 	{
 		_uri = uri;
 		_parameters = parameters;

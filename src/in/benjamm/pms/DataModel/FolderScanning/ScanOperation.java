@@ -3,6 +3,7 @@ package in.benjamm.pms.DataModel.FolderScanning;
 import java.util.concurrent.*;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.

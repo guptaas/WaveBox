@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 import static in.benjamm.pms.DataModel.Singletons.Log.log2File;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpMethod.GET;

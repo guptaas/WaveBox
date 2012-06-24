@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created by IntelliJ IDEA.

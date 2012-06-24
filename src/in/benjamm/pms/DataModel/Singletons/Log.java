@@ -16,13 +16,6 @@ public class Log
     public static int outLogLevel = 0; // Log everything
     public static int fileLogLevel = 0; // Log everything
 
-
-    // Log levels for easy use in other classes
-    public static LogLevel CRITICAL = LogLevel.CRITICAL;
-    public static LogLevel ERROR = LogLevel.ERROR;
-    public static LogLevel INFO = LogLevel.INFO;
-    public static LogLevel TEST = LogLevel.TEST;
-
     private static FileOutputStream _outStream;
     private static OutputStreamWriter _writer;
 
@@ -102,25 +95,6 @@ public class Log
 
             // Log the stack trace string
             log2File(level, s);
-        }
-    }
-
-    public enum LogLevel
-    {
-        CRITICAL(4), ERROR(3), INFO(2), TEST(1);
-
-        private int _level;
-        public int getLevel() { return _level; }
-
-        LogLevel(int level)
-        {
-            _level = level;
-        }
-
-        public boolean displayLog(int level)
-        {
-            // Display only all logs with level greater than the out log level
-            return getLevel() > level;
         }
     }
 }

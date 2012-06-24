@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
-
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -155,7 +155,7 @@ public class Artist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
 
         return success;

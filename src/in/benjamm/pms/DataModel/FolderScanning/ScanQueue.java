@@ -7,6 +7,7 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.

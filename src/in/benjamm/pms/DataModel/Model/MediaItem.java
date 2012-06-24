@@ -6,6 +6,7 @@ import java.io.File;
 import java.sql.*;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 
 /**

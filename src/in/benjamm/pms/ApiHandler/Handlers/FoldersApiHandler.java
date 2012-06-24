@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 
 /**
@@ -27,7 +28,7 @@ public class FoldersApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
 
-    public FoldersApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh)
+    public FoldersApiHandler(UriWrapper uri, Map<String, List<String>> parameters, HttpServerHandler sh, int userId)
     {
         _uri = uri;
         _parameters = parameters;

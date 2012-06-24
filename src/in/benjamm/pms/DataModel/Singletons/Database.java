@@ -8,6 +8,7 @@ import java.io.*;
 import java.sql.*;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -131,6 +132,11 @@ public class Database
         {
             try { c.close(); } catch (SQLException e) { }
         }
+    }
+
+    public static void close(Connection c, Statement s)
+    {
+        close(c, s, null);
     }
 
     public static void close(Connection c)

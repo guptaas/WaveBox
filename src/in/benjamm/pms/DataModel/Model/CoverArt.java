@@ -10,6 +10,7 @@ import java.util.zip.Adler32;
 import java.util.zip.Checksum;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 
 /**

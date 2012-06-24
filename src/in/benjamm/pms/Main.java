@@ -22,6 +22,7 @@ import in.benjamm.pms.DataModel.Singletons.Settings;
 import in.benjamm.pms.HttpServer.HttpServer;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>

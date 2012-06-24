@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
-
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -390,7 +390,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
     }
 
@@ -485,7 +485,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
     }
 
@@ -544,7 +544,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
     }
 
@@ -570,7 +570,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
 
         if (updateDatabase)
@@ -642,7 +642,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
     }
 
@@ -689,7 +689,7 @@ public class Playlist
         } catch (SQLException e) {
             log2File(ERROR, e);
         } finally {
-            Database.close(c, s, null);
+            Database.close(c, s);
         }
     }
 }

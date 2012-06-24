@@ -3,6 +3,8 @@ package in.benjamm.pms.ApiHandler.Handlers;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Song;
+import in.benjamm.pms.DataModel.Singletons.Stats;
+import in.benjamm.pms.DataModel.Singletons.StatsType;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.File;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 
 /**
@@ -25,23 +28,27 @@ public class StreamApiHandler implements IApiHandler
     private Map<String, List<String>> _parameters;
     private HttpServerHandler _sh;
     private Map<String, String> _headers;
+    private int _userId;
 
-    public StreamApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
+    public StreamApiHandler(UriWrapper uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh, int userId)
     {
         _uri = uri;
         _parameters = parameters;
         _headers = headers;
         _sh = sh;
+        _userId = userId;
     }
 
     public void process()
     {
+        // Open the file on disk
+        Song song = null;
         File file = null;
         try {
             if (_uri.getUriPart(2) != null)
             {
                 int songId = Integer.parseInt(_uri.getUriPart(2));
-                Song song = new Song(songId);
+                song = new Song(songId);
                 file = song.songFile();
             }
         } catch (NumberFormatException e) {
@@ -50,6 +57,7 @@ public class StreamApiHandler implements IApiHandler
             return;
         }
 
+        // Determine the file offset
         long offset = 0;
         if (_headers.containsKey("Range"))
         {
@@ -64,43 +72,14 @@ public class StreamApiHandler implements IApiHandler
             }
         }
 
+        // Log the action
+        Stats.recordStat(StatsType.SONG_PLAY, song.getItemId(), _userId);
+        if (song.getAlbumId() != null)
+            Stats.recordStat(StatsType.ALBUM_PLAY, song.getAlbumId(), _userId);
+        if (song.getArtistId() != null)
+            Stats.recordStat(StatsType.ARTIST_PLAY, song.getAlbumId(), _userId);
+
+        // Send the file to the client
         _sh.sendFile(file, offset);
     }
 }
-
-
-
-	/*private String sanitizeUri(String uri)
-	{
-		// Decode the path.
-		try
-		{
-			uri = URLDecoder.decode(uri, "UTF-8");
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			try
-			{
-				uri = URLDecoder.decode(uri, "ISO-8859-1");
-			}
-			catch (UnsupportedEncodingException e1)
-			{
-				throw new Error();
-			}
-		}
-
-		// Convert file separators.
-		uri = uri.replace('/', File.separator);
-
-		// Simplistic dumb security check.
-		// You will have to do something serious in the production environment.
-		if (uri.contains(File.separator + ".") ||
-				uri.contains("." + File.separator) ||
-				uri.startsWith(".") || uri.endsWith("."))
-		{
-			return null;
-		}
-
-		// Convert to absolute path.
-		return System.getProperty("user.dir") + File.separator + uri;
-	}*/

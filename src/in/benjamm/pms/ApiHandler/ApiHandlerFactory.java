@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static in.benjamm.pms.DataModel.Singletons.Log.*;
-import static in.benjamm.pms.DataModel.Singletons.Log.LogLevel;
+import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,6 +22,8 @@ public class ApiHandlerFactory
 {
 	public static IApiHandler createRestHandler(String uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
 	{
+        int userId;
+
         // Verify the login credentials
         try {
             String username = parameters.get("u") .get(0);
@@ -31,6 +33,7 @@ public class ApiHandlerFactory
             if (!user.authenticate(password))
                 return new ErrorApiHandler(sh, "Invalid username or password");
 
+            userId = user.getUserId();
         } catch (Exception e) {
             return new ErrorApiHandler(sh, "Invalid username or password");
         }
@@ -48,35 +51,35 @@ public class ApiHandlerFactory
 
 				if (part1.equals("test"))
 				{
-					returnHandler = new TestApiHandler(uriW, parameters, headers, sh);
+					returnHandler = new TestApiHandler(uriW, parameters, headers, sh, userId);
 				}
 				else if (part1.equals("folders"))
 				{
-                    returnHandler = new FoldersApiHandler(uriW, parameters, sh);
+                    returnHandler = new FoldersApiHandler(uriW, parameters, sh, userId);
 				}
                 else if (part1.equals("artists"))
                 {
-                    returnHandler = new ArtistsApiHandler(uriW, parameters, sh);
+                    returnHandler = new ArtistsApiHandler(uriW, parameters, sh, userId);
                 }
                 else if (part1.equals("albums"))
                 {
-                    returnHandler = new AlbumsApiHandler(uriW, parameters, sh);
+                    returnHandler = new AlbumsApiHandler(uriW, parameters, sh, userId);
                 }
                 else if (part1.equals("songs"))
                 {
-                    returnHandler = new SongsApiHandler(uriW, parameters, sh);
+                    returnHandler = new SongsApiHandler(uriW, parameters, sh, userId);
                 }
                 else if (part1.equals("stream"))
                 {
-                    returnHandler = new StreamApiHandler(uriW, parameters, headers, sh);
+                    returnHandler = new StreamApiHandler(uriW, parameters, headers, sh, userId);
                 }
                 else if (part1.equals("cover"))
                 {
-                    returnHandler = new CoverArtApiHandler(uriW, parameters, sh);
+                    returnHandler = new CoverArtApiHandler(uriW, parameters, sh, userId);
                 }
                 else if (part1.equals("status"))
                 {
-                    returnHandler = new StatusApiHandler(uriW, parameters, sh);
+                    returnHandler = new StatusApiHandler(uriW, parameters, sh, userId);
                 }
 			}
 		}
