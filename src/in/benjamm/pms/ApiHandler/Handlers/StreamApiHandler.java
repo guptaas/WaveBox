@@ -6,6 +6,7 @@ import in.benjamm.pms.DataModel.Model.Song;
 import in.benjamm.pms.DataModel.Singletons.Stats;
 import in.benjamm.pms.DataModel.Singletons.StatsType;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 import java.io.File;
 import java.util.List;
@@ -53,7 +54,7 @@ public class StreamApiHandler implements IApiHandler
             }
         } catch (NumberFormatException e) {
             log2File(ERROR, e);
-            //_sh.sendError(_ctx, NOT_FOUND);
+            _sh.sendError(HttpResponseStatus.NOT_FOUND);
             return;
         }
 
@@ -65,10 +66,9 @@ public class StreamApiHandler implements IApiHandler
                 String range = _headers.get("Range");
                 String[] ranges = range.substring("bytes=".length()).split("-");
                 offset = Long.valueOf(ranges[0]);
-                //long to = Long.valueOf(ranges[1]);
             } catch (NumberFormatException e) {
                 offset = 0;
-                //log2File(ERROR, e);
+                log2File(ERROR, e);
             }
         }
 

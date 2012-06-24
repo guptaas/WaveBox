@@ -116,6 +116,11 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         ctx.getChannel().write(response).addListener(ChannelFutureListener.CLOSE);
     }
 
+    public void sendError(HttpResponseStatus status)
+	{
+        sendError(_ctx, status);
+    }
+
     /*public void sendFile(File file)
     {
         final long fileLength = file.length();
