@@ -56,6 +56,6 @@ public class SongsApiHandler implements IApiHandler
             log2File(ERROR, e);
         }
 
-        return "{\"error\":null, \"albums\":" + writer.toString() + "}";
+        return "{\"error\":null, \"songs\":" + writer.toString() + "}";
     }
 }

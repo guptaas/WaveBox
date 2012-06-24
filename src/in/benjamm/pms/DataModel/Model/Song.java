@@ -372,6 +372,38 @@ public class Song extends MediaItem
         return songs;
     }
 
+    public static List<Song> randomSongs(int count)
+    {
+        // Retrieve random songs
+        List<Song> songs = new ArrayList<Song>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+
+        try {
+            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
+                  query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
+                  query += "LEFT JOIN album ON song_album_id = album.album_id ";
+                  query += "ORDER BY RANDOM() LIMIT ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, _ITEM_TYPE_ID);
+            s.setInt(2, count);
+            r = s.executeQuery();
+            while(r.next())
+            {
+                songs.add(new Song(r));
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }
+
+        return songs;
+    }
+
     static class SongNameComparator implements Comparator<Song>
     {
         public int compare(Song song1, Song song2)
@@ -381,22 +413,22 @@ public class Song extends MediaItem
     }
 
     static class SongOrderComparator implements Comparator<Song>
-   {
-       public int compare(Song song1, Song song2)
-       {
-           if (song1.getDiscNumber() != null && song2.getDiscNumber() != null)
-           {
-               return song1.getDiscNumber() - song2.getDiscNumber();
-           }
-           else if (song1.getTrackNumber() != null && song2.getTrackNumber() != null)
-           {
-               return song1.getTrackNumber() - song2.getTrackNumber();
-           }
-           else
-           {
-               // Compare by name
-               return new SongNameComparator().compare(song1, song2);
-           }
-       }
-   }
+    {
+        public int compare(Song song1, Song song2)
+        {
+            if (song1.getDiscNumber() != null && song2.getDiscNumber() != null)
+            {
+                return song1.getDiscNumber() - song2.getDiscNumber();
+            }
+            else if (song1.getTrackNumber() != null && song2.getTrackNumber() != null)
+            {
+                return song1.getTrackNumber() - song2.getTrackNumber();
+            }
+            else
+            {
+                // Compare by name
+                return new SongNameComparator().compare(song1, song2);
+            }
+        }
+    }
 }

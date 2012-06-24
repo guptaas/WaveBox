@@ -81,6 +81,10 @@ public class ApiHandlerFactory
                 {
                     returnHandler = new StatusApiHandler(uriW, parameters, sh, userId);
                 }
+                else if (part1.equals("random"))
+                {
+                    returnHandler = new RandomApiHandler(uriW, parameters, sh, userId);
+                }
 			}
 		}
 		catch (NullPointerException e)

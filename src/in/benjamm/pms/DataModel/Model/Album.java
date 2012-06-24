@@ -291,6 +291,35 @@ public class Album
         return albums;
     }
 
+    public static List<Album> randomAlbums(int count)
+    {
+        // Retrieve random albums
+        List<Album> albums = new ArrayList<Album>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+
+        try {
+            String query = "SELECT * FROM album LEFT JOIN item_type_art ON item_type_id = ? AND item_id = album_id ";
+                  query += "ORDER BY RANDOM() LIMIT ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, ItemType.ALBUM.getItemTypeId());
+            s.setInt(2, count);
+            r = s.executeQuery();
+            while(r.next())
+            {
+                albums.add(new Album(r));
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }
+
+        return albums;
+    }
+
     static class AlbumNameComparator implements Comparator<Album>
     {
         public int compare(Album album1, Album album2)

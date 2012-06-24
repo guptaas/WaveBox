@@ -289,6 +289,34 @@ public class Artist
         return artists;
     }
 
+    public static List<Artist> randomArtists(int count)
+    {
+        // Retrieve random artists
+        List<Artist> artists = new ArrayList<Artist>();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+
+        try {
+            String query = "SELECT * FROM artist LEFT JOIN item_type_art ON item_type_id = ? AND item_id = artist_id ";
+                  query += "ORDER BY RANDOM() LIMIT count";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, ItemType.ARTIST.getItemTypeId());
+            r = s.executeQuery();
+            while(r.next())
+            {
+                artists.add(new Artist(r));
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }
+
+        return artists;
+    }
+
     static class ArtistNameComparator implements Comparator<Artist>
     {
         public int compare(Artist artist1, Artist artist2)
