@@ -93,6 +93,8 @@ public class Artist
         if (artistName == null || artistName.equals(""))
             return;
 
+        _artistName = artistName;
+
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
@@ -108,10 +110,6 @@ public class Artist
             {
                 // Return the existing artist
                 _setPropertiesFromResultSet(r);
-            }
-            else
-            {
-                _artistName = artistName;
             }
         } catch (SQLException e) {
             log2File(ERROR, e);

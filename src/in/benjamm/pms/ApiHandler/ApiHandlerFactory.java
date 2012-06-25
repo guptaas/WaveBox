@@ -84,6 +84,10 @@ public class ApiHandlerFactory
                 {
                     returnHandler = new RandomApiHandler(uriW, parameters, sh, userId);
                 }
+                else if (part1.equals("jukebox"))
+                {
+                    returnHandler = new JukeboxApiHandler(uriW, parameters, sh, userId);
+                }
 			}
 		}
 		catch (NullPointerException e)

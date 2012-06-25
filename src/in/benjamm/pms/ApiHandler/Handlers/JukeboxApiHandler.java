@@ -3,10 +3,12 @@ package in.benjamm.pms.ApiHandler.Handlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
+import in.benjamm.pms.DataModel.Model.Song;
 import in.benjamm.pms.DataModel.Singletons.Jukebox;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,10 @@ public class JukeboxApiHandler extends ApiHandler
     {
         String response = _defaultResponse();
 
-        if (_uri.getUriPart(2).equals("play"))
+        String part2 = _uri.getUriPart(2);
+        String part3 = _uri.getUriPart(3);
+
+        if (part2.equals("play"))
         {
             Integer index = null;
             if (_uri.getUriPart(3) != null)
@@ -64,29 +69,58 @@ public class JukeboxApiHandler extends ApiHandler
                 _playSongAtIndex(index);
             }
         }
-        else if (_uri.getUriPart(2).equals("pause"))
+        else if (part2.equals("pause"))
         {
             _pause();
         }
-        else if (_uri.getUriPart(2).equals("stop"))
+        else if (part2.equals("stop"))
         {
             _stop();
         }
-        else if (_uri.getUriPart(2).equals("prev"))
+        else if (part2.equals("prev"))
         {
             _prev();
         }
-        else if (_uri.getUriPart(2).equals("next"))
+        else if (part2.equals("next"))
         {
             _next();
         }
-        else if (_uri.getUriPart(2).equals("status"))
+        else if (part2.equals("status"))
         {
             response = _status();
         }
-        else if (_uri.getUriPart(2).equals("playlist"))
+        else if (part2.equals("playlist"))
         {
             response = _playlist();
+        }
+        else if (part2.equals("add"))
+        {
+            if (_parameters.containsKey("i"))
+            {
+                _addSongs(_parameters.get("i"));
+            }
+        }
+        else if (part2.equals("remove"))
+        {
+            if (_parameters.containsKey("i"))
+            {
+                _addSongs(_parameters.get("i"));
+            }
+        }
+        else if (part2.equals("move"))
+        {
+            if (_parameters.containsKey("from") && _parameters.containsKey("to") )
+            {
+                try {
+                    _move(_parameters.get("from").get(0), _parameters.get("to").get(0));
+                } catch (Exception e) {
+                    log2File(ERROR, e);
+                }
+            }
+        }
+        else if (part2.equals("clear"))
+        {
+            _clear();
         }
 
         _sh.sendJson(response);
@@ -125,6 +159,47 @@ public class JukeboxApiHandler extends ApiHandler
     private void _playSongAtIndex(int index)
     {
         _jukebox.playSongAtIndex(index);
+    }
+
+    private void _addSongs(List<String> parameter)
+    {
+        List<Song> songs = new ArrayList<Song>();
+        for (String songIdString : parameter)
+        {
+            try {
+                int songId = Integer.parseInt(songIdString);
+                songs.add(new Song(songId));
+            } catch (NumberFormatException e) {
+                log2File(ERROR, e);
+            }
+        }
+        _jukebox.addSongs(songs);
+    }
+
+    private void _removeSongs(List<String> parameter)
+    {
+        List<Integer> indexes = new ArrayList<Integer>();
+        for (String indexString : parameter)
+        {
+            try {
+                Integer index = Integer.valueOf(indexString);
+                indexes.add(index);
+            } catch (NumberFormatException e) {
+                log2File(ERROR, e);
+            }
+        }
+        _jukebox.removeSongsAtIndexes(indexes);
+    }
+
+    private void _move(String from, String to)
+    {
+        try {
+            int fromIndex = Integer.parseInt(from);
+            int toIndex = Integer.parseInt(to);
+            _jukebox.moveSong(fromIndex, toIndex);
+        } catch (NumberFormatException e) {
+            log2File(ERROR, e);
+        }
     }
 
     private String _status()

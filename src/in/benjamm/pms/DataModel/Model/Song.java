@@ -341,7 +341,7 @@ public class Song extends MediaItem
         ResultSet r = null;
 
         try {
-            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                   query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
                   query += "LEFT JOIN album ON song_album_id = album.album_id";
@@ -374,7 +374,7 @@ public class Song extends MediaItem
         ResultSet r = null;
 
         try {
-            String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
+            String query = "SELECT song.*, item_type_art.art_id, artist.artist_name, album.album_name FROM song ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                   query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
                   query += "LEFT JOIN album ON song_album_id = album.album_id ";

@@ -108,6 +108,8 @@ public class Album
         if (albumName == null || albumName.equals(""))
             return;
 
+        _albumName = albumName;
+
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
@@ -124,11 +126,6 @@ public class Album
                 // Return the existing album
                 //log2Out(TEST, "ALBUM " + albumName + " exists in database");
                 _setPropertiesFromResultSet(r);
-            }
-            else
-            {
-                //log2Out(TEST, "ALBUM " + albumName + " does NOT exist in database");
-                _albumName = albumName;
             }
         } catch (SQLException e) {
             log2File(ERROR, e);

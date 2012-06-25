@@ -109,6 +109,8 @@ public class Playlist
         if (playlistName == null || playlistName.equals(""))
             return;
 
+        _playlistName = playlistName;
+
         Connection c = null;
         PreparedStatement s = null;
         ResultSet r = null;
@@ -123,10 +125,6 @@ public class Playlist
             {
                 // Return the existing playlist
                 _setPropertiesFromResultSet(r);
-            }
-            else
-            {
-                playlistName = playlistName;
             }
         } catch (SQLException e) {
             log2File(ERROR, e);
@@ -149,7 +147,8 @@ public class Playlist
             _playlistCount = (Integer)rs.getObject("playlist_count");
             _playlistDuration = (Integer)rs.getObject("playlist_duration");
             _md5Hash = rs.getString("md5_hash");
-            _lastUpdateTime = (Long)rs.getObject("last_update");
+            _lastUpdateTime = rs.getObject("last_update") == null ? null : (Long)rs.getObject("last_update") * 1000; // Temp workaround for H2 bug
+            //_lastUpdateTime = (Long)rs.getObject("last_update");
         } catch (SQLException e) {
             log2File(ERROR, e);
         }
@@ -219,10 +218,14 @@ public class Playlist
     public synchronized void _updateProperties(int itemsAdded, int durationAdded)
     {
         // Update the playlist database
-        setPlaylistCount(getPlaylistCount() + itemsAdded);
+        int playlistCount = getPlaylistCount() == null ? 0 : getPlaylistCount();
+        setPlaylistCount(playlistCount + itemsAdded);
         setLastUpdateTime(System.currentTimeMillis());
         setMd5Hash(_calculateHash());
-        setPlaylistDuration(getPlaylistDuration() + durationAdded);
+        int playlistDuration = getPlaylistDuration() == null ? 0 : getPlaylistDuration();
+        setPlaylistDuration(playlistDuration + durationAdded);
+
+        log2Out(TEST, "count: " + getPlaylistCount() + " updateTime: " + getLastUpdateTime() + " md5: " + getMd5Hash() + " duration: " + getPlaylistDuration());
         _updateDatabase();
     }
 
@@ -234,9 +237,7 @@ public class Playlist
 
         try {
             // Insert into the playlist table
-            String query = "MERGE INTO playlist ";
-                  query += "(playlist_id, playlist_name, playlist_count, playlist_duration, adler_hash, last_update)";
-                  query += "VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "MERGE INTO playlist VALUES (?, ?, ?, ?, ?, ?)";
 
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
@@ -245,7 +246,8 @@ public class Playlist
             s.setObject(3, getPlaylistCount());
             s.setObject(4, getPlaylistDuration());
             s.setObject(5, getMd5Hash());
-            s.setObject(6, getLastUpdateTime());
+            s.setObject(6, getLastUpdateTime() == null ? null : getLastUpdateTime()/1000); // Temp workaround for H2 bug
+            //s.setObject(6, getLastUpdateTime());
             s.executeUpdate();
 
             if (getPlaylistId() == null)
@@ -353,20 +355,21 @@ public class Playlist
         PreparedStatement s = null;
         ResultSet r = null;
 
-        try {
-            // Insert into the playlist table
-            String query = "SELECT *, artist.artist_name, album.album_name FROM playlist_item ";
-                  query += "LEFT JOIN song ON item_id = song_id AND item_type_id = ? ";
+/*        try {
+            String query = "SELECT song.*, video.*, playlist_item.item_type_id, item_type_art.art_id, artist.artist_name, album.album_name FROM playlist_item ";
+                  query += "LEFT JOIN song ON  playlist_item.item_type_id = ? AND playlist_item.item_id = song_id ";
+                  query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND playlist_item.item_id = song_id ";
                   query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
                   query += "LEFT JOIN album ON song_album_id = album.album_id ";
-                  query += "LEFT JOIN video ON item_id = video_id AND item_type_id = ? ";
+                  query += "LEFT JOIN video ON playlist_item.item_type_id = ? AND playlist_item.item_id = video_id ";
                   query += "WHERE playlist_id = ? ORDER BY item_position";
 
             c = Database.getDbConnection();
             s = c.prepareStatement(query);
             s.setObject(1, ItemType.SONG.getItemTypeId());
-            s.setObject(2, ItemType.VIDEO.getItemTypeId());
-            s.setObject(3, getPlaylistId());
+            s.setObject(2, ItemType.SONG.getItemTypeId());
+            s.setObject(3, ItemType.VIDEO.getItemTypeId());
+            s.setObject(4, getPlaylistId());
             r = s.executeQuery();
 
             while (r.next())
@@ -374,7 +377,38 @@ public class Playlist
                 int itemTypeId = r.getInt("item_type_id");
                 if (itemTypeId == ItemType.SONG.getItemTypeId())
                 {
+                    log2File(TEST, "found a song");
                     mediaItems.add(new Song(r));
+                }
+                else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
+                {
+                    // Fill in later
+                }
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }*/
+
+        // ^^ prints returns many more results than exist in the table for some reason
+        // switching to doing it in a (probably) less efficient, simpler way for the time being
+        try {
+            String query = "SELECT * FROM playlist_item WHERE playlist_id = ? ORDER BY item_position";
+
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setObject(1, getPlaylistId());
+            r = s.executeQuery();
+
+            while (r.next())
+            {
+                int itemTypeId = r.getInt("item_type_id");
+                int itemId = r.getInt("item_id");
+                if (itemTypeId == ItemType.SONG.getItemTypeId())
+                {
+                    log2File(TEST, "found a song");
+                    mediaItems.add(new Song(itemId));
                 }
                 else if (itemTypeId == ItemType.VIDEO.getItemTypeId())
                 {
@@ -628,7 +662,7 @@ public class Playlist
             s.setObject(2, getPlaylistId());
             s.setObject(3, item.getItemTypeId());
             s.setObject(4, item.getItemId());
-            s.setObject(5, getPlaylistCount());
+            s.setObject(5, getPlaylistCount() == null ? 0 : getPlaylistCount());
             s.executeUpdate();
         } catch (SQLException e) {
             log2File(ERROR, e);

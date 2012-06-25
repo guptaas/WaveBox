@@ -109,10 +109,6 @@ public class FileManager implements JNotifyListener
 
     private void _bootstrapJNotify() throws RuntimeException
     {
-        /*log2Out("java.library.path: " + System.getProperty("java.library.path", "unset"));
-        log2Out("java.library.path", ".");
-        log2Out("java.library.path: " + System.getProperty("java.library.path", "unset"));*/
-
         String overrideClass = System.getProperty("jnotify.impl.override");
         if (overrideClass != null)
         {

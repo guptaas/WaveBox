@@ -90,7 +90,7 @@ public class Log
         {
             // Log the string
             try {
-                _writer.write(s);
+                _writer.append(s + "\n");
                 _writer.flush();
             } catch (IOException e) {
                 System.out.println(e);

@@ -151,7 +151,7 @@ public class OrphanScanOperation extends ScanOperation
 
                 int songId = r.getInt("song_id");
                 Song song = new Song(songId);
-                if (!song.songFile().exists())
+                if (!song.file().exists())
                 {
                     log2Out(TEST, "Song " + songId + " is orphaned");
                     songIds.add(songId);
