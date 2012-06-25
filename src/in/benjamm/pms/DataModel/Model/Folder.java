@@ -248,6 +248,12 @@ public class Folder
         return songs;
     }
 
+    // TODO: Implement this
+    public List<Video> listOfVideos()
+    {
+        return new ArrayList<Video>();
+    }
+
     /**
      * Generate list of sub-folders contained in this folder
      */

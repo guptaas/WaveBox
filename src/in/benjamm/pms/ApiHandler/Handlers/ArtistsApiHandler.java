@@ -1,13 +1,14 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Artist;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 9:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ArtistsApiHandler implements IApiHandler
+public class ArtistsApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
@@ -54,52 +55,25 @@ public class ArtistsApiHandler implements IApiHandler
             } catch (NumberFormatException e) { }
         }
 
-        return "{\"error\":\"Invalid API call\"}";
+        return _invalidApiResponse();
     }
 
     private String _allArtists()
     {
-        List<Artist> artists = Artist.allArtists();
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, artists);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("artists", Artist.allArtists());
 
-        return "{\"error\":null, \"artists\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 
     private String _artist(int artistId)
     {
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+
         Artist artist = new Artist(artistId);
+        jsonMap.put("albums", artist.listOfAlbums());
+        jsonMap.put("songs", artist.listOfSongs());
 
-        String response = "{\"error\":null, \"albums\":";
-
-        // Get the folders
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, artist.listOfAlbums());
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
-
-        response += writer.toString();
-
-        // Get the songs
-        // TODO: this needs to be MediaItems not Songs
-        mapper = new ObjectMapper();
-        writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, artist.listOfSongs());
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
-
-        response += ",\"songs\":" + writer.toString() + "}";
-
-        return response;
+        return _createJson(jsonMap);
     }
 }

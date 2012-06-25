@@ -36,7 +36,7 @@ public class FileManager implements JNotifyListener
     public Map<String, Integer> getFolderWatchIds() { return _folderWatchIds; };
 
     private static FileManager _sharedInstance = new FileManager();
-    public static FileManager sharedInstance() {return _sharedInstance;}
+    public static FileManager sharedInstance() { return _sharedInstance; }
 
     private ScanQueue _folderScanQueue = new ScanQueue();
     public ScanQueue getFolderScanQueue() { return _folderScanQueue; }

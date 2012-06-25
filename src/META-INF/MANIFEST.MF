@@ -8,6 +8,7 @@ Class-Path: org.json.jar sqlite-jdbc-3.7.2.jar jnotify-0.94.jar jaudio
  1207.115108-15.jar slf4j-api-1.6.5.jar guava-12.0.jar slf4j-simple-1.
  6.5.jar slf4j-nop-1.6.5.jar jackson-annotations-2.0.2.jar jackson-dat
  abind-2.0.2.jar jackson-core-2.0.2.jar java-image-scaling-0.8.5.jar n
- etty-3.5.0.Final.jar bonecp-0.7.1.RELEASE.jar h2-1.3.166.jar
+ etty-3.5.0.Final.jar bonecp-0.7.1.RELEASE.jar h2-1.3.166.jar NativeBa
+ ss.jar
 Main-Class: in.benjamm.pms.Main
 

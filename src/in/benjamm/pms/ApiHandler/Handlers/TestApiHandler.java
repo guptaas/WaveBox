@@ -1,7 +1,7 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 6:11 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TestApiHandler implements IApiHandler
+public class TestApiHandler extends ApiHandler
 {
 	private UriWrapper _uri;
 	private Map<String, List<String>> _parameters;
@@ -39,26 +39,26 @@ public class TestApiHandler implements IApiHandler
 
 	private String _processRequest()
 	{
-        log2Out(TEST, "TestApiHandler  uri:" + _uri);
-        log2Out(TEST, "Parameters:");
+        StringBuilder response = new StringBuilder();
+        response.append("TestApiHandler  uri:" + _uri + "\n");
+        response.append("Parameters:\n");
 		for (String key : _parameters.keySet())
 		{
-            log2Out(TEST, key + ": ");
+            response.append(key + ": \n");
 			for (String value : _parameters.get(key))
 			{
-                log2Out(TEST, value + "   ");
+                response.append(value + "   \n");
 			}
-            log2Out(TEST, "   ");
+            log2Out(TEST, "   \n");
 		}
-        log2Out(TEST, "Headers:");
+        response.append("Headers:\n");
         for (String key : _headers.keySet())
         {
-            log2Out(TEST, key + ": ");
+            response.append(key + ": \n");
             String value = _headers.get(key);
-            log2Out(TEST, value + "   ");
-            log2Out(TEST, "   ");
+            response.append(value + "   \n");
+            response.append("   \n");
         }
-        log2Out(TEST, "   ");
-		return "Yay it worked!";
+		return response.toString();
 	}
 }

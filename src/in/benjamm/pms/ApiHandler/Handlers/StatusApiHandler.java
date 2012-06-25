@@ -1,9 +1,10 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * Time: 8:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StatusApiHandler implements IApiHandler
+public class StatusApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
    	private Map<String, List<String>> _parameters;
@@ -29,7 +30,9 @@ public class StatusApiHandler implements IApiHandler
 
     public void process()
     {
-        String response = "{\"error\":null,version:1}";
-        _sh.sendJson(response);
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("version", 1);
+
+        _sh.sendJson(_createJson(jsonMap));
     }
 }

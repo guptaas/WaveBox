@@ -3,8 +3,8 @@ package in.benjamm.pms.ApiHandler.Handlers;
 import com.mortennobel.imagescaling.DimensionConstrain;
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.CoverArt;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  * Time: 5:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CoverArtApiHandler implements IApiHandler
+public class CoverArtApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
@@ -61,7 +61,7 @@ public class CoverArtApiHandler implements IApiHandler
 
                             _sh.sendFile(bytesOut);
                         } catch (IOException e) {
-                            _sh.sendJson("{\"error\":\"Couldn't open file\"}");
+                            _sh.sendJson(_errorResponse("Couldn't open file"));
                         }
                     } catch (NumberFormatException e) {
                         // Send the original file
@@ -74,12 +74,12 @@ public class CoverArtApiHandler implements IApiHandler
                     _sh.sendFile(art.artFile(), 0);
                 }
             } catch (NumberFormatException e) {
-                _sh.sendJson("{\"error\":\"Invalid API call\"}");
+                _sh.sendJson(_invalidApiResponse());
             }
         }
         else
         {
-            _sh.sendJson("{\"error\":\"Invalid API call\"}");
+            _sh.sendJson(_invalidApiResponse());
         }
     }
 }

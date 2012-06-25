@@ -1,8 +1,7 @@
 package in.benjamm.pms.HttpServer;
 
-import in.benjamm.pms.ApiHandler.IApiHandler;
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.ApiHandlerFactory;
-import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.Channel;
@@ -13,7 +12,6 @@ import org.jboss.netty.handler.stream.ChunkedFile;
 import org.jboss.netty.util.CharsetUtil;
 
 import java.io.*;
-import java.nio.channels.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +80,7 @@ public class HttpServerHandler extends SimpleChannelUpstreamHandler
         }
 
 		// Create a rest handler
-		IApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters, headers, this);
+		ApiHandler apiHandler = ApiHandlerFactory.createRestHandler(path, parameters, headers, this);
         apiHandler.process();
     }
 

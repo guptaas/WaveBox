@@ -70,7 +70,70 @@ public class Playlist
      * Constructor(s)
      */
 
-    // Constuctors here
+    public Playlist()
+    {
+
+    }
+
+    public Playlist(ResultSet rs)
+    {
+        _setPropertiesFromResultSet(rs);
+    }
+
+    public Playlist(int playlistId)
+    {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+
+        try {
+            String query = "SELECT * FROM playlist WHERE playlist_id = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setInt(1, playlistId);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing playlist
+                _setPropertiesFromResultSet(r);
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }
+    }
+
+    public Playlist(String playlistName)
+    {
+        if (playlistName == null || playlistName.equals(""))
+            return;
+
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+
+        try {
+            String query = "SELECT * FROM playlist WHERE playlist_name = ?";
+            c = Database.getDbConnection();
+            s = c.prepareStatement(query);
+            s.setString(1, playlistName);
+            r = s.executeQuery();
+            if (r.next())
+            {
+                // Return the existing playlist
+                _setPropertiesFromResultSet(r);
+            }
+            else
+            {
+                playlistName = playlistName;
+            }
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s, r);
+        }
+    }
 
 
 
@@ -638,6 +701,27 @@ public class Playlist
             // Complete the transaction and commit the changes
             query = "END";
             s = c.prepareStatement(query);
+
+        } catch (SQLException e) {
+            log2File(ERROR, e);
+        } finally {
+            Database.close(c, s);
+        }
+    }
+
+    public synchronized void clearPlaylist()
+    {
+        String query;
+        Connection c = null;
+        PreparedStatement s = null;
+
+        try {
+            // Delete the playlist items
+            query = "DELETE FROM playlist_item WHERE playlist_id = ?";
+            s = c.prepareStatement(query);
+            s.setObject(1, getPlaylistId());
+            s.executeUpdate();
+            Database.close(s);
 
         } catch (SQLException e) {
             log2File(ERROR, e);

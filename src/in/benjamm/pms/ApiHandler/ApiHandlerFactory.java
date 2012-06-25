@@ -1,6 +1,5 @@
 package in.benjamm.pms.ApiHandler;
 
-import com.jolbox.bonecp.UsernamePassword;
 import in.benjamm.pms.ApiHandler.Handlers.*;
 import in.benjamm.pms.DataModel.Model.User;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
@@ -20,7 +19,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  */
 public class ApiHandlerFactory
 {
-	public static IApiHandler createRestHandler(String uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
+	public static ApiHandler createRestHandler(String uri, Map<String, List<String>> parameters, Map<String, String> headers, HttpServerHandler sh)
 	{
         int userId;
 
@@ -38,7 +37,7 @@ public class ApiHandlerFactory
             return new ErrorApiHandler(sh, "Invalid username or password");
         }
 
-        IApiHandler returnHandler = null;
+        ApiHandler returnHandler = null;
 		try
 		{
 			UriWrapper uriW = new UriWrapper(uri);

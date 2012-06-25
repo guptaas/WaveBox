@@ -69,6 +69,21 @@ public class Log
         }
     }
 
+    public static void log2Out(LogLevel level, Throwable t)
+    {
+        if (level.displayLog(fileLogLevel))
+        {
+            // Get the stack trace as a string
+            Writer writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
+            t.printStackTrace(printWriter);
+            String s = writer.toString();
+
+            // Log the stack trace string
+            log2Out(level, s);
+        }
+    }
+
     public static void log2File(LogLevel level, String s)
     {
         if (level.displayLog(fileLogLevel))

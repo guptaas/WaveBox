@@ -118,6 +118,12 @@ public class MediaItem
      * Public methods
      */
 
+    public File file()
+    {
+        String fullPath = new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
+        return new File(fullPath);
+    }
+
     /**
      * Add this song to the end of a playlist
      */

@@ -1,13 +1,14 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Folder;
 import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 6:16 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FoldersApiHandler implements IApiHandler
+public class FoldersApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
@@ -58,68 +59,36 @@ public class FoldersApiHandler implements IApiHandler
             } catch (NumberFormatException e) { }
         }
 
-        return "{\"error\":\"Invalid API call\"}";
+        return _invalidApiResponse();
     }
 
     private String _mediaFolders()
     {
-        List<Folder> folders = Folder.mediaFolders();
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, folders);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("folders", Folder.mediaFolders());
 
-        return "{\"error\":null, \"folders\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 
     private String _allFolders()
     {
-        List<Folder> folders = Folder.topLevelFolders();
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, folders);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("folders", Folder.topLevelFolders());
 
-        return "{\"error\":null, \"folders\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 
     private String _folder(int folderId)
     {
         Folder folder = new Folder(folderId);
         if (folder.getFolderId() == null)
-            return "{\"error\":\"folder doesn't exist\"}";
+            return _errorResponse("Folder doesn't exist");
 
-        String response = "{\"error\":null, \"folders\":";
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("folders", folder.listOfSubFolders());
+        jsonMap.put("songs", folder.listOfSongs());
+        jsonMap.put("videos", folder.listOfVideos());
 
-        // Get the folders
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, folder.listOfSubFolders());
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
-
-        response += writer.toString();
-
-        // Get the songs
-        // TODO: this needs to be MediaItems not Songs
-        mapper = new ObjectMapper();
-        writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, folder.listOfSongs());
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
-
-        response += ",\"songs\":" + writer.toString() + "}";
-
-        return response;
+        return _createJson(jsonMap);
     }
 }

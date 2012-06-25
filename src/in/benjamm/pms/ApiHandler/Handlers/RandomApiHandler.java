@@ -1,7 +1,7 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
 import in.benjamm.pms.DataModel.Model.Album;
 import in.benjamm.pms.DataModel.Model.Artist;
@@ -10,6 +10,7 @@ import in.benjamm.pms.HttpServer.HttpServerHandler;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.ERROR;
  * Time: 3:27 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RandomApiHandler implements IApiHandler
+public class RandomApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
@@ -65,48 +66,30 @@ public class RandomApiHandler implements IApiHandler
             return _artists(count);
         }
 
-        return "{\"error\":\"Invalid API call\"}";
+        return _invalidApiResponse();
     }
 
     private String _songs(int count)
     {
-        List<Song> songs = Song.randomSongs(count);
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, songs);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("songs", Song.randomSongs(count));
 
-        return "{\"error\":null, \"songs\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 
     private String _albums(int count)
     {
-        List<Album> albums = Album.randomAlbums(count);
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, albums);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("albums", Album.randomAlbums(count));
 
-        return "{\"error\":null, \"albums\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 
     private String _artists(int count)
     {
-        List<Artist> artists = Artist.randomArtists(count);
-        ObjectMapper mapper = new ObjectMapper();
-        StringWriter writer = new StringWriter();
-        try {
-            mapper.writeValue(writer, artists);
-        } catch (IOException e) {
-            log2File(ERROR, e);
-        }
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+        jsonMap.put("artists", Artist.randomArtists(count));
 
-        return "{\"error\":null, \"artists\":" + writer.toString() + "}";
+        return _createJson(jsonMap);
     }
 }

@@ -1,7 +1,7 @@
 package in.benjamm.pms.ApiHandler.Handlers;
 
+import in.benjamm.pms.ApiHandler.ApiHandler;
 import in.benjamm.pms.ApiHandler.UriWrapper;
-import in.benjamm.pms.ApiHandler.IApiHandler;
 import in.benjamm.pms.DataModel.Model.Song;
 import in.benjamm.pms.DataModel.Singletons.Stats;
 import in.benjamm.pms.DataModel.Singletons.StatsType;
@@ -23,7 +23,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 6:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public class StreamApiHandler implements IApiHandler
+public class StreamApiHandler extends ApiHandler
 {
     private UriWrapper _uri;
     private Map<String, List<String>> _parameters;
@@ -50,7 +50,7 @@ public class StreamApiHandler implements IApiHandler
             {
                 int songId = Integer.parseInt(_uri.getUriPart(2));
                 song = new Song(songId);
-                file = song.songFile();
+                file = song.file();
             }
         } catch (NumberFormatException e) {
             log2File(ERROR, e);

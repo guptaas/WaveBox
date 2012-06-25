@@ -1,12 +1,10 @@
 package in.benjamm.pms.ApiHandler;
 
-import org.jboss.netty.handler.codec.http.HttpResponse;
-
 /**
- * Created by IntelliJ IDEA.
+ * Created with IntelliJ IDEA.
  * User: bbaron
- * Date: 1/7/12
- * Time: 6:05 PM
+ * Date: 6/24/12
+ * Time: 5:54 PM
  * To change this template use File | Settings | File Templates.
  */
 public interface IApiHandler

@@ -270,13 +270,6 @@ public class Song extends MediaItem
     public void rescan()
     {}
 
-    public File songFile()
-    {
-        String fullPath = new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
-        return new File(fullPath);
-    }
-
-
 	public void updateDatabase()
 	{
         String query;
