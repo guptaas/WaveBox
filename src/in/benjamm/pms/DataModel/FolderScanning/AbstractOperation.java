@@ -12,7 +12,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 4:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class ScanOperation implements Delayed, Runnable
+public abstract class AbstractOperation implements IOperation
 {
     private long _executionTime;
     private TimeUnit _unit = TimeUnit.NANOSECONDS;
@@ -23,18 +23,6 @@ public abstract class ScanOperation implements Delayed, Runnable
     public synchronized boolean isRestart() { return _isRestart; }
     public synchronized void setIsRestart(boolean isRestart) { _isRestart = isRestart; }
 
-    /////////////////////////////////////// Database Performance Tests /////////////////////////////////////////////////
-    // SQLITE-JDBC /////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Just use 2 threads (actually 3 because using CallerRunsPolicy so main thread is used as well)                  //
-    // using more is actually slower, assuming because of db locking (tho should all be read locks, so not sure)      //
-    // Tests re-scanning 30K songs: single threaded - 977 seconds, 1 - 605, 2 - 455, 3 - 477, 4 - 793                 //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // H2-DATABASE//////////////////////////////////////////////////////////////////////////////////////////////////////
-    // H2 DB with proper index for song update checking:                                                              //
-    // Fresh scan 30K songs: single t'd - 325 seconds, 2 - 288, 4 - 266/255, 8 - 247, 16 - 241                        //
-    // Rescan 30K songs: single threaded - 6 seconds, 2 - 5, 4 - 5, 8 - 5                                             //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     //private int _processors = Runtime.getRuntime().availableProcessors();
     //private int _numThreads = _processors * 2;
     private int _numThreads = 4; // 4 threads is optimal for H2 database
@@ -42,7 +30,7 @@ public abstract class ScanOperation implements Delayed, Runnable
     private RejectedExecutionHandler _rejectedExecutionHandler = new ThreadPoolExecutor.CallerRunsPolicy();
     private ExecutorService _executorService =  new ThreadPoolExecutor(_numThreads, _numThreads, 0L, TimeUnit.MILLISECONDS, _blockingQueue, _rejectedExecutionHandler);
 
-    public ScanOperation(int secondsDelay)
+    public AbstractOperation(int secondsDelay)
     {
         _secondsDelay = secondsDelay;
         resetDelay();
@@ -93,7 +81,7 @@ public abstract class ScanOperation implements Delayed, Runnable
         setIsRestart(true);
     }
 
-    public void submitTask(Runnable r)
+    public void submitAsyncTask(Runnable r)
     {
         _executorService.submit(r);
     }
@@ -103,3 +91,17 @@ public abstract class ScanOperation implements Delayed, Runnable
     public abstract boolean equals(Object obj);
 
 }
+
+
+
+    /////////////////////////////////////// Database Performance Tests /////////////////////////////////////////////////
+    // SQLITE-JDBC /////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Just use 2 threads (actually 3 because using CallerRunsPolicy so main thread is used as well)                  //
+    // using more is actually slower, assuming because of db locking (tho should all be read locks, so not sure)      //
+    // Tests re-scanning 30K songs: single threaded - 977 seconds, 1 - 605, 2 - 455, 3 - 477, 4 - 793                 //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // H2-DATABASE//////////////////////////////////////////////////////////////////////////////////////////////////////
+    // H2 DB with proper index for song update checking:                                                              //
+    // Fresh scan 30K songs: single t'd - 325 seconds, 2 - 288, 4 - 266/255, 8 - 247, 16 - 241                        //
+    // Rescan 30K songs: single threaded - 6 seconds, 2 - 5, 4 - 5, 8 - 5                                             //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

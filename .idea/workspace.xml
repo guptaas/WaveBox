@@ -7,86 +7,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5b66e2b3-7be7-4bc0-a251-88913f2613ce" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libLibLoader.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libNativeBass.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_aac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_ac3.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_alac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_fx.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_mpc.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbass_spx.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbassenc.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbassflac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbassmidi.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbassmix.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux32/libbasswv.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libLibLoader64.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libNativeBass64.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_aac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_ac3.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_alac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_fx.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_mpc.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbass_spx.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbassenc.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbassflac.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbassmidi.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbassmix.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/linux64/libbasswv.so" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libNativeBass.jnilib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_aac.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_ac3.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_alac.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_fx.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_mpc.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbass_spx.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbassenc.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbassflac.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbassmidi.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbassmix.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/mac/libbasswv.dylib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/NativeBass.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_aac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_ac3.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_alac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_fx.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_mpc.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bass_spx.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bassenc.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bassflac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bassmidi.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/bassmix.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win32/basswv.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/NativeBass64.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_aac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_ac3.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_alac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_fx.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_mpc.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bass_spx.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bassenc.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bassflac.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bassmidi.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/bassmix.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nlib/win64/basswv.dll" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/NativeBass.jar" afterPath="$PROJECT_DIR$/lib/NativeBass.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/pms.h2.db" afterPath="$PROJECT_DIR$/res/pms.h2.db" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/FolderScanQueue.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/IOperation.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/SerialOperationQueue.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/TranscodeManager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegAACTranscoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegHLSTranscoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegMP3Transcoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegOGGTranscoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegTranscoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoderDelegate.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscodeQuality.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscodeType.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/Transcoder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscoderFactory.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/ScanQueue.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/ScanOperation.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/AbstractOperation.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/ApiHandlerFactory.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/ApiHandlerFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/JukeboxApiHandler.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/JukeboxApiHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/FolderScanOperation.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/FolderScanOperation.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/OrphanScanOperation.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/OrphanScanOperation.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Album.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Album.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Artist.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Artist.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Playlist.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Playlist.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Song.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Song.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/MediaItem.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/MediaItem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/FileManager.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/FileManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Jukebox.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Jukebox.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Log.java" afterPath="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Log.java" />
     </list>
     <ignored path="iSub Server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -144,99 +87,99 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Jukebox.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Jukebox.java">
+      <file leaf-file-name="FFMpegAACTranscoder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegAACTranscoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="161" column="38" selection-start="5018" selection-end="5018" vertical-scroll-proportion="0.3325359">
+            <state line="41" column="0" selection-start="1101" selection-end="1412" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FFMpegHLSTranscoder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegHLSTranscoder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="5" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ITranscoderDelegate.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoderDelegate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="0" selection-start="240" selection-end="355" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TranscodeManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/TranscodeManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="0" selection-start="401" selection-end="401" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="docComment;class#Jukebox#0" expanded="true" />
-                <element signature="e#4485#4772#0" expanded="true" />
-                <element signature="e#4749#4750#0" expanded="true" />
-                <element signature="e#5834#5845#0" expanded="true" />
-                <element signature="e#6232#7460#0" expanded="true" />
-                <element signature="e#7449#7450#0" expanded="true" />
+                <element signature="e#986#999#0" expanded="true" />
+                <element signature="e#1078#1100#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JukeboxApiHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/JukeboxApiHandler.java">
+      <file leaf-file-name="SerialOperationQueue.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/SerialOperationQueue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="207" column="47" selection-start="5122" selection-end="5122" vertical-scroll-proportion="0.0">
+            <state line="12" column="13" selection-start="285" selection-end="285" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#739#751#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractOperation.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/AbstractOperation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="98" column="46" selection-start="3025" selection-end="3025" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Artist.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Artist.java">
+      <file leaf-file-name="TranscoderFactory.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscoderFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="112" column="13" selection-start="2929" selection-end="2929" vertical-scroll-proportion="0.0">
+            <state line="21" column="9" selection-start="716" selection-end="716" vertical-scroll-proportion="0.477707">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Database.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Database.java">
+      <file leaf-file-name="FolderScanQueue.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/FolderScanQueue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="80" selection-start="1290" selection-end="1290" vertical-scroll-proportion="0.0">
+            <state line="18" column="13" selection-start="490" selection-end="490" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/FileManager.java">
+      <file leaf-file-name="FFMpegMP3Transcoder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegMP3Transcoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="110" column="5" selection-start="3027" selection-end="3027" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="23" column="0" selection-start="576" selection-end="1278" vertical-scroll-proportion="-1.7307693">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Song.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Song.java">
+      <file leaf-file-name="FFMpegOGGTranscoder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegOGGTranscoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="376" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Playlist.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Playlist.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="410" column="52" selection-start="13155" selection-end="13155" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ItemType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/ItemType.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="12" selection-start="208" selection-end="208" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Log.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Log.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="29" selection-start="2317" selection-end="2317" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Settings.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Settings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="91" selection-start="1410" selection-end="1410" vertical-scroll-proportion="0.0">
+            <state line="51" column="9" selection-start="1377" selection-end="1377" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -262,30 +205,28 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/FoldersApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/RandomApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/SongsApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/StatusApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/TestApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/OrphanScanOperation.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/JukeboxApiHandler.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/ApiHandlerFactory.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Database.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Artist.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/HLSTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoderDelegate.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegHEAACTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/MediaItem.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscodeQuality.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscodeType.java" />
         <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Album.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Log.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Song.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Playlist.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/FileManager.java" />
-        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Jukebox.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/Transcoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegAACTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegMP3Transcoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegOGGTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegHLSTranscoder.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/TranscodeManager.java" />
+        <option value="$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscoderFactory.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="23" />
-    <option name="y" value="48" />
-    <option name="width" value="1424" />
-    <option name="height" value="869" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -400,6 +341,16 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -473,6 +424,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="HttpServer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Personal Media Server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataModel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Transcoding" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -602,44 +579,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Personal Media Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pms" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Personal Media Server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pms" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -656,12 +595,12 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="FullScreen" value="false" />
+    <property name="FullScreen" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -831,27 +770,27 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="23" y="48" width="1424" height="869" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328877" sideWeight="0.49709302" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297414" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0049937577" sideWeight="0.4597701" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15106952" sideWeight="0.6570605" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32352942" sideWeight="0.59011626" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3233458" sideWeight="0.61206895" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32352942" sideWeight="0.4047965" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3233458" sideWeight="0.3829023" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328877" sideWeight="0.49709302" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3125" sideWeight="0.6764706" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31681034" sideWeight="0.67665416" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15508021" sideWeight="0.7063953" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3342246" sideWeight="0.4651163" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -915,99 +854,127 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/ApiHandlerFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/MediaItem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="8" selection-start="2582" selection-end="2582" vertical-scroll-proportion="0.0" />
+        <state line="65" column="19" selection-start="1645" selection-end="1645" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/CoverArt.java">
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscodeQuality.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="40" selection-start="1893" selection-end="1893" vertical-scroll-proportion="0.0" />
+        <state line="11" column="4" selection-start="236" selection-end="236" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Album.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="13" selection-start="3483" selection-end="3483" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/NativeBass.jar!/jouvieje/bass/utils/Pointer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="11" selection-start="212" selection-end="212" vertical-scroll-proportion="0.18817204" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/MediaItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="24" selection-start="494" selection-end="494" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Artist.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="13" selection-start="2929" selection-end="2929" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="80" selection-start="1290" selection-end="1290" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/FileManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="5" selection-start="3027" selection-end="3027" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Song.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="376" column="0" selection-start="11085" selection-end="11085" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/Playlist.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="410" column="52" selection-start="13155" selection-end="13155" vertical-scroll-proportion="0.0">
+        <state line="212" column="46" selection-start="5676" selection-end="5676" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Model/ItemType.java">
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="12" selection-start="208" selection-end="208" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Log.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="29" selection-start="2317" selection-end="2317" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Settings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="91" selection-start="1410" selection-end="1410" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/NativeBass.jar!/jouvieje/bass/Bass.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="51" selection-start="1963" selection-end="1963" vertical-scroll-proportion="0.35322195">
+        <state line="18" column="38" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/ApiHandler/Handlers/JukeboxApiHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/Transcoder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="207" column="47" selection-start="5122" selection-end="5122" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/Jukebox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="38" selection-start="5018" selection-end="5018" vertical-scroll-proportion="0.3325359">
+        <state line="46" column="29" selection-start="1558" selection-end="1558" vertical-scroll-proportion="0.33261338">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="docComment;class#Jukebox#0" expanded="true" />
-            <element signature="e#4485#4772#0" expanded="true" />
-            <element signature="e#4749#4750#0" expanded="true" />
-            <element signature="e#5834#5845#0" expanded="true" />
-            <element signature="e#6232#7460#0" expanded="true" />
-            <element signature="e#7449#7450#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegTranscoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="120" selection-start="1132" selection-end="1132" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegAACTranscoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="0" selection-start="1101" selection-end="1412" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegOGGTranscoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="9" selection-start="1377" selection-end="1377" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegMP3Transcoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="0" selection-start="576" selection-end="1278" vertical-scroll-proportion="-1.7307693">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/FFMpegHLSTranscoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="5" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/ITranscoderDelegate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="240" selection-end="355" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Singletons/TranscodeManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="401" selection-end="401" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#986#999#0" expanded="true" />
+            <element signature="e#1078#1100#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/FolderScanQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="13" selection-start="490" selection-end="490" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/SerialOperationQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="13" selection-start="285" selection-end="285" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#739#751#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/FolderScanning/AbstractOperation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="46" selection-start="3025" selection-end="3025" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/in/benjamm/pms/DataModel/Transcoding/TranscoderFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="9" selection-start="716" selection-end="716" vertical-scroll-proportion="0.477707">
+          <folding />
         </state>
       </provider>
     </entry>

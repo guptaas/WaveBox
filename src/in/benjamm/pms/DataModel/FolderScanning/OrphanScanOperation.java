@@ -23,7 +23,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 5:25 PM
  * To change this template use File | Settings | File Templates.
  */
-public class OrphanScanOperation extends ScanOperation
+public class OrphanScanOperation extends AbstractOperation
 {
     public OrphanScanOperation(int secondsDelay)
     {

@@ -210,7 +210,7 @@ public class Album
             String query = "SELECT song.*, artist.artist_name, album.album_name FROM song ";
                   query += "LEFT JOIN item_type_art ON item_type_art.item_type_id = ? AND item_id = song_id ";
                   query += "LEFT JOIN artist ON song_artist_id = artist.artist_id ";
-                  query += "LEFT JOIN album USING song_album_id = album.album_id ";
+                  query += "LEFT JOIN album ON song_album_id = album.album_id ";
                   query += "WHERE song_album_id = ?";
             c = Database.getDbConnection();
             s = c.prepareStatement(query);

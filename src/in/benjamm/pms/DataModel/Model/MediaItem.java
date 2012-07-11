@@ -118,10 +118,15 @@ public class MediaItem
      * Public methods
      */
 
+    public String filePath()
+    {
+        return new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
+
+    }
+
     public File file()
     {
-        String fullPath = new Folder(getFolderId()).getFolderPath() + File.separator + getFileName();
-        return new File(fullPath);
+        return new File(filePath());
     }
 
     /**

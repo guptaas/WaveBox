@@ -25,7 +25,7 @@ import static in.benjamm.pms.DataModel.Singletons.LogLevel.*;
  * Time: 5:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FolderScanOperation extends ScanOperation
+public class FolderScanOperation extends AbstractOperation
 {
     private String _folderPath;
     public String getFolderPath() { return _folderPath; }
@@ -93,7 +93,7 @@ public class FolderScanOperation extends ScanOperation
                 }
                 else
                 {
-                    submitTask(new Runnable() {
+                    submitAsyncTask(new Runnable() {
                         public void run() {
                             processFile(subFile, topFolder.getFolderId());
                         }

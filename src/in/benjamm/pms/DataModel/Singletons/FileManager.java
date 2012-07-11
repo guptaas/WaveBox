@@ -1,6 +1,6 @@
 package in.benjamm.pms.DataModel.Singletons;
 
-import in.benjamm.pms.DataModel.FolderScanning.ScanQueue;
+import in.benjamm.pms.DataModel.FolderScanning.FolderScanQueue;
 import in.benjamm.pms.DataModel.Model.Folder;
 import net.contentobjects.jnotify.IJNotify;
 import net.contentobjects.jnotify.JNotify;
@@ -38,8 +38,8 @@ public class FileManager implements JNotifyListener
     private static FileManager _sharedInstance = new FileManager();
     public static FileManager sharedInstance() { return _sharedInstance; }
 
-    private ScanQueue _folderScanQueue = new ScanQueue();
-    public ScanQueue getFolderScanQueue() { return _folderScanQueue; }
+    private FolderScanQueue _folderScanQueue = new FolderScanQueue();
+    public FolderScanQueue getFolderScanQueue() { return _folderScanQueue; }
 
     /*
      * Constructor(s)
@@ -77,7 +77,7 @@ public class FileManager implements JNotifyListener
 
         // Start the folder scan
         log2Out(TEST, "starting folder scan");
-        _folderScanQueue.startScanQueue();
+        _folderScanQueue.startQueue();
 
         // Watch media folders for changes
         // Do this here instead of in the loop above because it can take a while for many subfolders
@@ -186,21 +186,21 @@ public class FileManager implements JNotifyListener
     {
         File file = new File(rootPath + File.separator + name);
         log2Out(TEST, "fileCreated - path: " + file.getParent());
-        _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
    	public void fileDeleted(int wd, String rootPath, String name)
     {
         File file = new File(rootPath + File.separator + name);
         log2Out(TEST, "fileCreated - path: " + file.getParent());
-        _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
     public void fileModified(int wd, String rootPath, String name)
     {
         File file = new File(rootPath + File.separator + name);
         log2Out(TEST, "fileCreated - path: " + file.getParent());
-        _folderScanQueue.queueFolderScan(file.getParent(), ScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(file.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 
    	public void fileRenamed(int wd, String rootPath, String oldName, String newName)
@@ -208,7 +208,7 @@ public class FileManager implements JNotifyListener
         File oldFile = new File(rootPath + File.separator + oldName);
         File newFile = new File(rootPath + File.separator + newName);
         log2Out(TEST, "fileCreated - oldPath: " + oldFile.getParent() + " newPath: " + newFile.getParent());
-        _folderScanQueue.queueFolderScan(oldFile.getParent(), ScanQueue.DEFAULT_DELAY);
-        _folderScanQueue.queueFolderScan(newFile.getParent(), ScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(oldFile.getParent(), FolderScanQueue.DEFAULT_DELAY);
+        _folderScanQueue.queueFolderScan(newFile.getParent(), FolderScanQueue.DEFAULT_DELAY);
     }
 }
